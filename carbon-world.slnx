@@ -4,6 +4,7 @@
   <Project Path="ALINE.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.csproj" />
   <Project Path="VFolders.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="ALINEEditor.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
   <Project Path="Sirenix.OdinInspector.Modules.UnityMathematics.csproj" />
