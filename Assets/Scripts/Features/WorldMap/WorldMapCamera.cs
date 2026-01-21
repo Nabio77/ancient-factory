@@ -1,0 +1,125 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using Sirenix.OdinInspector;
+
+namespace CarbonWorld.Features.WorldMap
+{
+    public class WorldMapCamera : MonoBehaviour
+    {
+        [Title("Movement")]
+        [SerializeField]
+        private float panSpeed = 20f;
+
+        [SerializeField]
+        private float dragSpeed = 0.5f;
+
+        [SerializeField]
+        private float smoothTime = 0.1f;
+
+        [Title("Zoom")]
+        [SerializeField]
+        private float zoomSpeed = 5f;
+
+        [SerializeField]
+        private float minZoom = 5f;
+
+        [SerializeField]
+        private float maxZoom = 50f;
+
+        private Camera _camera;
+        private Vector3 _targetPosition;
+        private float _targetZoom;
+        private Vector3 _velocity;
+        private float _zoomVelocity;
+        private Vector2 _lastMousePos;
+        private bool _isDragging;
+
+        void Awake()
+        {
+            _camera = GetComponent<Camera>();
+            _targetPosition = transform.position;
+            _targetZoom = _camera.orthographicSize;
+        }
+
+        void Update()
+        {
+            HandleKeyboardPan();
+            HandleMouseDrag();
+            HandleZoom();
+            ApplyMovement();
+        }
+
+        private void HandleKeyboardPan()
+        {
+            var keyboard = Keyboard.current;
+            if (keyboard == null) return;
+
+            var input = Vector2.zero;
+
+            if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) input.y += 1;
+            if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) input.y -= 1;
+            if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) input.x -= 1;
+            if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) input.x += 1;
+
+            if (input.sqrMagnitude > 0)
+            {
+                input.Normalize();
+                float zoomFactor = _targetZoom / 10f;
+                _targetPosition += new Vector3(input.x, 0, input.y) * (panSpeed * zoomFactor * Time.deltaTime);
+            }
+        }
+
+        private void HandleMouseDrag()
+        {
+            var mouse = Mouse.current;
+            if (mouse == null) return;
+
+            var mousePos = mouse.position.ReadValue();
+
+            if (mouse.middleButton.wasPressedThisFrame)
+            {
+                _isDragging = true;
+                _lastMousePos = mousePos;
+            }
+
+            if (mouse.middleButton.wasReleasedThisFrame)
+            {
+                _isDragging = false;
+            }
+
+            if (_isDragging)
+            {
+                var delta = mousePos - _lastMousePos;
+                float zoomFactor = _targetZoom * 0.01f;
+                _targetPosition -= new Vector3(delta.x, 0, delta.y) * (dragSpeed * zoomFactor);
+                _lastMousePos = mousePos;
+            }
+        }
+
+        private void HandleZoom()
+        {
+            var mouse = Mouse.current;
+            if (mouse == null) return;
+
+            var scroll = mouse.scroll.ReadValue().y;
+            if (Mathf.Abs(scroll) > 0.01f)
+            {
+                _targetZoom -= scroll * zoomSpeed * 0.1f;
+                _targetZoom = Mathf.Clamp(_targetZoom, minZoom, maxZoom);
+            }
+        }
+
+        private void ApplyMovement()
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _velocity, smoothTime);
+            _camera.orthographicSize = Mathf.SmoothDamp(_camera.orthographicSize, _targetZoom, ref _zoomVelocity, smoothTime);
+        }
+
+        [Button("Reset Position")]
+        public void ResetPosition()
+        {
+            _targetPosition = new Vector3(0, transform.position.y, 0);
+            _targetZoom = 15f;
+        }
+    }
+}

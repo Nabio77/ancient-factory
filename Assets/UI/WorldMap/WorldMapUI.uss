@@ -1,0 +1,56 @@
+.panel {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 200px;
+    padding: 12px;
+    background-color: rgba(30, 30, 30, 0.9);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.panel.hidden {
+    display: none;
+}
+
+.title {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+}
+
+.divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-bottom: 8px;
+}
+
+.info-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+}
+
+.value {
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+}
+
+.section-title {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.neighbors-list {
+    color: rgb(255, 255, 255);
+    font-size: 11px;
+    white-space: normal;
+}

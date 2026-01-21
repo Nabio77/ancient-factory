@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="WorldMapUI.uss" />
+    <ui:VisualElement name="tile-info-panel" class="panel hidden">
+        <ui:Label name="tile-type" class="title" text="Tile Type" />
+        <ui:VisualElement class="divider" />
+        <ui:VisualElement class="info-row">
+            <ui:Label text="Coordinates" class="label" />
+            <ui:Label name="tile-coords" class="value" text="(0, 0)" />
+        </ui:VisualElement>
+        <ui:VisualElement class="divider" />
+        <ui:Label text="Neighbors" class="section-title" />
+        <ui:Label name="tile-neighbors" class="neighbors-list" text="" />
+    </ui:VisualElement>
+</ui:UXML>
