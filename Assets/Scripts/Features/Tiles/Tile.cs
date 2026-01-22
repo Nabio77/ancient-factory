@@ -1,6 +1,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Grid;
+using CarbonWorld.Features.Inventories;
 
 namespace CarbonWorld.Features.Tiles
 {
@@ -19,9 +20,12 @@ namespace CarbonWorld.Features.Tiles
         private bool _isHovered;
         private bool _isSelected;
 
+        private readonly Inventory _inventory = new();
+
         public HexCoord Coordinates { get; private set; }
         public bool IsHovered => _isHovered;
         public bool IsSelected => _isSelected;
+        public Inventory Inventory => _inventory;
 
         public virtual void Initialize(HexCoord coord)
         {

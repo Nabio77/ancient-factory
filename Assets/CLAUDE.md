@@ -4,7 +4,7 @@
 - **Language:** C# 9.0+ (Unity 2022/6000+)
 - **Formatting:** K&R style braces (standard C#). 4 spaces indentation.
 - **Comments:** minimal, explain *why* not *what*. Avoid "divider" comments (e.g., `// Fields`).
-- **Namespaces:** Match folder structure (e.g., `CarbonWorld.Core.Systems`).
+- **Namespaces:** Match folder structure (e.g., `CarbonWorld.Core.Systems`). Pluralize namespaces (e.g., `CarbonWorld.Features.Inventories`) to avoid naming collisions with singular class names.
 - **Using Directives:** Place `using` statements **outside** (above) the `namespace` declaration.
 
 ## Naming Conventions

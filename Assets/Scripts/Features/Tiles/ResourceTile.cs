@@ -1,24 +1,24 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
+using CarbonWorld.Core.Data;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public enum ResourceType
-    {
-        Coal,
-        Iron,
-        Water,
-        Stone,
-        Wood,
-        Fruit
-    }
-
     public class ResourceTile : Tile
     {
         [Title("Resource")]
-        [SerializeField]
-        private ResourceType resourceType;
+        [SerializeField, Required]
+        private ItemDefinition resourceItem;
 
-        public ResourceType ResourceType => resourceType;
+        [SerializeField, Min(1)]
+        private int outputPerTick = 1;
+
+        public ItemDefinition ResourceItem => resourceItem;
+        public int OutputPerTick => outputPerTick;
+
+        public ItemStack GetOutput()
+        {
+            return new ItemStack(resourceItem, outputPerTick);
+        }
     }
 }

@@ -34,5 +34,10 @@ namespace CarbonWorld.Features.Grid
         {
             return _tiles.ContainsKey(coord);
         }
+
+        public IEnumerable<KeyValuePair<HexCoord, Tile>> GetAllTiles()
+        {
+            return _tiles;
+        }
     }
 }
