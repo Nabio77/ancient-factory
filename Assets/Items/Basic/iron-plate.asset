@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1487f6bfa08d420fb9b91b2a0b83b7c, type: 3}
-  m_Name: IronPlate
+  m_Name: iron-plate
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.ItemDefinition
   itemName: Iron plate
   description: Iron plate
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1ed388111c5af4dc0abc15c82dad77a4, type: 3}
   tier: 1
   category: 1
   baseValue: 1

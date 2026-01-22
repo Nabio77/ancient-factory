@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1487f6bfa08d420fb9b91b2a0b83b7c, type: 3}
-  m_Name: iron
+  m_Name: stone
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.ItemDefinition
-  itemName: Iron
+  itemName: Stone
   description: 
-  icon: {fileID: 21300000, guid: ff3e21e19b5f9470e805dbb48514e2bc, type: 3}
+  icon: {fileID: 21300000, guid: d87ae1b0f3a6449a5af7235727448fd2, type: 3}
   tier: 0
   category: 0
   baseValue: 1

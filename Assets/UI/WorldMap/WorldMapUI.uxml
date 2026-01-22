@@ -7,6 +7,20 @@
             <ui:Label text="Coordinates" class="label" />
             <ui:Label name="tile-coords" class="value" text="(0, 0)" />
         </ui:VisualElement>
+        <ui:VisualElement name="resource-info" class="hidden">
+            <ui:VisualElement class="divider" />
+            <ui:VisualElement class="resource-header">
+                <ui:VisualElement name="resource-icon" class="resource-icon" />
+                <ui:VisualElement class="resource-details">
+                    <ui:Label name="resource-name" class="resource-name" text="Iron Ore" />
+                    <ui:Label name="resource-tier" class="resource-tier" text="Tier 0 - Raw" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Output/Tick" class="label" />
+                <ui:Label name="resource-output" class="value" text="1" />
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement class="divider" />
         <ui:Label text="Neighbors" class="section-title" />
         <ui:Label name="tile-neighbors" class="neighbors-list" text="" />
