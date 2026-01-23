@@ -1,0 +1,159 @@
+.panel {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 260px;
+    padding: 12px;
+    background-color: rgba(30, 30, 30, 0.9);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.title {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+}
+
+.divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-bottom: 8px;
+}
+
+.info-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+}
+
+.value {
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+}
+
+.value.highlight {
+    color: rgb(100, 200, 255);
+    -unity-font-style: bold;
+}
+
+.section-title {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+/* Core Status */
+.core-status {
+    margin-bottom: 4px;
+}
+
+.demands-count {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+    -unity-text-align: middle-center;
+}
+
+/* Progress Bars */
+.progress-bar-container {
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-container.small {
+    height: 6px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background-color: rgb(100, 200, 100);
+    border-radius: 4px;
+    transition-property: width;
+    transition-duration: 0.3s;
+}
+
+.victory-fill {
+    background-color: rgb(255, 200, 50);
+}
+
+/* Demands Container */
+.demands-container {
+    flex-direction: column;
+}
+
+/* Demand Entry */
+.demand-entry {
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.demand-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.demand-icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.demand-info {
+    flex: 1;
+}
+
+.demand-name {
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+}
+
+.demand-quantity {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Fulfilled state */
+.demand-entry.fulfilled {
+    opacity: 0.5;
+}
+
+/* Food Section */
+.food-section {
+    margin-bottom: 4px;
+}
+
+.food-status {
+    font-size: 12px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+}
+
+.food-status.fed {
+    color: rgb(100, 200, 100);
+    background-color: rgba(100, 200, 100, 0.15);
+}
+
+.food-status.starving {
+    color: rgb(255, 100, 100);
+    background-color: rgba(255, 100, 100, 0.15);
+}

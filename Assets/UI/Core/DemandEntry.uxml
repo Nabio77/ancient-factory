@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement class="demand-entry">
+        <ui:VisualElement class="demand-header">
+            <ui:VisualElement name="demand-icon" class="demand-icon" />
+            <ui:VisualElement class="demand-info">
+                <ui:Label name="demand-name" class="demand-name" text="Item Name" />
+                <ui:Label name="demand-quantity" class="demand-quantity" text="0 / 100" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="progress-bar-container small">
+            <ui:VisualElement name="demand-progress-fill" class="progress-bar-fill" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
