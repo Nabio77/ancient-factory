@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0929d3f20898041ca886698bcb855fe7, type: 3}
+  m_Name: iron-smelter
+  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.BlueprintDefinition
+  blueprintName: Iron smelter
+  description: Smelts iron ore into iron ingot
+  icon: {fileID: 0}
+  type: 0
+  inputCount: 1
+  outputCount: 1
+  inputs:
+  - item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
+    amount: 1
+  output:
+    item: {fileID: 11400000, guid: 50d6c3abf32634f40baad2b31c09fddc, type: 2}
+    amount: 1
+  productionTime: 1
+  powerConsumption: 1
+  isStarterCard: 1
+  unlockCost: 0

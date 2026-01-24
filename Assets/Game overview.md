@@ -109,16 +109,13 @@ Players can convert production tiles into specialized types (limited by meta-pro
 
 **Base Blueprints:**
 
+- Blueprint is like a card
 - Always available to all players
 - Basic versions of all building types
 - Sufficient to complete any production chain
-
-**Tech Tree Blueprints:**
-
-- Advanced building variants locked in tech tree
-- Better efficiency, speed, or reduced carbon
-- Unlock by spending points earned during run
-- Tech tree resets each run (roguelike)
+- Can have 1-4 inputs but only one output
+- Can connect to other blueprints with input / output
+- Divided into blueprint types that handle different tiers of items
 
 **Enhanced Blueprints:**
 
