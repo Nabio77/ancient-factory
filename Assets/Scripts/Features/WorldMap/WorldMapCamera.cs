@@ -34,6 +34,15 @@ namespace CarbonWorld.Features.WorldMap
         private Vector2 _lastMousePos;
         private bool _isDragging;
 
+        // Saved position for reset
+        private Vector3 _savedPosition;
+        private float _savedZoom;
+
+        /// <summary>
+        /// When false, camera ignores all input. Used when UI overlays are active.
+        /// </summary>
+        public bool InputEnabled { get; set; } = true;
+
         void Awake()
         {
             _camera = GetComponent<Camera>();
@@ -43,10 +52,31 @@ namespace CarbonWorld.Features.WorldMap
 
         void Update()
         {
-            HandleKeyboardPan();
-            HandleMouseDrag();
-            HandleZoom();
+            if (InputEnabled)
+            {
+                HandleKeyboardPan();
+                HandleMouseDrag();
+                HandleZoom();
+            }
             ApplyMovement();
+        }
+
+        /// <summary>
+        /// Save current position to restore later.
+        /// </summary>
+        public void SavePosition()
+        {
+            _savedPosition = _targetPosition;
+            _savedZoom = _targetZoom;
+        }
+
+        /// <summary>
+        /// Restore previously saved position.
+        /// </summary>
+        public void RestorePosition()
+        {
+            _targetPosition = _savedPosition;
+            _targetZoom = _savedZoom;
         }
 
         private void HandleKeyboardPan()

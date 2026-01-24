@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement class="blueprint-card">
+        <ui:VisualElement class="card-header">
+            <ui:VisualElement name="card-icon" />
+            <ui:VisualElement class="card-header-text">
+                <ui:Label name="card-title" text="Blueprint Name" />
+                <ui:Label name="card-type" text="Constructor" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="card-body">
+            <ui:VisualElement name="inputs-container" class="port-container port-column">
+                <!-- Input ports added via code -->
+            </ui:VisualElement>
+
+            <ui:VisualElement class="card-content">
+                <ui:Label name="card-description" text="Description" />
+                <ui:VisualElement class="card-stats">
+                    <ui:VisualElement name="inputs-row" class="stat-row">
+                        <ui:Label text="In:" class="stat-label" />
+                        <ui:Label name="card-inputs" class="stat-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="output-row" class="stat-row">
+                        <ui:Label text="Out:" class="stat-label" />
+                        <ui:Label name="card-output" class="stat-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="time-row" class="stat-row">
+                        <ui:Label text="Time:" class="stat-label" />
+                        <ui:Label name="card-time" class="stat-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="power-row" class="stat-row">
+                        <ui:Label text="Power:" class="stat-label" />
+                        <ui:Label name="card-power" class="stat-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="outputs-container" class="port-container port-column">
+                <!-- Output ports added via code -->
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

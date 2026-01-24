@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: BlueprintDatabase
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.BlueprintDatabase
   blueprints:
+  - {fileID: 11400000, guid: 176a39c6995104caf948f08bf2ac11ca, type: 2}
   - {fileID: 11400000, guid: ca7b20e5617604f23adf1079fed97903, type: 2}
   - {fileID: 11400000, guid: 229c26a81bf564515ae2752fed44743c, type: 2}
