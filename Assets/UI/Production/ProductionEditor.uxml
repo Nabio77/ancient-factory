@@ -1,0 +1,33 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="BlueprintCard" src="project://database/Assets/UI/Blueprint/BlueprintCard.uxml"/>
+    <Style src="project://database/Assets/UI/Production/ProductionEditor.uss?fileID=7433441132597879392&amp;guid=d731b6be6a6b34111be4731dbc46ceb2&amp;type=3#ProductionEditor"/>
+    <ui:VisualElement name="root" class="production-editor-root">
+        <ui:VisualElement class="editor-container">
+            <ui:VisualElement name="graph-canvas">
+                <ui:VisualElement name="canvas-content" picking-mode="Ignore">
+                    <ui:VisualElement name="connections-layer" picking-mode="Ignore"/>
+                    <!-- Preview card (cleared at runtime) -->
+                    <ui:Instance template="BlueprintCard" name="preview-card" style="left: 50px; top: 50px;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="palette-bar">
+                <ui:Label text="Blueprints" class="palette-title"/>
+                <ui:ScrollView name="palette-panel" mode="Horizontal">
+                    <ui:VisualElement name="palette-content">
+                        <ui:VisualElement class="palette-item">
+                            <ui:VisualElement class="palette-icon"/>
+                            <ui:Label text="Sample Item" class="palette-label"/>
+                            <ui:Label text="Producer" class="palette-type"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="palette-item">
+                            <ui:VisualElement class="palette-icon"/>
+                            <ui:Label text="Another Item" class="palette-label"/>
+                            <ui:Label text="Storage" class="palette-type"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button name="close-button" text="X"/>
+    </ui:VisualElement>
+</ui:UXML>

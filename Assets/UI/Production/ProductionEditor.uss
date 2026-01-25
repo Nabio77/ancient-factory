@@ -1,0 +1,145 @@
+.production-editor-root {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.production-editor-root.hidden {
+    display: none;
+}
+
+.editor-container {
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+#graph-canvas {
+    flex-grow: 1;
+    background-color: rgb(26, 26, 26);
+    overflow: hidden;
+    position: relative;
+}
+
+#canvas-content {
+    position: absolute;
+    transform-origin: 0 0;
+}
+
+#connections-layer {
+    position: absolute;
+    left: -5000px;
+    top: -5000px;
+    width: 10000px;
+    height: 10000px;
+}
+
+.palette-drag-ghost {
+    position: absolute;
+    width: 120px;
+    height: 40px;
+    background-color: rgba(51, 128, 204, 0.8);
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+}
+
+.palette-drag-ghost Label {
+    color: white;
+    -unity-text-align: middle-center;
+}
+
+#palette-bar {
+    height: 120px;
+    background-color: rgb(43, 43, 43);
+    border-top-width: 2px;
+    border-top-color: rgb(68, 68, 68);
+    padding: 8px;
+    flex-direction: row;
+    align-items: center;
+}
+
+#palette-bar .palette-title {
+    color: rgb(136, 136, 136);
+    font-size: 12px;
+    -unity-font-style: bold;
+    margin-right: 15px;
+    writing-mode: vertical-lr;
+}
+
+#palette-panel {
+    flex-grow: 1;
+    height: 100%;
+}
+
+#palette-content {
+    flex-direction: row;
+    height: 100%;
+    align-items: center;
+}
+
+.palette-item {
+    width: 140px;
+    height: 90px;
+    background-color: rgb(56, 56, 56);
+    margin-right: 8px;
+    border-radius: 6px;
+    padding: 8px;
+    color: rgb(221, 221, 221);
+    border-width: 1px;
+    border-color: rgb(85, 85, 85);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.palette-item:hover {
+    background-color: rgb(72, 72, 72);
+    border-color: rgb(0, 170, 255);
+    cursor: grab;
+}
+
+.palette-item:active {
+    background-color: rgb(58, 90, 122);
+    cursor: grabbing;
+}
+
+.palette-item .palette-icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 5px;
+}
+
+.palette-item .palette-label {
+    font-size: 11px;
+    color: rgb(204, 204, 204);
+    -unity-text-align: middle-center;
+}
+
+.palette-item .palette-type {
+    font-size: 9px;
+    color: rgb(136, 136, 136);
+    -unity-text-align: middle-center;
+}
+
+#close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(170, 51, 51);
+    color: white;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    -unity-font-style: bold;
+}
+
+#close-button:hover {
+    background-color: rgb(221, 68, 68);
+}

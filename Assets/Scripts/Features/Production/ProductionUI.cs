@@ -80,29 +80,17 @@ namespace CarbonWorld.Features.Production
         {
             if (uiDocument == null) return;
             _root = uiDocument.rootVisualElement.Q<VisualElement>("root");
+            _root.AddToClassList("hidden"); // Start hidden at runtime
             _canvas = _root.Q<VisualElement>("graph-canvas");
+            _canvasContent = _canvas.Q<VisualElement>("canvas-content");
+            _connectionsLayer = _canvasContent.Q<VisualElement>("connections-layer");
             _palettePanel = _root.Q<ScrollView>("palette-panel");
             _closeButton = _root.Q<Button>("close-button");
 
             _closeButton.clicked += Hide;
 
-            // Create content container for zoom/pan
-            _canvasContent = new VisualElement { name = "canvas-content" };
-            _canvasContent.style.position = Position.Absolute;
-            _canvasContent.style.transformOrigin = new TransformOrigin(0, 0);
-            _canvas.Add(_canvasContent);
-
-            // Create layer for lines (inside content for zoom/pan)
-            // Use large fixed size to cover panning range
-            _connectionsLayer = new VisualElement { name = "connections-layer" };
-            _connectionsLayer.style.position = Position.Absolute;
-            _connectionsLayer.style.left = -5000;
-            _connectionsLayer.style.top = -5000;
-            _connectionsLayer.style.width = 10000;
-            _connectionsLayer.style.height = 10000;
-            _connectionsLayer.pickingMode = PickingMode.Ignore;
+            // Set up connections layer for drawing
             _connectionsLayer.generateVisualContent += OnGenerateConnections;
-            _canvasContent.Add(_connectionsLayer);
 
             // Canvas Events
             _canvas.RegisterCallback<MouseDownEvent>(OnCanvasMouseDown);
@@ -169,28 +157,21 @@ namespace CarbonWorld.Features.Production
             _isDraggingFromPalette = true;
             _paletteDragBlueprint = blueprint;
 
-            // Create ghost element
-            _paletteDragGhost = new VisualElement();
-            _paletteDragGhost.AddToClassList("palette-drag-ghost");
+            // Create ghost as a card preview
+            _paletteDragGhost = cardTemplate.Instantiate();
             _paletteDragGhost.style.position = Position.Absolute;
-            _paletteDragGhost.style.width = 120;
-            _paletteDragGhost.style.height = 40;
-            _paletteDragGhost.style.backgroundColor = new Color(0.2f, 0.5f, 0.8f, 0.8f);
-            _paletteDragGhost.style.borderTopLeftRadius = 4;
-            _paletteDragGhost.style.borderTopRightRadius = 4;
-            _paletteDragGhost.style.borderBottomLeftRadius = 4;
-            _paletteDragGhost.style.borderBottomRightRadius = 4;
+            _paletteDragGhost.style.opacity = 0.8f;
             _paletteDragGhost.pickingMode = PickingMode.Ignore;
 
-            var ghostLabel = new Label(blueprint.BlueprintName);
-            ghostLabel.style.color = Color.white;
-            ghostLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            ghostLabel.style.flexGrow = 1;
-            _paletteDragGhost.Add(ghostLabel);
+            // Populate card with blueprint data
+            _paletteDragGhost.Q<Label>("card-title").text = blueprint.BlueprintName;
+            _paletteDragGhost.Q<Label>("card-type").text = blueprint.Type.ToString();
+            if (blueprint.Icon != null)
+                _paletteDragGhost.Q<VisualElement>("card-icon").style.backgroundImage = new StyleBackground(blueprint.Icon);
 
             var mousePos = evt.mousePosition;
-            _paletteDragGhost.style.left = mousePos.x - 60;
-            _paletteDragGhost.style.top = mousePos.y - 20;
+            _paletteDragGhost.style.left = mousePos.x - 110;
+            _paletteDragGhost.style.top = mousePos.y - 50;
 
             _root.Add(_paletteDragGhost);
             _root.CaptureMouse();
@@ -202,8 +183,8 @@ namespace CarbonWorld.Features.Production
             if (_isDraggingFromPalette && _paletteDragGhost != null)
             {
                 var mousePos = evt.mousePosition;
-                _paletteDragGhost.style.left = mousePos.x - 60;
-                _paletteDragGhost.style.top = mousePos.y - 20;
+                _paletteDragGhost.style.left = mousePos.x - 110;
+                _paletteDragGhost.style.top = mousePos.y - 50;
             }
         }
 
@@ -268,7 +249,7 @@ namespace CarbonWorld.Features.Production
 
             _currentTile = tile;
             _currentGraph = tile.Graph;
-            _root.AddToClassList("visible");
+            _root.RemoveFromClassList("hidden");
 
             RebuildGraphUI();
         }
@@ -300,7 +281,7 @@ namespace CarbonWorld.Features.Production
             // Release focus
             _root.Blur();
 
-            _root.RemoveFromClassList("visible");
+            _root.AddToClassList("hidden");
 
             // Restore camera position and re-enable input
             if (worldMapCamera != null)
@@ -352,37 +333,36 @@ namespace CarbonWorld.Features.Production
         private void CreateNodeUI(BlueprintNode node)
         {
             var card = cardTemplate.Instantiate();
-            var root = card.Q<VisualElement>(className: "blueprint-card");
             var bp = node.blueprint;
 
             // Header
-            root.Q<Label>("card-title").text = bp.BlueprintName;
-            root.Q<Label>("card-type").text = bp.Type.ToString();
-            var icon = root.Q<VisualElement>("card-icon");
+            card.Q<Label>("card-title").text = bp.BlueprintName;
+            card.Q<Label>("card-type").text = bp.Type.ToString();
+            var icon = card.Q<VisualElement>("card-icon");
             if (bp.Icon != null)
                 icon.style.backgroundImage = new StyleBackground(bp.Icon);
 
             // Content
-            var descLabel = root.Q<Label>("card-description");
+            var descLabel = card.Q<Label>("card-description");
             descLabel.text = !string.IsNullOrEmpty(bp.Description) ? bp.Description : "";
             descLabel.style.display = string.IsNullOrEmpty(bp.Description) ? DisplayStyle.None : DisplayStyle.Flex;
 
             // Stats - only show for producers
-            var inputsRow = root.Q<VisualElement>("inputs-row");
-            var outputRow = root.Q<VisualElement>("output-row");
-            var timeRow = root.Q<VisualElement>("time-row");
-            var powerRow = root.Q<VisualElement>("power-row");
+            var inputsRow = card.Q<VisualElement>("inputs-row");
+            var outputRow = card.Q<VisualElement>("output-row");
+            var timeRow = card.Q<VisualElement>("time-row");
+            var powerRow = card.Q<VisualElement>("power-row");
 
             if (bp.IsProducer)
             {
                 var inputsText = bp.Inputs.Count > 0
                     ? string.Join(", ", bp.Inputs.Select(i => i.ToString()))
                     : "None";
-                root.Q<Label>("card-inputs").text = inputsText;
+                card.Q<Label>("card-inputs").text = inputsText;
 
-                root.Q<Label>("card-output").text = bp.Output.IsValid ? bp.Output.ToString() : "None";
-                root.Q<Label>("card-time").text = $"{bp.ProductionTime:0.#}s";
-                root.Q<Label>("card-power").text = $"{bp.PowerConsumption}W";
+                card.Q<Label>("card-output").text = bp.Output.IsValid ? bp.Output.ToString() : "None";
+                card.Q<Label>("card-time").text = $"{bp.ProductionTime:0.#}s";
+                card.Q<Label>("card-power").text = $"{bp.PowerConsumption}W";
             }
             else
             {
@@ -392,17 +372,19 @@ namespace CarbonWorld.Features.Production
                 powerRow.style.display = DisplayStyle.None;
             }
 
-            // Position
-            root.style.left = node.position.x;
-            root.style.top = node.position.y;
+            // Position on the card container
+            card.style.position = Position.Absolute;
+            card.style.left = node.position.x;
+            card.style.top = node.position.y;
 
             // Store Reference
-            _nodeElements[node.id] = root;
+            _nodeElements[node.id] = card;
             _inputPorts[node.id] = new List<VisualElement>();
             _outputPorts[node.id] = new List<VisualElement>();
 
             // Inputs
-            var inputsContainer = root.Q<VisualElement>("inputs-container");
+            var inputsContainer = card.Q<VisualElement>("inputs-container");
+            inputsContainer.Clear(); // Remove preview ports
             for (int i = 0; i < bp.InputCount; i++)
             {
                 var port = new VisualElement();
@@ -415,7 +397,8 @@ namespace CarbonWorld.Features.Production
             }
 
             // Outputs
-            var outputsContainer = root.Q<VisualElement>("outputs-container");
+            var outputsContainer = card.Q<VisualElement>("outputs-container");
+            outputsContainer.Clear(); // Remove preview ports
             for (int i = 0; i < bp.OutputCount; i++)
             {
                 var port = new VisualElement();
@@ -427,9 +410,9 @@ namespace CarbonWorld.Features.Production
             }
 
             // Dragging - only register MouseDown, MouseUp is handled by canvas
-            root.RegisterCallback<MouseDownEvent>(evt => StartDragNode(evt, node, root));
+            card.RegisterCallback<MouseDownEvent>(evt => StartDragNode(evt, node, card));
 
-            _canvasContent.Add(root);
+            _canvasContent.Add(card);
         }
 
         // --- Zoom & Pan ---
@@ -454,8 +437,22 @@ namespace CarbonWorld.Features.Production
 
         private void OnCanvasMouseDown(MouseDownEvent evt)
         {
-            // Middle mouse or right mouse to pan
-            if (evt.button == 2 || evt.button == 1)
+            // Right-click to delete connections
+            if (evt.button == 1)
+            {
+                var contentPos = ScreenToContent(evt.localMousePosition);
+                var connectionToDelete = FindConnectionNearPoint(contentPos);
+                if (connectionToDelete != null)
+                {
+                    _currentGraph.connections.Remove(connectionToDelete);
+                    _connectionsLayer.MarkDirtyRepaint();
+                }
+                evt.StopPropagation();
+                return;
+            }
+
+            // Middle mouse to pan
+            if (evt.button == 2)
             {
                 _isPanning = true;
                 _panStartMouse = evt.localMousePosition;
@@ -639,15 +636,72 @@ namespace CarbonWorld.Features.Production
             return ScreenToContent(canvasPos);
         }
 
+        private BlueprintConnection FindConnectionNearPoint(Vector2 point)
+        {
+            if (_currentGraph == null) return null;
+
+            const float hitDistance = 10f;
+
+            foreach (var conn in _currentGraph.connections)
+            {
+                var start = GetPortPosition(conn.fromNodeId, conn.fromPortIndex, false);
+                var end = GetPortPosition(conn.toNodeId, conn.toPortIndex, true);
+
+                if (!start.HasValue || !end.HasValue) continue;
+
+                if (IsPointNearBezier(point, start.Value, end.Value, hitDistance))
+                {
+                    return conn;
+                }
+            }
+
+            return null;
+        }
+
+        private bool IsPointNearBezier(Vector2 point, Vector2 start, Vector2 end, float maxDistance)
+        {
+            // Calculate control points (same as DrawConnection)
+            float tangentDist = Mathf.Abs(start.x - end.x) * 0.5f;
+            if (tangentDist < 50) tangentDist = 50;
+
+            var cp1 = start + new Vector2(tangentDist, 0);
+            var cp2 = end - new Vector2(tangentDist, 0);
+
+            // Sample points along the bezier and check distance
+            const int samples = 20;
+            for (int i = 0; i <= samples; i++)
+            {
+                float t = i / (float)samples;
+                var bezierPoint = CubicBezier(start, cp1, cp2, end, t);
+                if (Vector2.Distance(point, bezierPoint) < maxDistance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private Vector2 CubicBezier(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
+        {
+            float u = 1 - t;
+            float tt = t * t;
+            float uu = u * u;
+            float uuu = uu * u;
+            float ttt = tt * t;
+
+            return uuu * p0 + 3 * uu * t * p1 + 3 * u * tt * p2 + ttt * p3;
+        }
+
         private void DrawConnection(Painter2D paint, Vector2 start, Vector2 end)
         {
             paint.BeginPath();
             paint.MoveTo(start);
-            
+
             // Simple Bezier
             float tangentDist = Mathf.Abs(start.x - end.x) * 0.5f;
             if (tangentDist < 50) tangentDist = 50;
-            
+
             var cp1 = start + new Vector2(tangentDist, 0);
             var cp2 = end - new Vector2(tangentDist, 0);
 

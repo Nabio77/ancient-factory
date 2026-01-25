@@ -1,41 +1,43 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="BlueprintCard.uss"/>
     <ui:VisualElement class="blueprint-card">
         <ui:VisualElement class="card-header">
-            <ui:VisualElement name="card-icon" />
+            <ui:VisualElement name="card-icon"/>
             <ui:VisualElement class="card-header-text">
-                <ui:Label name="card-title" text="Blueprint Name" />
-                <ui:Label name="card-type" text="Constructor" />
+                <ui:Label name="card-title" text="Blueprint Name"/>
+                <ui:Label name="card-type" text="Constructor"/>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement class="card-body">
             <ui:VisualElement name="inputs-container" class="port-container port-column">
-                <!-- Input ports added via code -->
+                <!-- Preview ports (added via code at runtime) -->
+                <ui:VisualElement class="port"/>
+                <ui:VisualElement class="port"/>
             </ui:VisualElement>
-
             <ui:VisualElement class="card-content">
-                <ui:Label name="card-description" text="Description" />
+                <ui:Label name="card-description" text="Description"/>
                 <ui:VisualElement class="card-stats">
                     <ui:VisualElement name="inputs-row" class="stat-row">
-                        <ui:Label text="In:" class="stat-label" />
-                        <ui:Label name="card-inputs" class="stat-value" />
+                        <ui:Label text="In:" class="stat-label"/>
+                        <ui:Label name="card-inputs" text="2x Iron" class="stat-value"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="output-row" class="stat-row">
-                        <ui:Label text="Out:" class="stat-label" />
-                        <ui:Label name="card-output" class="stat-value" />
+                        <ui:Label text="Out:" class="stat-label"/>
+                        <ui:Label name="card-output" text="1x Steel" class="stat-value"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="time-row" class="stat-row">
-                        <ui:Label text="Time:" class="stat-label" />
-                        <ui:Label name="card-time" class="stat-value" />
+                        <ui:Label text="Time:" class="stat-label"/>
+                        <ui:Label name="card-time" text="2.5s" class="stat-value"/>
                     </ui:VisualElement>
                     <ui:VisualElement name="power-row" class="stat-row">
-                        <ui:Label text="Power:" class="stat-label" />
-                        <ui:Label name="card-power" class="stat-value" />
+                        <ui:Label text="Power:" class="stat-label"/>
+                        <ui:Label name="card-power" text="50W" class="stat-value"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-
             <ui:VisualElement name="outputs-container" class="port-container port-column">
-                <!-- Output ports added via code -->
+                <!-- Preview ports (added via code at runtime) -->
+                <ui:VisualElement class="port"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

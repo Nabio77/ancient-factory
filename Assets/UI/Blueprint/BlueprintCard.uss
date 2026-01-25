@@ -1,0 +1,115 @@
+.blueprint-card {
+    width: 220px;
+    background-color: rgb(51, 51, 51);
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: rgb(85, 85, 85);
+    color: white;
+}
+
+.blueprint-card.selected {
+    border-color: rgb(0, 170, 255);
+}
+
+.card-header {
+    background-color: rgb(68, 68, 68);
+    padding: 8px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.card-header #card-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.card-header-text {
+    flex-grow: 1;
+}
+
+.card-header #card-title {
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+.card-header #card-type {
+    font-size: 10px;
+    color: rgb(170, 170, 170);
+}
+
+.card-body {
+    flex-direction: row;
+    padding: 8px;
+}
+
+.port-column {
+    width: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-content {
+    flex-grow: 1;
+    padding: 0 5px;
+}
+
+#card-description {
+    font-size: 10px;
+    color: rgb(153, 153, 153);
+    margin-bottom: 5px;
+    white-space: normal;
+}
+
+.card-stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.stat-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3px;
+    width: 100%;
+}
+
+.stat-label {
+    font-size: 9px;
+    color: rgb(119, 119, 119);
+    width: 50px;
+}
+
+.stat-value {
+    font-size: 10px;
+    color: rgb(187, 187, 187);
+    flex-grow: 1;
+}
+
+.port-container {
+    justify-content: space-around;
+    min-width: 20px;
+}
+
+.port {
+    width: 12px;
+    height: 12px;
+    background-color: rgb(119, 119, 119);
+    border-radius: 6px;
+    margin: 4px 0;
+    border-width: 1px;
+    border-color: rgb(34, 34, 34);
+}
+
+.port:hover {
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(0, 170, 255);
+}
+
+.port.connected {
+    background-color: rgb(0, 170, 255);
+}
