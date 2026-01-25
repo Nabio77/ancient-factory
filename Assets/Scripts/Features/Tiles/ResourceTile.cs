@@ -1,52 +1,24 @@
 using UnityEngine;
-using Sirenix.OdinInspector;
 using CarbonWorld.Core.Data;
-using CarbonWorld.Features.Grid;
+using CarbonWorld.Types;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public class ResourceTile : Tile
+    public class ResourceTile : BaseTile
     {
-        [Title("Resource")]
-        [SerializeField]
-        private ItemDefinition resourceItem;
+        public ItemDefinition ResourceItem { get; set; }
+        public int OutputPerTick { get; set; }
 
-        [SerializeField, Min(1)]
-        private int outputPerTick = 1;
-
-        [Title("Visuals")]
-        [SerializeField, Required]
-        private SpriteRenderer iconRenderer;
-
-        public ItemDefinition ResourceItem
+        public ResourceTile(Vector3Int cellPosition, ItemDefinition resourceItem, int outputPerTick)
+            : base(cellPosition, TileType.Resource)
         {
-            get => resourceItem;
-            set
-            {
-                resourceItem = value;
-                UpdateIcon();
-            }
-        }
-
-        public int OutputPerTick { get => outputPerTick; set => outputPerTick = value; }
-
-        public override void Initialize(HexCoord coord)
-        {
-            base.Initialize(coord);
-            UpdateIcon();
-        }
-
-        private void UpdateIcon()
-        {
-            if (iconRenderer != null && resourceItem != null)
-            {
-                iconRenderer.sprite = resourceItem.Icon;
-            }
+            ResourceItem = resourceItem;
+            OutputPerTick = outputPerTick;
         }
 
         public ItemStack GetOutput()
         {
-            return new ItemStack(resourceItem, outputPerTick);
+            return new ItemStack(ResourceItem, OutputPerTick);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace CarbonWorld.Features.Production
         private const float MinZoom = 0.25f;
         private const float MaxZoom = 2f;
         private const float ZoomSpeed = 0.1f;
-        
+
         // Interaction State
         private bool _isDraggingNode;
         private VisualElement _draggedNodeElement;
@@ -225,7 +225,7 @@ namespace CarbonWorld.Features.Production
             }
         }
 
-        private void OnTileSelected(Tile tile)
+        private void OnTileSelected(BaseTile tile)
         {
             if (tile is ProductionTile productionTile)
             {
@@ -573,14 +573,14 @@ namespace CarbonWorld.Features.Production
             // Logic: Can only connect Output to Input (simplified)
             // Currently _connectionStartPortIndex assumes generic port, but usually we drag FROM Output TO Input
             // Let's assume user drags FROM Output.
-            
+
             // Check if we are connecting to a different node
             if (_connectionStartNodeId == targetNodeId) return;
 
             // Create Connection
             var conn = new BlueprintConnection(_connectionStartNodeId, _connectionStartPortIndex, targetNodeId, targetPortIndex);
             _currentGraph.connections.Add(conn);
-            
+
             _isConnecting = false;
             _connectionsLayer.MarkDirtyRepaint();
             evt.StopPropagation();

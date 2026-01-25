@@ -1,24 +1,17 @@
 using UnityEngine;
-using Sirenix.OdinInspector;
+using CarbonWorld.Core.Data;
+using CarbonWorld.Types;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public class ProductionTile : Tile
+    public class ProductionTile : BaseTile
     {
-        [Title("Data")]
-        [SerializeField]
-        private CarbonWorld.Core.Data.BlueprintGraph graph = new();
+        public BlueprintGraph Graph { get; } = new();
+        public bool IsPowered { get; set; }
 
-        [Title("Power")]
-        [ShowInInspector, ReadOnly]
-        private bool _isPowered;
-
-        public bool IsPowered => _isPowered;
-        public CarbonWorld.Core.Data.BlueprintGraph Graph => graph;
-
-        public void SetPowered(bool powered)
+        public ProductionTile(Vector3Int cellPosition)
+            : base(cellPosition, TileType.Production)
         {
-            _isPowered = powered;
         }
     }
 }

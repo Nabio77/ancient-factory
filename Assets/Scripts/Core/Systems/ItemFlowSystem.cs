@@ -1,9 +1,8 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
+using CarbonWorld.Types;
 
 namespace CarbonWorld.Core.Systems
 {
@@ -49,9 +48,9 @@ namespace CarbonWorld.Core.Systems
 
         private void ProcessResourceTiles()
         {
-            foreach (var kvp in worldMap.Grid.GetAllTiles())
+            foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (kvp.Value is ResourceTile resourceTile)
+                if (tile is ResourceTile resourceTile)
                 {
                     DistributeResource(resourceTile);
                 }
@@ -60,16 +59,12 @@ namespace CarbonWorld.Core.Systems
 
         private void DistributeResource(ResourceTile resourceTile)
         {
-            var neighbors = HexUtils.GetNeighbors(resourceTile.Coordinates);
             var output = resourceTile.GetOutput();
 
-            foreach (var neighborCoord in neighbors)
+            foreach (var neighborTile in worldMap.TileData.GetNeighbors(resourceTile.CellPosition))
             {
-                var neighborTile = worldMap.Grid.GetTile(neighborCoord);
-                if (neighborTile == null) continue;
-
                 // Resources flow to production tiles and core
-                if (neighborTile is ProductionTile || neighborTile is CoreTile)
+                if (neighborTile.Type == TileType.Production || neighborTile.Type == TileType.Core)
                 {
                     neighborTile.Inventory.Add(output);
                 }

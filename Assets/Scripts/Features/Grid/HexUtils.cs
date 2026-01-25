@@ -3,87 +3,123 @@ using UnityEngine;
 
 namespace CarbonWorld.Features.Grid
 {
+    /// <summary>
+    /// Utility functions for hexagonal tilemap operations.
+    /// Uses odd-r offset coordinates (pointy-top hexagons, odd rows shifted right).
+    /// </summary>
     public static class HexUtils
     {
-        public const float OUTER_RADIUS = 1f;
-        public const float INNER_RADIUS = OUTER_RADIUS * 0.866025404f;
-
-        private static readonly HexCoord[] NeighborOffsets =
+        // Neighbor offsets for odd-r offset hexagonal coordinates
+        // For even rows (y % 2 == 0)
+        private static readonly Vector3Int[] EvenRowOffsets =
         {
-            new(1, -1), new(1, 0), new(0, 1),
-            new(-1, 1), new(-1, 0), new(0, -1)
+            new(-1, -1, 0), new(0, -1, 0),  // top-left, top-right
+            new(-1, 0, 0), new(1, 0, 0),     // left, right
+            new(-1, 1, 0), new(0, 1, 0)      // bottom-left, bottom-right
         };
 
-        public static Vector3 HexToWorld(HexCoord coord)
+        // For odd rows (y % 2 == 1)
+        private static readonly Vector3Int[] OddRowOffsets =
         {
-            float x = coord.Q * INNER_RADIUS * 2f + coord.R * INNER_RADIUS;
-            float z = coord.R * OUTER_RADIUS * 1.5f;
-            return new Vector3(x, 0f, z);
-        }
+            new(0, -1, 0), new(1, -1, 0),   // top-left, top-right
+            new(-1, 0, 0), new(1, 0, 0),     // left, right
+            new(0, 1, 0), new(1, 1, 0)       // bottom-left, bottom-right
+        };
 
-        public static int Distance(HexCoord a, HexCoord b)
+        /// <summary>
+        /// Gets all 6 neighbor positions for a hex cell in odd-r offset coordinates.
+        /// </summary>
+        public static Vector3Int[] GetNeighbors(Vector3Int pos)
         {
-            int dq = a.Q - b.Q;
-            int dr = a.R - b.R;
-            int ds = (-a.Q - a.R) - (-b.Q - b.R);
-            return (System.Math.Abs(dq) + System.Math.Abs(dr) + System.Math.Abs(ds)) / 2;
-        }
-
-        public static HexCoord[] GetNeighbors(HexCoord coord)
-        {
-            var neighbors = new HexCoord[6];
+            var offsets = (pos.y & 1) == 0 ? EvenRowOffsets : OddRowOffsets;
+            var neighbors = new Vector3Int[6];
             for (int i = 0; i < 6; i++)
             {
-                var offset = NeighborOffsets[i];
-                neighbors[i] = new HexCoord(coord.Q + offset.Q, coord.R + offset.R);
+                neighbors[i] = pos + offsets[i];
             }
             return neighbors;
         }
 
-        public static List<HexCoord> GetRing(HexCoord center, int radius)
+        /// <summary>
+        /// Calculates the hex distance between two cells in offset coordinates.
+        /// Converts to cube coordinates for accurate distance calculation.
+        /// </summary>
+        public static int Distance(Vector3Int a, Vector3Int b)
+        {
+            var cubeA = OffsetToCube(a);
+            var cubeB = OffsetToCube(b);
+            return CubeDistance(cubeA, cubeB);
+        }
+
+        /// <summary>
+        /// Gets all hex cells in a ring around a center position.
+        /// </summary>
+        public static List<Vector3Int> GetRing(Vector3Int center, int radius)
         {
             if (radius <= 0)
-                return new List<HexCoord> { center };
+                return new List<Vector3Int> { center };
 
-            var results = new List<HexCoord>(6 * radius);
+            var results = new List<Vector3Int>(6 * radius);
+            var centerCube = OffsetToCube(center);
 
-            // Start at the "top-left" of the ring and walk around
-            var current = new HexCoord(center.Q, center.R - radius);
+            // Start at one corner and walk around the ring in cube coordinates
+            var current = new Vector3Int(centerCube.x, centerCube.y + radius, centerCube.z - radius);
 
-            // Walk directions in order to complete the ring
-            int[][] directions =
+            // Direction vectors in cube coordinates
+            Vector3Int[] cubeDirections =
             {
-                new[] { 1, 0 },   // SE
-                new[] { 0, 1 },   // S
-                new[] { -1, 1 },  // SW
-                new[] { -1, 0 },  // NW
-                new[] { 0, -1 },  // N
-                new[] { 1, -1 }   // NE
+                new(1, -1, 0),   // SE
+                new(0, -1, 1),   // S
+                new(-1, 0, 1),   // SW
+                new(-1, 1, 0),   // NW
+                new(0, 1, -1),   // N
+                new(1, 0, -1)    // NE
             };
 
             for (int side = 0; side < 6; side++)
             {
                 for (int step = 0; step < radius; step++)
                 {
-                    results.Add(current);
-                    current = new HexCoord(
-                        current.Q + directions[side][0],
-                        current.R + directions[side][1]
-                    );
+                    results.Add(CubeToOffset(current));
+                    current += cubeDirections[side];
                 }
             }
 
             return results;
         }
 
-        public static List<HexCoord> GetSpiral(HexCoord center, int rings)
+        /// <summary>
+        /// Gets all hex cells in a filled spiral pattern from center outward.
+        /// </summary>
+        public static List<Vector3Int> GetSpiral(Vector3Int center, int rings)
         {
-            var results = new List<HexCoord> { center };
+            var results = new List<Vector3Int> { center };
             for (int r = 1; r <= rings; r++)
             {
                 results.AddRange(GetRing(center, r));
             }
             return results;
+        }
+
+        // Cube coordinate helpers for accurate hex math
+        private static Vector3Int OffsetToCube(Vector3Int offset)
+        {
+            int x = offset.x - (offset.y - (offset.y & 1)) / 2;
+            int z = offset.y;
+            int y = -x - z;
+            return new Vector3Int(x, y, z);
+        }
+
+        private static Vector3Int CubeToOffset(Vector3Int cube)
+        {
+            int col = cube.x + (cube.z - (cube.z & 1)) / 2;
+            int row = cube.z;
+            return new Vector3Int(col, row, 0);
+        }
+
+        private static int CubeDistance(Vector3Int a, Vector3Int b)
+        {
+            return (System.Math.Abs(a.x - b.x) + System.Math.Abs(a.y - b.y) + System.Math.Abs(a.z - b.z)) / 2;
         }
     }
 }

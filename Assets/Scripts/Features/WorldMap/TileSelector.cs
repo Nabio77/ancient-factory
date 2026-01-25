@@ -12,22 +12,24 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, Required]
         private WorldMap worldMap;
 
-        [Title("Settings")]
-        [SerializeField]
-        private LayerMask tileLayerMask = ~0;
-
         [Title("State")]
         [ShowInInspector, ReadOnly]
-        private Tile _hoveredTile;
+        private BaseTile _hoveredTile;
 
         [ShowInInspector, ReadOnly]
-        private Tile _selectedTile;
+        private BaseTile _selectedTile;
 
-        public Tile HoveredTile => _hoveredTile;
-        public Tile SelectedTile => _selectedTile;
+        [ShowInInspector, ReadOnly]
+        private Vector3Int _hoveredCell;
 
-        public event Action<Tile> OnTileHovered;
-        public event Action<Tile> OnTileSelected;
+        [ShowInInspector, ReadOnly]
+        private Vector3Int _selectedCell;
+
+        public BaseTile HoveredTile => _hoveredTile;
+        public BaseTile SelectedTile => _selectedTile;
+
+        public event Action<BaseTile> OnTileHovered;
+        public event Action<BaseTile> OnTileSelected;
         public event Action OnTileDeselected;
 
         private Camera _camera;
@@ -50,22 +52,26 @@ namespace CarbonWorld.Features.WorldMap
 
             if (_camera == null)
             {
-                Debug.LogWarning("TileSelector: Camera is null");
-                return;
+                _camera = Camera.main;
+                if (_camera == null) return;
             }
 
-            var ray = _camera.ScreenPointToRay(mouse.position.ReadValue());
+            // Convert screen position to world position (for 2D orthographic camera)
+            Vector3 mouseScreenPos = mouse.position.ReadValue();
+            mouseScreenPos.z = -_camera.transform.position.z;
+            Vector3 worldPos = _camera.ScreenToWorldPoint(mouseScreenPos);
 
-            if (Physics.Raycast(ray, out var hit, 1000f, tileLayerMask))
+            // Convert world position to tilemap cell
+            var cellPos = worldMap.WorldToCell(worldPos);
+
+            // Check if this cell has a tile
+            var tile = worldMap.TileData.GetTile(cellPos);
+
+            if (tile != null)
             {
-                var tile = hit.collider.GetComponentInParent<Tile>();
-                if (tile != null && tile != _hoveredTile)
+                if (tile != _hoveredTile)
                 {
-                    SetHoveredTile(tile);
-                }
-                else if (tile == null)
-                {
-                    Debug.LogWarning($"Hit object has no Tile component: {hit.collider.gameObject.name}");
+                    SetHoveredTile(tile, cellPos);
                 }
             }
             else
@@ -81,7 +87,7 @@ namespace CarbonWorld.Features.WorldMap
 
             if (_hoveredTile != null)
             {
-                SelectTile(_hoveredTile);
+                SelectTile(_hoveredTile, _hoveredCell);
             }
             else
             {
@@ -89,15 +95,30 @@ namespace CarbonWorld.Features.WorldMap
             }
         }
 
-        private void SetHoveredTile(Tile tile)
+        private void SetHoveredTile(BaseTile tile, Vector3Int cellPos)
         {
+            // Clear previous hover highlight
             if (_hoveredTile != null)
             {
-                _hoveredTile.SetHovered(false);
+                _hoveredTile.IsHovered = false;
+                // Only clear if not selected
+                if (_hoveredCell != _selectedCell)
+                {
+                    worldMap.HighlightTilemap.SetTile(_hoveredCell, null);
+                }
             }
 
             _hoveredTile = tile;
-            _hoveredTile.SetHovered(true);
+            _hoveredCell = cellPos;
+            _hoveredTile.IsHovered = true;
+
+            // Set hover highlight (only if not selected)
+            bool isSelected = _selectedTile != null && _selectedCell == cellPos;
+            if (!isSelected && worldMap.HoverHighlightTile != null)
+            {
+                worldMap.HighlightTilemap.SetTile(cellPos, worldMap.HoverHighlightTile);
+            }
+
             OnTileHovered?.Invoke(tile);
         }
 
@@ -105,22 +126,39 @@ namespace CarbonWorld.Features.WorldMap
         {
             if (_hoveredTile != null)
             {
-                _hoveredTile.SetHovered(false);
+                _hoveredTile.IsHovered = false;
+                // Only clear highlight if not selected
+                bool isSelected = _selectedTile != null && _selectedCell == _hoveredCell;
+                if (!isSelected)
+                {
+                    worldMap.HighlightTilemap.SetTile(_hoveredCell, null);
+                }
                 _hoveredTile = null;
+                _hoveredCell = default;
             }
         }
 
-        public void SelectTile(Tile tile)
+        public void SelectTile(BaseTile tile, Vector3Int cellPos)
         {
             if (_selectedTile == tile) return;
 
+            // Clear previous selection highlight
             if (_selectedTile != null)
             {
-                _selectedTile.SetSelected(false);
+                _selectedTile.IsSelected = false;
+                worldMap.HighlightTilemap.SetTile(_selectedCell, null);
             }
 
             _selectedTile = tile;
-            _selectedTile.SetSelected(true);
+            _selectedCell = cellPos;
+            _selectedTile.IsSelected = true;
+
+            // Set selection highlight
+            if (worldMap.SelectedHighlightTile != null)
+            {
+                worldMap.HighlightTilemap.SetTile(cellPos, worldMap.SelectedHighlightTile);
+            }
+
             OnTileSelected?.Invoke(tile);
         }
 
@@ -128,8 +166,10 @@ namespace CarbonWorld.Features.WorldMap
         {
             if (_selectedTile != null)
             {
-                _selectedTile.SetSelected(false);
+                _selectedTile.IsSelected = false;
+                worldMap.HighlightTilemap.SetTile(_selectedCell, null);
                 _selectedTile = null;
+                _selectedCell = default;
                 OnTileDeselected?.Invoke();
             }
         }

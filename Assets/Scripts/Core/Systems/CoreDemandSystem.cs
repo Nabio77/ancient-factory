@@ -5,8 +5,9 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Core;
-using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
+using CarbonWorld.Types;
+using CarbonWorld.Features.Tiles;
 
 namespace CarbonWorld.Core.Systems
 {
@@ -17,6 +18,9 @@ namespace CarbonWorld.Core.Systems
         [Title("References")]
         [SerializeField, Required]
         private WorldMap worldMap;
+
+        [SerializeField, Required]
+        private ItemDatabase itemDatabase;
 
         [Title("Settings")]
         [SerializeField, MinValue(1)]
@@ -76,7 +80,7 @@ namespace CarbonWorld.Core.Systems
         private float _foodTickTimer;
         private List<ItemDefinition> _t6Items = new();
         private ItemDefinition _foodItem;
-        private CoreTile _coreTile;
+        private BaseTile _coreTileData;
 
         // Events
         public event Action<Demand> OnDemandCreated;
@@ -96,7 +100,7 @@ namespace CarbonWorld.Core.Systems
         public int FoodNeededPerTick => _population * foodPerPopulation;
         public int FoodConsumedLastTick => _foodConsumedLastTick;
         public int FoodDeficit => _foodDeficit;
-        public int FoodInStock => _coreTile?.Inventory.Get(_foodItem) ?? 0;
+        public int FoodInStock => _coreTileData?.Inventory.Get(_foodItem) ?? 0;
         public ItemDefinition FoodItem => _foodItem;
 
         void Awake()
@@ -120,10 +124,10 @@ namespace CarbonWorld.Core.Systems
         {
             if (_victoryAchieved) return;
 
-            if (_coreTile == null)
+            if (_coreTileData == null)
             {
                 TryFindCoreTile();
-                if (_coreTile == null) return;
+                if (_coreTileData == null) return;
             }
 
             ProcessDemandGeneration();
@@ -135,11 +139,11 @@ namespace CarbonWorld.Core.Systems
         {
             if (worldMap == null) return;
 
-            foreach (var kvp in worldMap.Grid.GetAllTiles())
+            foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (kvp.Value is CoreTile coreTile)
+                if (tile.Type == TileType.Core)
                 {
-                    _coreTile = coreTile;
+                    _coreTileData = tile;
                     return;
                 }
             }
@@ -147,18 +151,23 @@ namespace CarbonWorld.Core.Systems
 
         private void LoadItems()
         {
-            var allItems = Resources.LoadAll<ItemDefinition>("Items");
-            _t6Items = allItems.Where(item => item.IsFinalProduct).ToList();
-            _foodItem = allItems.FirstOrDefault(item => item.ItemName == "Food");
+            if (itemDatabase == null)
+            {
+                Debug.LogError("CoreDemandSystem: ItemDatabase reference is missing!");
+                return;
+            }
+
+            _t6Items = itemDatabase.GetFinalProducts().ToList();
+            _foodItem = itemDatabase.GetByName("Food");
 
             if (_t6Items.Count == 0)
             {
-                Debug.LogWarning("CoreDemandSystem: No T6 (FinalProduct) items found in Resources/Items!");
+                Debug.LogWarning("CoreDemandSystem: No T6 (FinalProduct) items found in ItemDatabase!");
             }
 
             if (_foodItem == null)
             {
-                Debug.LogWarning("CoreDemandSystem: Food item not found in Resources/Items!");
+                Debug.LogWarning("CoreDemandSystem: Food item not found in ItemDatabase!");
             }
         }
 
@@ -198,7 +207,7 @@ namespace CarbonWorld.Core.Systems
 
         private void ProcessInventory()
         {
-            var inventory = _coreTile.Inventory;
+            var inventory = _coreTileData.Inventory;
 
             foreach (var demand in _activeDemands)
             {
@@ -274,7 +283,7 @@ namespace CarbonWorld.Core.Systems
                 return;
             }
 
-            var inventory = _coreTile.Inventory;
+            var inventory = _coreTileData.Inventory;
             int available = inventory.Get(_foodItem);
             int consumed = Mathf.Min(available, foodNeeded);
 
@@ -298,9 +307,9 @@ namespace CarbonWorld.Core.Systems
             }
 
             int tileCount = 0;
-            foreach (var kvp in worldMap.Grid.GetAllTiles())
+            foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (kvp.Value is ProductionTile)
+                if (tile.Type == TileType.Production)
                 {
                     tileCount++;
                 }

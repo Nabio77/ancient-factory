@@ -1,15 +1,46 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Core.Data;
+using CarbonWorld.Types;
 
 namespace CarbonWorld.Features.WorldMap
 {
     public class WorldMap : MonoBehaviour
     {
+        [Title("Tilemap References")]
+        [SerializeField, Required]
+        private UnityEngine.Grid grid;
+
+        [SerializeField, Required]
+        private Tilemap tilemap;
+
+        [SerializeField, Required]
+        private Tilemap highlightTilemap;
+
+        [Title("Tile Assets")]
+        [SerializeField, Required]
+        private TileBase coreTile;
+
+        [SerializeField, Required]
+        private TileBase resourceTile;
+
+        [SerializeField, Required]
+        private TileBase productionTile;
+
+        [SerializeField, Required]
+        private TileBase enhancementTile;
+
+        [SerializeField]
+        private TileBase hoverHighlightTile;
+
+        [SerializeField]
+        private TileBase selectedHighlightTile;
+
         [Title("Map Size")]
         [SerializeField, Min(1)]
         private int rings = 5;
@@ -31,22 +62,59 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, Min(1)]
         private int minEnhancementDistanceFromCore = 2;
 
-        [Title("Tile Prefabs")]
-        [SerializeField, Required, AssetsOnly]
-        private Tile coreTilePrefab;
+        [SerializeField, HideInInspector]
+        private List<TileSaveData> _savedTiles = new();
 
-        [SerializeField, Required, AssetsOnly]
-        private ResourceTile resourceTilePrefab;
+        private TileDataGrid _tileData = new();
 
-        [SerializeField, Required, AssetsOnly]
-        private Tile enhancementTilePrefab;
+        public TileDataGrid TileData => _tileData;
+        public UnityEngine.Grid Grid => grid;
+        public Tilemap Tilemap => tilemap;
+        public Tilemap HighlightTilemap => highlightTilemap;
+        public TileBase HoverHighlightTile => hoverHighlightTile;
+        public TileBase SelectedHighlightTile => selectedHighlightTile;
 
-        [SerializeField, Required, AssetsOnly]
-        private Tile productionTilePrefab;
+        private static readonly Vector3Int Center = Vector3Int.zero;
 
-        private HexGrid _grid = new();
+        private void Awake()
+        {
+            // Ensure highlight is drawn on top
+            var mainRenderer = tilemap.GetComponent<TilemapRenderer>();
+            var highlightRenderer = highlightTilemap.GetComponent<TilemapRenderer>();
+            
+            if (mainRenderer != null && highlightRenderer != null)
+            {
+                if (highlightRenderer.sortingOrder <= mainRenderer.sortingOrder)
+                {
+                    highlightRenderer.sortingOrder = mainRenderer.sortingOrder + 1;
+                }
+            }
 
-        public HexGrid Grid => _grid;
+            if (_tileData.Count == 0 && _savedTiles.Count > 0)
+            {
+                foreach (var data in _savedTiles)
+                {
+                    BaseTile tileData;
+                    switch (data.Type)
+                    {
+                        case TileType.Core:
+                            tileData = new CoreTile(data.Position, TileType.Core);
+                            break;
+                        case TileType.Resource:
+                            tileData = new ResourceTile(data.Position, data.Item, data.OutputPerTick);
+                            break;
+                        case TileType.Enhancement:
+                            tileData = new EnhancementTile(data.Position, TileType.Enhancement);
+                            break;
+                        case TileType.Production:
+                        default:
+                            tileData = new ProductionTile(data.Position);
+                            break;
+                    }
+                    _tileData.Add(data.Position, tileData);
+                }
+            }
+        }
 
         [Button("Generate", ButtonSizes.Large), GUIColor(0.4f, 0.8f, 0.4f)]
         public void Generate()
@@ -54,13 +122,13 @@ namespace CarbonWorld.Features.WorldMap
             Clear();
 
             var rng = new System.Random();
-            var coords = HexUtils.GetSpiral(HexCoord.Zero, rings);
-            var assignments = new Dictionary<HexCoord, TileAssignment>();
+            var coords = HexUtils.GetSpiral(Center, rings);
+            var assignments = new Dictionary<Vector3Int, TileAssignment>();
 
             // Phase 1: Core tiles (center)
             foreach (var coord in coords)
             {
-                if (HexUtils.Distance(HexCoord.Zero, coord) <= coreRadius)
+                if (HexUtils.Distance(Center, coord) <= coreRadius)
                     assignments[coord] = new TileAssignment { Type = TileType.Core };
             }
 
@@ -101,32 +169,30 @@ namespace CarbonWorld.Features.WorldMap
                     assignments[coord] = new TileAssignment { Type = TileType.Production };
             }
 
-            // Phase 5: Instantiate all tiles
-            InstantiateTiles(assignments);
+            // Phase 5: Create tiles
+            CreateTiles(assignments);
         }
 
         [Button("Clear"), GUIColor(0.8f, 0.4f, 0.4f)]
         public void Clear()
         {
-            _grid.Clear();
-
-            for (int i = transform.childCount - 1; i >= 0; i--)
-            {
-                DestroyImmediate(transform.GetChild(i).gameObject);
-            }
+            _tileData.Clear();
+            _savedTiles.Clear();
+            tilemap.ClearAllTiles();
+            highlightTilemap.ClearAllTiles();
         }
 
-        private List<HexCoord> GetValidCandidates(
-            List<HexCoord> allCoords,
-            Dictionary<HexCoord, TileAssignment> assignments,
+        private List<Vector3Int> GetValidCandidates(
+            List<Vector3Int> allCoords,
+            Dictionary<Vector3Int, TileAssignment> assignments,
             int minDistanceFromCore)
         {
-            var candidates = new List<HexCoord>();
+            var candidates = new List<Vector3Int>();
             foreach (var coord in allCoords)
             {
                 if (assignments.ContainsKey(coord))
                     continue;
-                if (HexUtils.Distance(HexCoord.Zero, coord) < minDistanceFromCore)
+                if (HexUtils.Distance(Center, coord) < minDistanceFromCore)
                     continue;
                 candidates.Add(coord);
             }
@@ -142,45 +208,62 @@ namespace CarbonWorld.Features.WorldMap
             }
         }
 
-        private void InstantiateTiles(Dictionary<HexCoord, TileAssignment> assignments)
+        private void CreateTiles(Dictionary<Vector3Int, TileAssignment> assignments)
         {
+            _savedTiles.Clear();
             foreach (var (coord, assignment) in assignments)
             {
-                var worldPos = HexUtils.HexToWorld(coord);
-                Tile tile;
+                TileBase visualTile;
+                BaseTile tileData;
 
                 switch (assignment.Type)
                 {
                     case TileType.Core:
-                        tile = Instantiate(coreTilePrefab, worldPos, Quaternion.identity, transform);
+                        visualTile = coreTile;
+                        tileData = new CoreTile(coord, TileType.Core);
                         break;
 
                     case TileType.Resource:
-                        var resourceTile = Instantiate(resourceTilePrefab, worldPos, Quaternion.identity, transform);
-                        resourceTile.Initialize(coord);
-                        resourceTile.ResourceItem = assignment.Item;
-                        resourceTile.OutputPerTick = assignment.OutputPerTick;
-                        resourceTile.name = $"{assignment.Type} {coord}";
-                        _grid.Add(coord, resourceTile);
-                        continue;
+                        visualTile = resourceTile;
+                        tileData = new ResourceTile(coord, assignment.Item, assignment.OutputPerTick);
+                        break;
 
                     case TileType.Enhancement:
-                        tile = Instantiate(enhancementTilePrefab, worldPos, Quaternion.identity, transform);
+                        visualTile = enhancementTile;
+                        tileData = new EnhancementTile(coord, TileType.Enhancement);
                         break;
 
                     case TileType.Production:
                     default:
-                        tile = Instantiate(productionTilePrefab, worldPos, Quaternion.identity, transform);
+                        visualTile = productionTile;
+                        tileData = new ProductionTile(coord);
                         break;
                 }
 
-                tile.Initialize(coord);
-                tile.name = $"{assignment.Type} {coord}";
-                _grid.Add(coord, tile);
+                _savedTiles.Add(new TileSaveData
+                {
+                    Position = coord,
+                    Type = assignment.Type,
+                    Item = assignment.Item,
+                    OutputPerTick = assignment.OutputPerTick
+                });
+
+                tilemap.SetTile(coord, visualTile);
+                _tileData.Add(coord, tileData);
             }
         }
 
-        private enum TileType { Core, Resource, Enhancement, Production }
+        public Vector3 CellToWorld(Vector3Int cellPos)
+        {
+            return grid.CellToWorld(cellPos);
+        }
+
+        public Vector3Int WorldToCell(Vector3 worldPos)
+        {
+            // Use tilemap.WorldToCell for correct hexagonal coordinate conversion
+            // Grid.WorldToCell uses simple floor which doesn't work for hex tiles
+            return tilemap.WorldToCell(worldPos);
+        }
 
         private struct TileAssignment
         {
@@ -188,6 +271,15 @@ namespace CarbonWorld.Features.WorldMap
             public ItemDefinition Item;
             public int OutputPerTick;
         }
+    }
+
+    [Serializable]
+    public struct TileSaveData
+    {
+        public Vector3Int Position;
+        public TileType Type;
+        public ItemDefinition Item;
+        public int OutputPerTick;
     }
 
     [Serializable]

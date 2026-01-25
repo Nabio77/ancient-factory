@@ -1,9 +1,13 @@
 using UnityEngine;
-using Sirenix.OdinInspector;
+using CarbonWorld.Types;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public class PowerTile : Tile
+    public class PowerTile : BaseTile
     {
+        public PowerTile(Vector3Int cellPosition, TileType type) : base(cellPosition, type)
+        {
+        }
     }
+
 }

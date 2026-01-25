@@ -21,10 +21,10 @@ namespace CarbonWorld.Features.WorldMap
         private float zoomSpeed = 5f;
 
         [SerializeField]
-        private float minZoom = 5f;
+        private float minZoom = 3f;
 
         [SerializeField]
-        private float maxZoom = 50f;
+        private float maxZoom = 30f;
 
         private Camera _camera;
         private Vector3 _targetPosition;
@@ -95,7 +95,8 @@ namespace CarbonWorld.Features.WorldMap
             {
                 input.Normalize();
                 float zoomFactor = _targetZoom / 10f;
-                _targetPosition += new Vector3(input.x, 0, input.y) * (panSpeed * zoomFactor * Time.deltaTime);
+                // 2D: Move in XY plane
+                _targetPosition += new Vector3(input.x, input.y, 0) * (panSpeed * zoomFactor * Time.deltaTime);
             }
         }
 
@@ -121,7 +122,8 @@ namespace CarbonWorld.Features.WorldMap
             {
                 var delta = mousePos - _lastMousePos;
                 float zoomFactor = _targetZoom * 0.01f;
-                _targetPosition -= new Vector3(delta.x, 0, delta.y) * (dragSpeed * zoomFactor);
+                // 2D: Drag in XY plane
+                _targetPosition -= new Vector3(delta.x, delta.y, 0) * (dragSpeed * zoomFactor);
                 _lastMousePos = mousePos;
             }
         }
@@ -141,15 +143,17 @@ namespace CarbonWorld.Features.WorldMap
 
         private void ApplyMovement()
         {
-            transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _velocity, smoothTime);
+            // Keep Z position fixed for 2D camera
+            var targetWithFixedZ = new Vector3(_targetPosition.x, _targetPosition.y, transform.position.z);
+            transform.position = Vector3.SmoothDamp(transform.position, targetWithFixedZ, ref _velocity, smoothTime);
             _camera.orthographicSize = Mathf.SmoothDamp(_camera.orthographicSize, _targetZoom, ref _zoomVelocity, smoothTime);
         }
 
         [Button("Reset Position")]
         public void ResetPosition()
         {
-            _targetPosition = new Vector3(0, transform.position.y, 0);
-            _targetZoom = 15f;
+            _targetPosition = new Vector3(0, 0, transform.position.z);
+            _targetZoom = 10f;
         }
     }
 }

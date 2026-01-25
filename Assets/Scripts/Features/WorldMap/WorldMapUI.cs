@@ -2,7 +2,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 
@@ -58,11 +57,11 @@ namespace CarbonWorld.Features.WorldMap
             tileSelector.OnTileDeselected -= OnTileDeselected;
         }
 
-        private void OnTileSelected(Tile tile)
+        private void OnTileSelected(BaseTile tile)
         {
-            _tileType.text = tile.GetType().Name.Replace("Tile", " Tile");
-            _tileCoords.text = $"({tile.Coordinates.Q}, {tile.Coordinates.R})";
-            _tileNeighbors.text = GetNeighborsText(tile.Coordinates);
+            _tileType.text = $"{tile.Type} Tile";
+            _tileCoords.text = $"({tile.CellPosition.x}, {tile.CellPosition.y})";
+            _tileNeighbors.text = GetNeighborsText(tile.CellPosition);
 
             if (tile is ResourceTile resourceTile)
             {
@@ -104,18 +103,17 @@ namespace CarbonWorld.Features.WorldMap
             _resourceInfo.RemoveFromClassList("hidden");
         }
 
-        private string GetNeighborsText(HexCoord coord)
+        private string GetNeighborsText(Vector3Int cellPos)
         {
-            var neighbors = HexUtils.GetNeighbors(coord);
+            var neighbors = HexUtils.GetNeighbors(cellPos);
             var sb = new StringBuilder();
 
-            foreach (var neighborCoord in neighbors)
+            foreach (var neighborPos in neighbors)
             {
-                var neighborTile = worldMap.Grid.GetTile(neighborCoord);
+                var neighborTile = worldMap.TileData.GetTile(neighborPos);
                 if (neighborTile != null)
                 {
-                    var typeName = neighborTile.GetType().Name.Replace("Tile", "");
-                    sb.AppendLine($"({neighborCoord.Q}, {neighborCoord.R}) - {typeName}");
+                    sb.AppendLine($"({neighborPos.x}, {neighborPos.y}) - {neighborTile.Type}");
                 }
             }
 
