@@ -8,6 +8,7 @@ namespace CarbonWorld.Types
         Enhancement,
         Power,
         Nature,
+        Transport,
         Flooded,
         DeadZone,
         RefugeeCamp,

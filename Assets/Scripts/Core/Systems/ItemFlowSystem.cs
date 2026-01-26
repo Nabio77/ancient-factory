@@ -63,8 +63,8 @@ namespace CarbonWorld.Core.Systems
 
             foreach (var neighborTile in worldMap.TileData.GetNeighbors(resourceTile.CellPosition))
             {
-                // Resources flow to production tiles, power tiles, and core
-                if (neighborTile.Type == TileType.Production || neighborTile.Type == TileType.Power || neighborTile.Type == TileType.Core)
+                // Resources flow to production tiles, power tiles, transport tiles, and core
+                if (neighborTile.Type == TileType.Production || neighborTile.Type == TileType.Power || neighborTile.Type == TileType.Transport || neighborTile.Type == TileType.Core)
                 {
                     neighborTile.Inventory.Add(output);
                 }

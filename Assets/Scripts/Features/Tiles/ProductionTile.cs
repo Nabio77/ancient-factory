@@ -54,6 +54,14 @@ namespace CarbonWorld.Features.Tiles
                         AddInputNode(neighbor.CellPosition, neighbor.Type, neighborOutput, inputIndex++);
                     }
                 }
+                else if (neighbor is TransportTile transportTile)
+                {
+                    var graphOutputs = transportTile.GetOutputs();
+                    foreach (var neighborOutput in graphOutputs)
+                    {
+                        AddInputNode(neighbor.CellPosition, neighbor.Type, neighborOutput, inputIndex++);
+                    }
+                }
             }
 
             // Create/Update Output Node

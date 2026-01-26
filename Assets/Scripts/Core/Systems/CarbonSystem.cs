@@ -246,7 +246,8 @@ namespace CarbonWorld.Core.Systems
                     tile.Type == TileType.DeadZone ||
                     tile.Type == TileType.RefugeeCamp ||
                     tile.Type == TileType.Heatwave ||
-                    tile.Type == TileType.Resource)
+                    tile.Type == TileType.Resource ||
+                    tile.Type == TileType.Transport)
                     continue;
 
                 // For flooding, prefer tiles near existing floods or at map edges
@@ -358,7 +359,8 @@ namespace CarbonWorld.Core.Systems
                            t.Type != TileType.Flooded &&
                            t.Type != TileType.DeadZone &&
                            t.Type != TileType.RefugeeCamp &&
-                           t.Type != TileType.Heatwave)
+                           t.Type != TileType.Heatwave &&
+                           t.Type != TileType.Transport)
                 .ToList();
 
             if (neighbors.Count == 0)

@@ -39,6 +39,10 @@ namespace CarbonWorld.Features.WorldMap
         public event Action OnTileHoverEnded;
         public event Action<BaseTile> OnTileSelected;
         public event Action OnTileDeselected;
+        
+        // Placement Mode
+        public bool IsPlacementMode { get; set; }
+        public event Action<BaseTile> OnPlacementClick;
 
         private Camera _camera;
 
@@ -57,7 +61,12 @@ namespace CarbonWorld.Features.WorldMap
         {
             var mouse = Mouse.current;
             if (mouse == null) return;
+            
+            // ... (rest of method same)
 
+            // Note: We might want to show a different hover cursor/highlight in placement mode later,
+            // but for now, standard hover is fine.
+            
             if (_camera == null)
             {
                 _camera = Camera.main;
@@ -100,12 +109,26 @@ namespace CarbonWorld.Features.WorldMap
             var mouse = Mouse.current;
             if (mouse == null || !mouse.leftButton.wasPressedThisFrame) return;
 
+            // Ignore click if over UI (Optional, but usually good practice. 
+            // However, typical Unity UI blocking requires EventSystem check which isn't imported here.
+            // Assuming UIToolkit blocks raycasts or handles this elsewhere.)
+
             if (_hoveredTile != null)
             {
-                SelectTile(_hoveredTile, _hoveredCell);
+                if (IsPlacementMode)
+                {
+                    OnPlacementClick?.Invoke(_hoveredTile);
+                }
+                else
+                {
+                    SelectTile(_hoveredTile, _hoveredCell);
+                }
             }
             else
             {
+                // Only deselect if NOT in placement mode? 
+                // Or maybe clicking empty space cancels placement mode?
+                // Let's keep it simple: clicking empty space always deselects.
                 Deselect();
             }
         }

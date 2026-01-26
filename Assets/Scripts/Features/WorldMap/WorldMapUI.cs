@@ -40,6 +40,9 @@ namespace CarbonWorld.Features.WorldMap
         private Label _powerOutput;
         private Label _powerRadius;
 
+        private VisualElement _transportInfo;
+        private Label _transportOutputs;
+
         void Awake()
         {
             var root = uiDocument.rootVisualElement;
@@ -61,6 +64,9 @@ namespace CarbonWorld.Features.WorldMap
             _powerInfo = root.Q<VisualElement>("power-info");
             _powerOutput = root.Q<Label>("power-output");
             _powerRadius = root.Q<Label>("power-radius");
+
+            _transportInfo = root.Q<VisualElement>("transport-info");
+            _transportOutputs = root.Q<Label>("transport-outputs");
         }
 
         void OnEnable()
@@ -125,7 +131,7 @@ namespace CarbonWorld.Features.WorldMap
             }
             else
             {
-                _resourceInfo.AddToClassList("hidden");
+                _resourceInfo?.AddToClassList("hidden");
             }
 
             if (tile is ProductionTile productionTile)
@@ -134,7 +140,7 @@ namespace CarbonWorld.Features.WorldMap
             }
             else
             {
-                _productionInfo.AddToClassList("hidden");
+                _productionInfo?.AddToClassList("hidden");
             }
 
             if (tile is PowerTile powerTile)
@@ -143,10 +149,37 @@ namespace CarbonWorld.Features.WorldMap
             }
             else
             {
-                _powerInfo.AddToClassList("hidden");
+                _powerInfo?.AddToClassList("hidden");
+            }
+
+            if (tile is TransportTile transportTile)
+            {
+                ShowTransportInfo(transportTile);
+            }
+            else
+            {
+                _transportInfo?.AddToClassList("hidden");
             }
 
             _tileInfoPanel.RemoveFromClassList("hidden");
+        }
+
+        private void ShowTransportInfo(TransportTile tile)
+        {
+            if (_transportInfo == null) return;
+
+            tile.UpdateIO(worldMap.TileData);
+            var outputs = tile.GetOutputs()
+                .Select(stack => $"{stack.Item.ItemName} (Tier {stack.Item.Tier})")
+                .Distinct()
+                .ToList();
+
+            if (_transportOutputs != null)
+            {
+                _transportOutputs.text = outputs.Any() ? string.Join("\n", outputs) : "None";
+            }
+
+            _transportInfo.RemoveFromClassList("hidden");
         }
 
         private void ShowPowerInfo(PowerTile tile)

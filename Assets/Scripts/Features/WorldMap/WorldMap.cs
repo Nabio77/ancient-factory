@@ -39,6 +39,9 @@ namespace CarbonWorld.Features.WorldMap
         private TileBase powerTile;
 
         [SerializeField]
+        private TileBase transportTile;
+
+        [SerializeField]
         private TileBase natureTile;
 
         [SerializeField]
@@ -148,6 +151,9 @@ namespace CarbonWorld.Features.WorldMap
                         case TileType.Nature:
                             tileData = new NatureTile(data.Position);
                             break;
+                        case TileType.Transport:
+                            tileData = new TransportTile(data.Position);
+                            break;
                         case TileType.Flooded:
                             tileData = new FloodedTile(data.Position, 0);
                             break;
@@ -216,13 +222,15 @@ namespace CarbonWorld.Features.WorldMap
                 assignments[enhancementCandidates[i]] = new TileAssignment { Type = TileType.Enhancement };
             }
 
-            // Phase 4: Power tiles
+            // Phase 4: Power tiles - DISABLED
+            /*
             var powerCandidates = GetValidCandidates(coords, assignments, minPowerDistanceFromCore);
             Shuffle(powerCandidates, rng);
             for (int i = 0; i < powerTileCount && i < powerCandidates.Count; i++)
             {
                 assignments[powerCandidates[i]] = new TileAssignment { Type = TileType.Power };
             }
+            */
 
             // Phase 5: Nature tiles
             var natureCandidates = GetValidCandidates(coords, assignments, minNatureDistanceFromCore);
@@ -313,6 +321,11 @@ namespace CarbonWorld.Features.WorldMap
                         tileData = new NatureTile(coord);
                         break;
 
+                    case TileType.Transport:
+                        visualTile = transportTile;
+                        tileData = new TransportTile(coord);
+                        break;
+
                     case TileType.Production:
                     default:
                         visualTile = productionTile;
@@ -330,6 +343,80 @@ namespace CarbonWorld.Features.WorldMap
 
                 tilemap.SetTile(coord, visualTile);
                 _tileData.Add(coord, tileData);
+            }
+        }
+
+        /// <summary>
+        /// Replaces a tile at the given position with a new type.
+        /// </summary>
+        public void ReplaceTile(Vector3Int position, TileType newType)
+        {
+            if (!_tileData.Contains(position)) return;
+
+            // 1. Create new tile data
+            BaseTile newTileData;
+            switch (newType)
+            {
+                case TileType.Power:
+                    newTileData = new PowerTile(position);
+                    break;
+                case TileType.Nature:
+                    newTileData = new NatureTile(position);
+                    break;
+                case TileType.Transport:
+                    newTileData = new TransportTile(position);
+                    break;
+                case TileType.Production:
+                    newTileData = new ProductionTile(position);
+                    break;
+                default:
+                    Debug.LogWarning($"ReplaceTile: Unsupported type {newType}");
+                    return;
+            }
+
+            // 2. Update TileDataGrid
+            _tileData.Remove(position);
+            _tileData.Add(position, newTileData);
+
+            // 3. Update Visuals
+            UpdateTileVisual(position);
+
+            // 4. Update Saved Data
+            int saveIndex = _savedTiles.FindIndex(t => t.Position == position);
+            if (saveIndex != -1)
+            {
+                var save = _savedTiles[saveIndex];
+                save.Type = newType;
+                // Reset item/output for non-resource types (assuming we don't convert to resource)
+                save.Item = null;
+                save.OutputPerTick = 0;
+                _savedTiles[saveIndex] = save;
+            }
+            else
+            {
+                // Should exist, but if not, add it
+                _savedTiles.Add(new TileSaveData
+                {
+                    Position = position,
+                    Type = newType
+                });
+            }
+            
+            // 5. Notify neighbors if they are graph tiles to update IO?
+            // This is important for immediate feedback in UI if lines are drawn
+            foreach (var neighborPos in HexUtils.GetNeighbors(position))
+            {
+                var neighbor = _tileData.GetTile(neighborPos);
+                if (neighbor is IGraphTile graphTile)
+                {
+                    graphTile.UpdateIO(_tileData);
+                }
+            }
+            
+            // Update self if graph tile
+            if (newTileData is IGraphTile newGraphTile)
+            {
+                newGraphTile.UpdateIO(_tileData);
             }
         }
 
@@ -362,6 +449,7 @@ namespace CarbonWorld.Features.WorldMap
                 TileType.Enhancement => enhancementTile,
                 TileType.Power => powerTile,
                 TileType.Nature => natureTile,
+                TileType.Transport => transportTile,
                 TileType.Flooded => floodedTile,
                 TileType.DeadZone => deadZoneTile,
                 TileType.RefugeeCamp => refugeeCampTile,
@@ -385,6 +473,7 @@ namespace CarbonWorld.Features.WorldMap
                 TileType.Enhancement => enhancementTile,
                 TileType.Power => powerTile,
                 TileType.Nature => natureTile,
+                TileType.Transport => transportTile,
                 TileType.Flooded => floodedTile,
                 TileType.DeadZone => deadZoneTile,
                 TileType.RefugeeCamp => refugeeCampTile,

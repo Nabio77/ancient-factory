@@ -1,0 +1,75 @@
+.palette-container {
+    position: absolute;
+    bottom: 50px;
+    align-self: center;
+    background-color: rgba(30, 30, 30, 0.95);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    min-width: 400px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.palette-header {
+    -unity-font-style: bold;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 10px;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    -unity-text-align: middle-center;
+}
+
+.palette-buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.palette-btn {
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    padding: 5px;
+    background-color: rgba(45, 45, 45, 0.8);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.05);
+    align-items: center;
+    justify-content: center;
+    transition-duration: 0.1s;
+}
+
+.palette-btn:hover {
+    background-color: rgba(70, 70, 70, 1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.palette-btn:active {
+    background-color: rgba(30, 30, 30, 1);
+}
+
+/* Active State for selected brush - No green border, just brighter background and scale */
+.palette-btn.selected {
+    background-color: rgba(120, 120, 120, 1);
+    border-color: rgba(255, 255, 255, 0.5);
+    scale: 1.1;
+}
+
+.palette-btn Label {
+    font-size: 10px;
+    color: white;
+    margin-top: 4px;
+}
+
+.palette-icon {
+    width: 32px;
+    height: 32px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* Removed debug colors from icons */
+.power-icon { }
+.nature-icon { }
+.transport-icon { }
+.production-icon { }
