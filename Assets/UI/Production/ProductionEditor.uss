@@ -143,3 +143,40 @@
 #close-button:hover {
     background-color: rgb(221, 68, 68);
 }
+
+/* IO Zones for input/output cards */
+.io-zone {
+    position: absolute;
+    top: 50px;
+    bottom: 130px;
+    width: 160px;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: scroll;
+}
+
+.io-zone-title {
+    font-size: 12px;
+    color: rgb(136, 136, 136);
+    -unity-font-style: bold;
+    margin-bottom: 10px;
+    -unity-text-align: upper-center;
+}
+
+.input-zone {
+    left: 10px;
+    background-color: rgba(33, 150, 243, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(33, 150, 243, 0.3);
+}
+
+.output-zone {
+    right: 50px;
+    background-color: rgba(255, 152, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 152, 0, 0.3);
+}

@@ -9,11 +9,24 @@ namespace CarbonWorld.Core.Data
     {
         public List<BlueprintNode> nodes = new();
         public List<BlueprintConnection> connections = new();
+        public List<TileIONode> ioNodes = new();
 
         // Helper to find a node by ID
         public BlueprintNode GetNode(string id)
         {
             return nodes.Find(n => n.id == id);
+        }
+
+        // Helper to find an IO node by ID
+        public TileIONode GetIONode(string id)
+        {
+            return ioNodes.Find(n => n.id == id);
+        }
+
+        // Check if a node ID belongs to an IO node
+        public bool IsIONode(string id)
+        {
+            return id != null && id.StartsWith("tile_io_");
         }
     }
 

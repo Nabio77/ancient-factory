@@ -28,6 +28,12 @@ namespace CarbonWorld.Features.Production
         [SerializeField, Required]
         private VisualTreeAsset cardTemplate;
 
+        [SerializeField, Required]
+        private VisualTreeAsset tileIOCardTemplate;
+
+        [SerializeField, Required]
+        private WorldMap.WorldMap worldMap;
+
         [Title("Settings")]
         [SerializeField]
         private Color connectionColor = new Color(0f, 0.67f, 1f);
@@ -75,6 +81,12 @@ namespace CarbonWorld.Features.Production
         private Dictionary<string, VisualElement> _nodeElements = new();
         private Dictionary<string, List<VisualElement>> _inputPorts = new();
         private Dictionary<string, List<VisualElement>> _outputPorts = new();
+
+        // IO Zones and Cards
+        private VisualElement _inputZone;
+        private VisualElement _outputZone;
+        private Dictionary<string, VisualElement> _ioCardElements = new();
+        private Dictionary<string, VisualElement> _ioCardPorts = new();
 
         void Awake()
         {
@@ -299,6 +311,14 @@ namespace CarbonWorld.Features.Production
             _nodeElements.Clear();
             _inputPorts.Clear();
             _outputPorts.Clear();
+
+            // Clear IO zones and cards
+            _inputZone?.RemoveFromHierarchy();
+            _outputZone?.RemoveFromHierarchy();
+            _inputZone = null;
+            _outputZone = null;
+            _ioCardElements.Clear();
+            _ioCardPorts.Clear();
         }
 
         private void RebuildGraphUI()
@@ -312,14 +332,24 @@ namespace CarbonWorld.Features.Production
                 }
             }
 
+            // Remove old IO zones from root
+            _inputZone?.RemoveFromHierarchy();
+            _outputZone?.RemoveFromHierarchy();
+
             _nodeElements.Clear();
             _inputPorts.Clear();
             _outputPorts.Clear();
+            _ioCardElements.Clear();
+            _ioCardPorts.Clear();
 
             // Reset view
             ResetView();
 
             if (_currentGraph == null) return;
+
+            // Create IO zones and cards
+            CreateIOZones();
+            PopulateIOCards();
 
             foreach (var node in _currentGraph.nodes)
             {
@@ -413,6 +443,228 @@ namespace CarbonWorld.Features.Production
             card.RegisterCallback<MouseDownEvent>(evt => StartDragNode(evt, node, card));
 
             _canvasContent.Add(card);
+        }
+
+        // --- IO Zones & Cards ---
+
+        private void CreateIOZones()
+        {
+            // Input zone on the left
+            _inputZone = new VisualElement();
+            _inputZone.AddToClassList("io-zone");
+            _inputZone.AddToClassList("input-zone");
+
+            var inputTitle = new Label("INPUTS");
+            inputTitle.AddToClassList("io-zone-title");
+            _inputZone.Add(inputTitle);
+
+            _root.Add(_inputZone);
+
+            // Output zone on the right
+            _outputZone = new VisualElement();
+            _outputZone.AddToClassList("io-zone");
+            _outputZone.AddToClassList("output-zone");
+
+            var outputTitle = new Label("OUTPUT");
+            outputTitle.AddToClassList("io-zone-title");
+            _outputZone.Add(outputTitle);
+
+            _root.Add(_outputZone);
+        }
+
+        private void PopulateIOCards()
+        {
+            if (_currentTile == null || worldMap == null) return;
+
+            // Clear existing IO nodes
+            _currentGraph.ioNodes.Clear();
+
+            // Get adjacent tiles
+            var neighbors = worldMap.TileData.GetNeighbors(_currentTile.CellPosition);
+            int inputIndex = 0;
+
+            foreach (var neighbor in neighbors)
+            {
+                if (neighbor is ResourceTile resourceTile)
+                {
+                    // Create input card for resource tile
+                    var output = resourceTile.GetOutput();
+                    if (output.IsValid)
+                    {
+                        var ioNode = new TileIONode(
+                            TileIOType.Input,
+                            neighbor.CellPosition,
+                            neighbor.Type,
+                            output,
+                            inputIndex++
+                        );
+                        _currentGraph.ioNodes.Add(ioNode);
+                        CreateIOCardUI(ioNode);
+                    }
+                }
+                else if (neighbor is ProductionTile productionTile)
+                {
+                    // Check what this production tile outputs from its graph
+                    var graphOutputs = GetProductionTileOutputs(productionTile);
+                    foreach (var outputItem in graphOutputs)
+                    {
+                        var ioNode = new TileIONode(
+                            TileIOType.Input,
+                            neighbor.CellPosition,
+                            neighbor.Type,
+                            outputItem,
+                            inputIndex++
+                        );
+                        _currentGraph.ioNodes.Add(ioNode);
+                        CreateIOCardUI(ioNode);
+                    }
+                }
+            }
+
+            // Create single output card
+            var outputNode = new TileIONode(
+                TileIOType.Output,
+                _currentTile.CellPosition,
+                _currentTile.Type,
+                new ItemStack(),
+                0
+            );
+            _currentGraph.ioNodes.Add(outputNode);
+            CreateIOCardUI(outputNode);
+        }
+
+        private List<ItemStack> GetProductionTileOutputs(ProductionTile tile)
+        {
+            var outputs = new List<ItemStack>();
+            var graph = tile.Graph;
+
+            if (graph == null || graph.nodes.Count == 0)
+                return outputs;
+
+            // Find connections that go to the output IO node
+            var outputConnections = graph.connections
+                .Where(c => c.toNodeId.StartsWith("tile_io_output"))
+                .ToList();
+
+            // Get the output items from the source blueprint nodes
+            foreach (var conn in outputConnections)
+            {
+                var sourceNode = graph.GetNode(conn.fromNodeId);
+                if (sourceNode?.blueprint != null && sourceNode.blueprint.Output.IsValid)
+                {
+                    outputs.Add(sourceNode.blueprint.Output);
+                }
+            }
+
+            // If no explicit output connections, check for unconnected outputs from producer nodes
+            if (outputs.Count == 0)
+            {
+                var connectedOutputs = new HashSet<(string nodeId, int portIndex)>();
+                foreach (var conn in graph.connections)
+                {
+                    connectedOutputs.Add((conn.fromNodeId, conn.fromPortIndex));
+                }
+
+                foreach (var node in graph.nodes)
+                {
+                    if (node.blueprint == null || !node.blueprint.IsProducer)
+                        continue;
+
+                    // Check if any output port is unconnected
+                    for (int i = 0; i < node.blueprint.OutputCount; i++)
+                    {
+                        if (!connectedOutputs.Contains((node.id, i)) && node.blueprint.Output.IsValid)
+                        {
+                            outputs.Add(node.blueprint.Output);
+                            break; // Only add once per node
+                        }
+                    }
+                }
+            }
+
+            return outputs;
+        }
+
+        private void CreateIOCardUI(TileIONode ioNode)
+        {
+            var card = tileIOCardTemplate.Instantiate();
+
+            bool isInput = ioNode.type == TileIOType.Input;
+
+            // Add appropriate class
+            card.AddToClassList(isInput ? "input-card" : "output-card");
+
+            // Set card content
+            var typeLabel = card.Q<Label>("io-card-type");
+            typeLabel.text = isInput ? ioNode.sourceTileType.ToString() : "Output";
+
+            var itemLabel = card.Q<Label>("io-card-item");
+            var amountLabel = card.Q<Label>("io-card-amount");
+
+            if (ioNode.availableItem.IsValid)
+            {
+                itemLabel.text = ioNode.availableItem.Item.ItemName;
+                amountLabel.text = $"{ioNode.availableItem.Amount}/tick";
+            }
+            else
+            {
+                itemLabel.text = isInput ? "Empty" : "Connect Output";
+                amountLabel.text = "";
+            }
+
+            // Set icon if available
+            var icon = card.Q<VisualElement>("io-card-icon");
+            if (ioNode.availableItem.IsValid && ioNode.availableItem.Item.Icon != null)
+            {
+                icon.style.backgroundImage = new StyleBackground(ioNode.availableItem.Item.Icon);
+            }
+
+            // Create port
+            var port = new VisualElement();
+            port.AddToClassList("io-port");
+
+            // Add port to appropriate container
+            var portContainer = isInput
+                ? card.Q<VisualElement>("io-port-right")
+                : card.Q<VisualElement>("io-port-left");
+            portContainer.Add(port);
+
+            // Register port events
+            if (isInput)
+            {
+                // Input cards have output ports (they provide items)
+                port.RegisterCallback<MouseDownEvent>(evt => StartConnection(evt, ioNode.id, 0));
+            }
+            else
+            {
+                // Output card has input port (it receives items)
+                port.RegisterCallback<MouseUpEvent>(evt => CompleteConnection(evt, ioNode.id, 0));
+            }
+
+            // Store references
+            _ioCardElements[ioNode.id] = card;
+            _ioCardPorts[ioNode.id] = port;
+
+            // Add to appropriate zone
+            if (isInput)
+            {
+                _inputZone.Add(card);
+            }
+            else
+            {
+                _outputZone.Add(card);
+            }
+        }
+
+        private Vector2? GetIOPortPosition(string ioNodeId)
+        {
+            if (!_ioCardPorts.TryGetValue(ioNodeId, out var port)) return null;
+
+            var worldCenter = port.worldBound.center;
+            if (float.IsNaN(worldCenter.x)) return null;
+
+            var canvasPos = _canvas.WorldToLocal(worldCenter);
+            return ScreenToContent(canvasPos);
         }
 
         // --- Zoom & Pan ---
@@ -602,8 +854,24 @@ namespace CarbonWorld.Features.Production
             {
                 foreach (var conn in _currentGraph.connections)
                 {
-                    var start = GetPortPosition(conn.fromNodeId, conn.fromPortIndex, false);
-                    var end = GetPortPosition(conn.toNodeId, conn.toPortIndex, true);
+                    Vector2? start, end;
+
+                    // Check if connection involves IO nodes
+                    if (_currentGraph.IsIONode(conn.fromNodeId))
+                    {
+                        start = GetIOPortPosition(conn.fromNodeId);
+                        end = GetPortPosition(conn.toNodeId, conn.toPortIndex, true);
+                    }
+                    else if (_currentGraph.IsIONode(conn.toNodeId))
+                    {
+                        start = GetPortPosition(conn.fromNodeId, conn.fromPortIndex, false);
+                        end = GetIOPortPosition(conn.toNodeId);
+                    }
+                    else
+                    {
+                        start = GetPortPosition(conn.fromNodeId, conn.fromPortIndex, false);
+                        end = GetPortPosition(conn.toNodeId, conn.toPortIndex, true);
+                    }
 
                     if (start.HasValue && end.HasValue)
                     {

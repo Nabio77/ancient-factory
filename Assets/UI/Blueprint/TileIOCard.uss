@@ -1,0 +1,108 @@
+.io-card {
+    width: 140px;
+    background-color: rgb(51, 51, 51);
+    border-radius: 6px;
+    border-width: 2px;
+    border-color: rgb(85, 85, 85);
+    color: white;
+    margin: 5px;
+}
+
+/* Input card styling (blue theme) */
+.io-card.input-card {
+    border-color: rgb(33, 150, 243);
+}
+
+.io-card.input-card .io-card-header {
+    background-color: rgb(33, 150, 243);
+}
+
+/* Output card styling (orange theme) */
+.io-card.output-card {
+    border-color: rgb(255, 152, 0);
+}
+
+.io-card.output-card .io-card-header {
+    background-color: rgb(255, 152, 0);
+}
+
+.io-card-header {
+    background-color: rgb(68, 68, 68);
+    padding: 6px 8px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.io-card-header #io-card-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.io-card-header #io-card-type {
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    flex-grow: 1;
+}
+
+.io-card-body {
+    flex-direction: row;
+    padding: 6px;
+    align-items: center;
+}
+
+.io-port-container {
+    width: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+.io-card-content {
+    flex-grow: 1;
+    padding: 0 4px;
+}
+
+#io-card-item {
+    font-size: 11px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+}
+
+#io-card-amount {
+    font-size: 9px;
+    color: rgb(170, 170, 170);
+    margin-top: 2px;
+}
+
+.io-port {
+    width: 12px;
+    height: 12px;
+    background-color: rgb(119, 119, 119);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgb(34, 34, 34);
+}
+
+.io-port:hover {
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(0, 170, 255);
+}
+
+.io-port.connected {
+    background-color: rgb(0, 170, 255);
+}
+
+/* Input card port is on the right */
+.io-card.input-card #io-port-left {
+    display: none;
+}
+
+/* Output card port is on the left */
+.io-card.output-card #io-port-right {
+    display: none;
+}
