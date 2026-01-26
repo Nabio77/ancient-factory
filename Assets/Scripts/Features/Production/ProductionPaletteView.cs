@@ -10,6 +10,7 @@ namespace CarbonWorld.Features.Production
     {
         private readonly VisualElement _root;
         private readonly ScrollView _palettePanel;
+        private readonly VisualElement _tabsContainer;
         private readonly BlueprintDatabase _database;
         private readonly VisualTreeAsset _cardTemplate;
         private readonly ProductionCanvasView _canvasView;
@@ -19,8 +20,9 @@ namespace CarbonWorld.Features.Production
         private BlueprintDefinition _paletteDragBlueprint;
         private VisualElement _paletteDragGhost;
 
-        // Blueprint Filter
-        private Func<BlueprintDefinition, bool> _blueprintFilter;
+        // Blueprint Filters
+        private Func<BlueprintDefinition, bool> _contextFilter;
+        private Func<BlueprintDefinition, bool> _categoryFilter;
 
         public bool IsDragging => _isDraggingFromPalette;
 
@@ -33,18 +35,47 @@ namespace CarbonWorld.Features.Production
         {
             _root = root;
             _palettePanel = palettePanel;
+            _tabsContainer = root.Q<VisualElement>("palette-tabs-container");
             _database = database;
             _cardTemplate = cardTemplate;
             _canvasView = canvasView;
 
-            // Default filter shows all production/logistics blueprints
-            _blueprintFilter = b => b.IsProducer || b.IsLogistics;
+            // Default filters
+            _contextFilter = b => true;
+            _categoryFilter = b => true; // All
+
+            BindTabs();
             InitializePalette();
         }
 
         public void SetBlueprintFilter(Func<BlueprintDefinition, bool> filter)
         {
-            _blueprintFilter = filter ?? (b => true);
+            _contextFilter = filter ?? (b => true);
+            InitializePalette();
+        }
+
+        private void BindTabs()
+        {
+            if (_tabsContainer == null) return;
+
+            var tabAll = _tabsContainer.Q<Label>("tab-all");
+            var tabProd = _tabsContainer.Q<Label>("tab-production");
+            var tabLog = _tabsContainer.Q<Label>("tab-logistics");
+            var tabPow = _tabsContainer.Q<Label>("tab-power");
+
+            tabAll?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabAll, b => true));
+            tabProd?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabProd, b => b.IsProducer));
+            tabLog?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabLog, b => b.IsLogistics));
+            tabPow?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabPow, b => b.IsPowerGenerator));
+        }
+
+        private void SelectTab(VisualElement tab, Func<BlueprintDefinition, bool> filter)
+        {
+            foreach (var child in _tabsContainer.Children())
+                child.RemoveFromClassList("selected");
+
+            tab.AddToClassList("selected");
+            _categoryFilter = filter;
             InitializePalette();
         }
 
@@ -55,9 +86,10 @@ namespace CarbonWorld.Features.Production
 
             foreach (var blueprint in _database.Blueprints)
             {
-                // Skip blueprints that don't match the current filter
-                if (!_blueprintFilter(blueprint))
+                // Apply both context filter (game logic) and category filter (user UI)
+                if (!_contextFilter(blueprint) || !_categoryFilter(blueprint))
                     continue;
+
                 var item = new VisualElement();
                 item.AddToClassList("palette-item");
 

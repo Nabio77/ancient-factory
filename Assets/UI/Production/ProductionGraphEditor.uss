@@ -53,32 +53,59 @@
 }
 
 #palette-bar {
-    height: 120px;
+    height: 200px;
     background-color: rgb(43, 43, 43);
     border-top-width: 2px;
     border-top-color: rgb(68, 68, 68);
     padding: 8px;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
 }
 
-#palette-bar .palette-title {
-    color: rgb(136, 136, 136);
-    font-size: 12px;
+#palette-tabs-container {
+    flex-direction: row;
+    height: 30px;
+    margin-bottom: 5px;
+    align-items: flex-end;
+    padding-left: 5px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(68, 68, 68);
+}
+
+.palette-tab {
+    padding: 4px 12px;
+    margin-right: 4px;
+    background-color: rgb(56, 56, 56);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    color: rgb(170, 170, 170);
+    font-size: 11px;
     -unity-font-style: bold;
-    margin-right: 15px;
-    writing-mode: vertical-lr;
+    border-width: 1px;
+    border-bottom-width: 0;
+    border-color: rgb(68, 68, 68);
+}
+
+.palette-tab:hover {
+    background-color: rgb(72, 72, 72);
+    cursor: link;
+}
+
+.palette-tab.selected {
+    background-color: rgb(43, 43, 43);
+    color: rgb(221, 221, 221);
+    height: 31px; /* Overlap border */
+    margin-bottom: -1px;
 }
 
 #palette-panel {
     flex-grow: 1;
-    height: 100%;
+    overflow: hidden;
 }
 
 #palette-content {
     flex-direction: row;
-    height: 100%;
     align-items: center;
+    padding-right: 20px; /* Spacer for end */
 }
 
 .palette-item {
@@ -148,7 +175,7 @@
 .io-zone {
     position: absolute;
     top: 50px;
-    bottom: 130px;
+    bottom: 210px;
     width: 160px;
     padding: 10px;
     flex-direction: column;

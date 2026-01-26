@@ -140,7 +140,7 @@ namespace CarbonWorld.Features.Production
 
             _ioView.CreateIOZones(_root, graphTile.HasOutput);
             _canvasView.SetGraph(graphTile.Graph);
-            _paletteView.SetBlueprintFilter(graphTile.BlueprintFilter);
+            // _paletteView.SetBlueprintFilter(graphTile.BlueprintFilter); // Allow all blueprints, filtered by tabs
             _ioView.PopulateIOCards(graphTile);
 
             // Re-render connections after layout

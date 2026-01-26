@@ -11,7 +11,12 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="palette-bar">
-                <ui:Label text="Blueprints" class="palette-title"/>
+                <ui:VisualElement name="palette-tabs-container">
+                    <ui:Label text="All" name="tab-all" class="palette-tab selected"/>
+                    <ui:Label text="Production" name="tab-production" class="palette-tab"/>
+                    <ui:Label text="Logistics" name="tab-logistics" class="palette-tab"/>
+                    <ui:Label text="Power" name="tab-power" class="palette-tab"/>
+                </ui:VisualElement>
                 <ui:ScrollView name="palette-panel" mode="Horizontal">
                     <ui:VisualElement name="palette-content">
                         <ui:VisualElement class="palette-item">

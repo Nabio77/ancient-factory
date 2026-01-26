@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: PowerHighlightTile
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: 21300000, guid: 0a9bb10fc7c1149cb8ad010c80352d9b, type: 3}
-  m_Color: {r: 0.048704147, g: 0, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: c78146947dbb34b158a01e0a57aaab1f, type: 3}
+  m_Color: {r: 0.7075472, g: 0.67490953, b: 0.383811, a: 0.57254905}
   m_Transform:
     e00: 1
     e01: 0

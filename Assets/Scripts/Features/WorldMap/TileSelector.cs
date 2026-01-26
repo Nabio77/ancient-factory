@@ -26,6 +26,10 @@ namespace CarbonWorld.Features.WorldMap
         [ShowInInspector, ReadOnly]
         private Vector3Int _selectedCell;
 
+        [Title("Settings")]
+        [SerializeField, Tooltip("Offset applied to the raycast world position before converting to cell coordinates. Use this to fix visual misalignment.")]
+        private Vector2 selectionOffset;
+
         private List<Vector3Int> _activeHighlights = new();
 
         public BaseTile HoveredTile => _hoveredTile;
@@ -60,15 +64,23 @@ namespace CarbonWorld.Features.WorldMap
                 if (_camera == null) return;
             }
 
-            // Convert screen position to world position (for 2D orthographic camera)
+            // Simple ScreenToWorldPoint with Offset
             Vector3 mouseScreenPos = mouse.position.ReadValue();
-            mouseScreenPos.z = -_camera.transform.position.z;
+            
+            // Calculate distance from camera to map plane
+            // Assuming orthographic camera aligned with Z axis
+            float zDistance = worldMap.transform.position.z - _camera.transform.position.z;
+            mouseScreenPos.z = Mathf.Abs(zDistance);
+            
             Vector3 worldPos = _camera.ScreenToWorldPoint(mouseScreenPos);
+            
+            // Apply manual offset to correct for visual/logical mismatch
+            worldPos += (Vector3)selectionOffset;
 
             // Convert world position to tilemap cell
             var cellPos = worldMap.WorldToCell(worldPos);
 
-            // Check if this cell has a tile
+            // Check if this cell has a tile data
             var tile = worldMap.TileData.GetTile(cellPos);
 
             if (tile != null)
@@ -77,11 +89,10 @@ namespace CarbonWorld.Features.WorldMap
                 {
                     SetHoveredTile(tile, cellPos);
                 }
+                return;
             }
-            else
-            {
-                ClearHover();
-            }
+            
+            ClearHover();
         }
 
         private void HandleClick()
