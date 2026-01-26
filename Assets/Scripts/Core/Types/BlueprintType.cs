@@ -10,9 +10,13 @@ namespace CarbonWorld.Core.Types
         // Advanced Types
         Assembler,
 
-
         // Utility Types
         Splitter,
         Merger,
+
+        // Power Generation Types
+        CoalGenerator,
+        SolarArray,
+        WindTurbine,
     }
 }

@@ -43,6 +43,10 @@ namespace CarbonWorld.Core.Data
         [SerializeField, ShowIf("IsProducer"), Tooltip("Power required per tick while producing")]
         private int powerConsumption = 1;
 
+        [Title("Power Generation")]
+        [SerializeField, ShowIf("IsPowerGenerator"), Tooltip("Power produced per tick")]
+        private int powerOutput = 0;
+
         [Title("Acquisition")]
         [SerializeField, Tooltip("Available from the start of the game")]
         private bool isStarterCard = true;
@@ -68,6 +72,10 @@ namespace CarbonWorld.Core.Data
 
         public bool IsProducer => type == BlueprintType.Smelter || type == BlueprintType.Furnace || type == BlueprintType.Constructor || type == BlueprintType.Assembler;
         public bool IsLogistics => type == BlueprintType.Splitter || type == BlueprintType.Merger;
+        public bool IsPowerGenerator => type == BlueprintType.CoalGenerator || type == BlueprintType.SolarArray || type == BlueprintType.WindTurbine;
+
+        // Power Generation Properties
+        public int PowerOutput => powerOutput;
 
         // Production Logic Helpers
         public bool CanProduce(Inventory inventory)

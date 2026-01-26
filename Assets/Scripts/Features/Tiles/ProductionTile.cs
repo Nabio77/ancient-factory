@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,10 +7,12 @@ using CarbonWorld.Types;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public class ProductionTile : BaseTile
+    public class ProductionTile : BaseTile, IGraphTile
     {
         public BlueprintGraph Graph { get; } = new();
         public bool IsPowered { get; set; }
+        public bool HasOutput => true;
+        public Func<BlueprintDefinition, bool> BlueprintFilter => b => b.IsProducer || b.IsLogistics;
 
         public ProductionTile(Vector3Int cellPosition)
             : base(cellPosition, TileType.Production)

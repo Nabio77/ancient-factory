@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Tiles;
+using System.Collections.Generic;
 
 namespace CarbonWorld.Features.WorldMap
 {
@@ -24,6 +25,8 @@ namespace CarbonWorld.Features.WorldMap
 
         [ShowInInspector, ReadOnly]
         private Vector3Int _selectedCell;
+
+        private List<Vector3Int> _activeHighlights = new();
 
         public BaseTile HoveredTile => _hoveredTile;
         public BaseTile SelectedTile => _selectedTile;
@@ -120,6 +123,7 @@ namespace CarbonWorld.Features.WorldMap
                 worldMap.HighlightTilemap.SetTile(cellPos, worldMap.HoverHighlightTile);
             }
 
+            UpdatePowerHighlights();
             OnTileHovered?.Invoke(tile);
         }
 
@@ -136,6 +140,8 @@ namespace CarbonWorld.Features.WorldMap
                 }
                 _hoveredTile = null;
                 _hoveredCell = default;
+                
+                UpdatePowerHighlights();
                 OnTileHoverEnded?.Invoke();
             }
         }
@@ -161,6 +167,7 @@ namespace CarbonWorld.Features.WorldMap
                 worldMap.HighlightTilemap.SetTile(cellPos, worldMap.SelectedHighlightTile);
             }
 
+            UpdatePowerHighlights();
             OnTileSelected?.Invoke(tile);
         }
 
@@ -172,7 +179,59 @@ namespace CarbonWorld.Features.WorldMap
                 worldMap.HighlightTilemap.SetTile(_selectedCell, null);
                 _selectedTile = null;
                 _selectedCell = default;
+                
+                UpdatePowerHighlights();
                 OnTileDeselected?.Invoke();
+            }
+        }
+
+        private void UpdatePowerHighlights()
+        {
+            // 1. Clear existing radius highlights
+            foreach (var pos in _activeHighlights)
+            {
+                // Don't clear if it's the currently selected tile or hovered tile
+                // (Though strictly speaking, radius highlights shouldn't be on the tile itself usually, 
+                // but if they are, we must preserve the main highlights)
+                if (pos == _selectedCell && _selectedTile != null) continue;
+                if (pos == _hoveredCell && _hoveredTile != null) continue;
+
+                worldMap.HighlightTilemap.SetTile(pos, null);
+            }
+            _activeHighlights.Clear();
+
+            // 2. Determine source (Hover takes precedence for previewing)
+            PowerTile source = null;
+            if (_hoveredTile is PowerTile hoveredPower)
+            {
+                source = hoveredPower;
+            }
+            else if (_selectedTile is PowerTile selectedPower)
+            {
+                source = selectedPower;
+            }
+
+            if (source == null) return;
+
+            // 3. Set new highlights
+            // Ensure calculations are up to date
+            source.CalculatePowerOutput();
+            var affectedPositions = source.GetPoweredPositions();
+
+            var highlightTile = worldMap.PowerRangeHighlightTile != null ? worldMap.PowerRangeHighlightTile : worldMap.HoverHighlightTile;
+
+            foreach (var pos in affectedPositions)
+            {
+                // Skip the source tile itself (already highlighted by hover/select)
+                if (pos == source.CellPosition) continue;
+
+                // Skip if it conflicts with selection/hover (though usually we want to see the overlap, 
+                // but we can't blend tiles easily. Let's prioritize the main state.)
+                if (pos == _selectedCell && _selectedTile != null) continue;
+                if (pos == _hoveredCell && _hoveredTile != null) continue;
+
+                worldMap.HighlightTilemap.SetTile(pos, highlightTile);
+                _activeHighlights.Add(pos);
             }
         }
     }

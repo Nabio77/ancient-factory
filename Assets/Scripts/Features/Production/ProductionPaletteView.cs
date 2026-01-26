@@ -19,6 +19,9 @@ namespace CarbonWorld.Features.Production
         private BlueprintDefinition _paletteDragBlueprint;
         private VisualElement _paletteDragGhost;
 
+        // Blueprint Filter
+        private Func<BlueprintDefinition, bool> _blueprintFilter;
+
         public bool IsDragging => _isDraggingFromPalette;
 
         public ProductionPaletteView(
@@ -34,6 +37,14 @@ namespace CarbonWorld.Features.Production
             _cardTemplate = cardTemplate;
             _canvasView = canvasView;
 
+            // Default filter shows all production/logistics blueprints
+            _blueprintFilter = b => b.IsProducer || b.IsLogistics;
+            InitializePalette();
+        }
+
+        public void SetBlueprintFilter(Func<BlueprintDefinition, bool> filter)
+        {
+            _blueprintFilter = filter ?? (b => true);
             InitializePalette();
         }
 
@@ -44,6 +55,9 @@ namespace CarbonWorld.Features.Production
 
             foreach (var blueprint in _database.Blueprints)
             {
+                // Skip blueprints that don't match the current filter
+                if (!_blueprintFilter(blueprint))
+                    continue;
                 var item = new VisualElement();
                 item.AddToClassList("palette-item");
 

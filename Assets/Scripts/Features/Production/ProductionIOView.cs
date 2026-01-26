@@ -27,7 +27,7 @@ namespace CarbonWorld.Features.Production
             _canvasView = canvasView;
         }
 
-        public void CreateIOZones(VisualElement root)
+        public void CreateIOZones(VisualElement root, bool hasOutput = true)
         {
             // Input zone
             _inputZone = new VisualElement();
@@ -40,16 +40,19 @@ namespace CarbonWorld.Features.Production
 
             root.Add(_inputZone);
 
-            // Output zone
-            _outputZone = new VisualElement();
-            _outputZone.AddToClassList("io-zone");
-            _outputZone.AddToClassList("output-zone");
+            // Output zone (only if tile has output)
+            if (hasOutput)
+            {
+                _outputZone = new VisualElement();
+                _outputZone.AddToClassList("io-zone");
+                _outputZone.AddToClassList("output-zone");
 
-            var outputTitle = new Label("OUTPUT");
-            outputTitle.AddToClassList("io-zone-title");
-            _outputZone.Add(outputTitle);
+                var outputTitle = new Label("OUTPUT");
+                outputTitle.AddToClassList("io-zone-title");
+                _outputZone.Add(outputTitle);
 
-            root.Add(_outputZone);
+                root.Add(_outputZone);
+            }
         }
 
         public void Cleanup()
@@ -62,27 +65,27 @@ namespace CarbonWorld.Features.Production
             _ioCardPorts.Clear();
         }
 
-        public void PopulateIOCards(ProductionTile currentTile)
+        public void PopulateIOCards(IGraphTile graphTile)
         {
-            if (currentTile == null || _worldMap == null || _canvasView.CurrentGraph == null) return;
+            if (graphTile == null || _worldMap == null || _canvasView.CurrentGraph == null) return;
 
-            // Update IO nodes (logic moved to ProductionTile)
-            currentTile.UpdateIO(_worldMap.TileData);
-            
+            // Update IO nodes
+            graphTile.UpdateIO(_worldMap.TileData);
+
             _ioCardElements.Clear();
             _ioCardPorts.Clear();
-            
+
             // Clear UI containers (keeping titles)
             if (_inputZone != null)
                 for (int i = _inputZone.childCount - 1; i >= 0; i--)
                     if (!_inputZone[i].ClassListContains("io-zone-title")) _inputZone.RemoveAt(i);
-                    
+
             if (_outputZone != null)
                 for (int i = _outputZone.childCount - 1; i >= 0; i--)
                     if (!_outputZone[i].ClassListContains("io-zone-title")) _outputZone.RemoveAt(i);
 
             // Render IO Nodes
-            foreach (var ioNode in currentTile.Graph.ioNodes)
+            foreach (var ioNode in graphTile.Graph.ioNodes)
             {
                 CreateIOCardUI(ioNode);
             }

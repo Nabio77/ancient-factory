@@ -35,11 +35,17 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, Required]
         private TileBase enhancementTile;
 
+        [SerializeField, Required]
+        private TileBase powerTile;
+
         [SerializeField]
         private TileBase hoverHighlightTile;
 
         [SerializeField]
         private TileBase selectedHighlightTile;
+
+        [SerializeField]
+        private TileBase powerRangeHighlightTile;
 
         [Title("Map Size")]
         [SerializeField, Min(1)]
@@ -62,6 +68,13 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, Min(1)]
         private int minEnhancementDistanceFromCore = 2;
 
+        [Title("Power Tiles")]
+        [SerializeField, Min(0)]
+        private int powerTileCount = 4;
+
+        [SerializeField, Min(1)]
+        private int minPowerDistanceFromCore = 2;
+
         [SerializeField, HideInInspector]
         private List<TileSaveData> _savedTiles = new();
 
@@ -73,6 +86,7 @@ namespace CarbonWorld.Features.WorldMap
         public Tilemap HighlightTilemap => highlightTilemap;
         public TileBase HoverHighlightTile => hoverHighlightTile;
         public TileBase SelectedHighlightTile => selectedHighlightTile;
+        public TileBase PowerRangeHighlightTile => powerRangeHighlightTile;
 
         private static readonly Vector3Int Center = Vector3Int.zero;
 
@@ -105,6 +119,9 @@ namespace CarbonWorld.Features.WorldMap
                             break;
                         case TileType.Enhancement:
                             tileData = new EnhancementTile(data.Position, TileType.Enhancement);
+                            break;
+                        case TileType.Power:
+                            tileData = new PowerTile(data.Position);
                             break;
                         case TileType.Production:
                         default:
@@ -162,7 +179,15 @@ namespace CarbonWorld.Features.WorldMap
                 assignments[enhancementCandidates[i]] = new TileAssignment { Type = TileType.Enhancement };
             }
 
-            // Phase 4: Fill remaining with production tiles
+            // Phase 4: Power tiles
+            var powerCandidates = GetValidCandidates(coords, assignments, minPowerDistanceFromCore);
+            Shuffle(powerCandidates, rng);
+            for (int i = 0; i < powerTileCount && i < powerCandidates.Count; i++)
+            {
+                assignments[powerCandidates[i]] = new TileAssignment { Type = TileType.Power };
+            }
+
+            // Phase 5: Fill remaining with production tiles
             foreach (var coord in coords)
             {
                 if (!assignments.ContainsKey(coord))
@@ -231,6 +256,11 @@ namespace CarbonWorld.Features.WorldMap
                     case TileType.Enhancement:
                         visualTile = enhancementTile;
                         tileData = new EnhancementTile(coord, TileType.Enhancement);
+                        break;
+
+                    case TileType.Power:
+                        visualTile = powerTile;
+                        tileData = new PowerTile(coord);
                         break;
 
                     case TileType.Production:

@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
+using CarbonWorld.Types;
 
 namespace CarbonWorld.Features.Production
 {
@@ -42,7 +43,8 @@ namespace CarbonWorld.Features.Production
         private ProductionIOView _ioView;
         private ProductionPaletteView _paletteView;
 
-        private ProductionTile _currentTile;
+        private IGraphTile _currentGraphTile;
+        private BaseTile _currentTile;
 
         void Awake()
         {
@@ -85,9 +87,9 @@ namespace CarbonWorld.Features.Production
 
         private void OnGraphChanged()
         {
-            if (_currentTile != null)
+            if (_currentGraphTile != null)
             {
-                _ioView.PopulateIOCards(_currentTile);
+                _ioView.PopulateIOCards(_currentGraphTile);
                 _root.schedule.Execute(() => _canvasView.MarkConnectionsDirty()).ExecuteLater(50);
             }
         }
@@ -115,13 +117,13 @@ namespace CarbonWorld.Features.Production
 
         private void OnTileSelected(BaseTile tile)
         {
-            if (tile is ProductionTile productionTile)
+            if (tile is IGraphTile graphTile)
             {
-                Show(productionTile);
+                Show(graphTile, tile);
             }
         }
 
-        public void Show(ProductionTile tile)
+        public void Show(IGraphTile graphTile, BaseTile tile)
         {
             if (tileSelector != null && _currentTile == null)
                 tileSelector.OnTileSelected -= OnTileSelected;
@@ -132,13 +134,15 @@ namespace CarbonWorld.Features.Production
                 worldMapCamera.InputEnabled = false;
             }
 
+            _currentGraphTile = graphTile;
             _currentTile = tile;
             _root.RemoveFromClassList("hidden");
 
-            _ioView.CreateIOZones(_root);
-            _canvasView.SetGraph(tile.Graph);
-            _ioView.PopulateIOCards(tile);
-            
+            _ioView.CreateIOZones(_root, graphTile.HasOutput);
+            _canvasView.SetGraph(graphTile.Graph);
+            _paletteView.SetBlueprintFilter(graphTile.BlueprintFilter);
+            _ioView.PopulateIOCards(graphTile);
+
             // Re-render connections after layout
             _root.schedule.Execute(() => _canvasView.MarkConnectionsDirty()).ExecuteLater(50);
         }
@@ -160,6 +164,7 @@ namespace CarbonWorld.Features.Production
             if (tileSelector != null && _currentTile != null)
                 tileSelector.OnTileSelected += OnTileSelected;
 
+            _currentGraphTile = null;
             _currentTile = null;
             _canvasView.Clear();
             _ioView.Cleanup();

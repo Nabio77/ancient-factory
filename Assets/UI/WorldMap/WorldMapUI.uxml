@@ -33,6 +33,18 @@
                 <ui:Label name="production-outputs" class="value" text="None" />
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="power-info" class="hidden">
+            <ui:VisualElement class="divider" />
+            <ui:Label text="Power Station" class="section-title" />
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Total Output" class="label" />
+                <ui:Label name="power-output" class="value" text="0" />
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Radius" class="label" />
+                <ui:Label name="power-radius" class="value" text="0" />
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement class="divider" />
         <ui:Label text="Neighbors" class="section-title" />
         <ui:Label name="tile-neighbors" class="neighbors-list" text="" />

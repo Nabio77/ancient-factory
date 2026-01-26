@@ -13,6 +13,24 @@ MonoBehaviour:
   m_Name: BlueprintDatabase
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.BlueprintDatabase
   blueprints:
+  - {fileID: 11400000, guid: 013efb56eed384f03935f0a31a94f429, type: 2}
+  - {fileID: 11400000, guid: 7a5309fcf055845c4b9b827e7536d35c, type: 2}
+  - {fileID: 11400000, guid: 9797f3935863f43f7bb99efbb12c4488, type: 2}
+  - {fileID: 11400000, guid: 508e92986f9b64b86a25ec5d5fd0b395, type: 2}
+  - {fileID: 11400000, guid: 18faaa0476a6048ddb27a5ab947d5f66, type: 2}
+  - {fileID: 11400000, guid: f3bca748dc25d42ca87eb8da0ded942c, type: 2}
+  - {fileID: 11400000, guid: 8857e9aff980b499282ad4e54719316b, type: 2}
   - {fileID: 11400000, guid: 176a39c6995104caf948f08bf2ac11ca, type: 2}
   - {fileID: 11400000, guid: ca7b20e5617604f23adf1079fed97903, type: 2}
+  - {fileID: 11400000, guid: 10107ae895be049c384b23f496612200, type: 2}
+  - {fileID: 11400000, guid: 76004e05e9e9e4434a5b2922d3d73129, type: 2}
   - {fileID: 11400000, guid: 229c26a81bf564515ae2752fed44743c, type: 2}
+  - {fileID: 11400000, guid: c9f4444268a714e8fb3420b5b9a1d571, type: 2}
+  - {fileID: 11400000, guid: 826b01095c3c840e19892aababc29e70, type: 2}
+  - {fileID: 11400000, guid: 0e411f6a73897488e8f2ee3a111d6c8d, type: 2}
+  - {fileID: 11400000, guid: 8494fad3408a845659a7bafb0f25bd57, type: 2}
+  - {fileID: 11400000, guid: 619ea45ab2e1b4d718126b1484e8e47f, type: 2}
+  - {fileID: 11400000, guid: 73427daa14d574b86bb1c27fe4273f3c, type: 2}
+  - {fileID: 11400000, guid: a5b694f70fb244ce4b0c6ffaac2ad29c, type: 2}
+  - {fileID: 11400000, guid: ecb49c7a0597c467ab9b51d6d3b2466b, type: 2}
+  - {fileID: 11400000, guid: 60ef4936bddc145cb8b46285ea310259, type: 2}

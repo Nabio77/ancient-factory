@@ -1771,8 +1771,8 @@ MonoBehaviour:
   worldMapCamera: {fileID: 330585548}
   database: {fileID: 11400000, guid: 583ea1c0c1c6e4f3c9caddc33a51b4f8, type: 2}
   cardTemplate: {fileID: 9197481963319205126, guid: c4026eea92e0c4c6593dc592feb191f5, type: 3}
-  connectionColor: {r: 0, g: 0.67, b: 1, a: 1}
-  lineWidth: 3
+  tileIOCardTemplate: {fileID: 9197481963319205126, guid: 75c27ac8916bb429e957e451d25811df, type: 3}
+  worldMap: {fileID: 998030626}
 --- !u!114 &610185977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1796,6 +1796,51 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!1 &743360584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 743360586}
+  - component: {fileID: 743360585}
+  m_Layer: 0
+  m_Name: PowerSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &743360585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743360584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fdd00afdc3bf40b98c52b04b5a00869, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.PowerDistributionSystem
+  worldMap: {fileID: 998030626}
+--- !u!4 &743360586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743360584}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,6 +1941,7 @@ MonoBehaviour:
   resourceTile: {fileID: 11400000, guid: 37071a9e0957a438fa15d0b2b3cfb121, type: 2}
   productionTile: {fileID: 11400000, guid: 1720b1748ca184f599a7cf1df30ff703, type: 2}
   enhancementTile: {fileID: 11400000, guid: e0206771911af42a2a62189bc18e96c1, type: 2}
+  powerTile: {fileID: 0}
   hoverHighlightTile: {fileID: 11400000, guid: f8b4b48c426064fb388cd3feff621cfc, type: 2}
   selectedHighlightTile: {fileID: 11400000, guid: 9125d4b13c4ed454d9b311009c649fd4, type: 2}
   rings: 5
@@ -1919,6 +1965,8 @@ MonoBehaviour:
   minResourceSpacing: 2
   enhancementTileCount: 8
   minEnhancementDistanceFromCore: 2
+  powerTileCount: 4
+  minPowerDistanceFromCore: 2
   _savedTiles:
   - Position: {x: 0, y: 0, z: 0}
     Type: 0
@@ -2695,3 +2743,4 @@ SceneRoots:
   - {fileID: 1877084597}
   - {fileID: 1013268114}
   - {fileID: 1777488289}
+  - {fileID: 743360586}

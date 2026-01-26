@@ -36,6 +36,10 @@ namespace CarbonWorld.Features.WorldMap
         private Label _productionInputs;
         private Label _productionOutputs;
 
+        private VisualElement _powerInfo;
+        private Label _powerOutput;
+        private Label _powerRadius;
+
         void Awake()
         {
             var root = uiDocument.rootVisualElement;
@@ -53,6 +57,10 @@ namespace CarbonWorld.Features.WorldMap
             _productionInfo = root.Q<VisualElement>("production-info");
             _productionInputs = root.Q<Label>("production-inputs");
             _productionOutputs = root.Q<Label>("production-outputs");
+
+            _powerInfo = root.Q<VisualElement>("power-info");
+            _powerOutput = root.Q<Label>("power-output");
+            _powerRadius = root.Q<Label>("power-radius");
         }
 
         void OnEnable()
@@ -129,7 +137,27 @@ namespace CarbonWorld.Features.WorldMap
                 _productionInfo.AddToClassList("hidden");
             }
 
+            if (tile is PowerTile powerTile)
+            {
+                ShowPowerInfo(powerTile);
+            }
+            else
+            {
+                _powerInfo.AddToClassList("hidden");
+            }
+
             _tileInfoPanel.RemoveFromClassList("hidden");
+        }
+
+        private void ShowPowerInfo(PowerTile tile)
+        {
+            // Ensure calculation is up to date
+            tile.CalculatePowerOutput();
+
+            _powerOutput.text = tile.TotalPowerOutput.ToString();
+            _powerRadius.text = tile.EffectiveRadius.ToString();
+
+            _powerInfo.RemoveFromClassList("hidden");
         }
 
         private void ShowProductionInfo(ProductionTile tile)
