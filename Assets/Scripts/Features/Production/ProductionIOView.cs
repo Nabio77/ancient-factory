@@ -66,8 +66,9 @@ namespace CarbonWorld.Features.Production
         {
             if (currentTile == null || _worldMap == null || _canvasView.CurrentGraph == null) return;
 
-            // Clear existing IO nodes in graph data
-            _canvasView.CurrentGraph.ioNodes.Clear();
+            // Update IO nodes (logic moved to ProductionTile)
+            currentTile.UpdateIO(_worldMap.TileData);
+            
             _ioCardElements.Clear();
             _ioCardPorts.Clear();
             
@@ -80,106 +81,11 @@ namespace CarbonWorld.Features.Production
                 for (int i = _outputZone.childCount - 1; i >= 0; i--)
                     if (!_outputZone[i].ClassListContains("io-zone-title")) _outputZone.RemoveAt(i);
 
-            // Get adjacent tiles
-            var neighbors = _worldMap.TileData.GetNeighbors(currentTile.CellPosition);
-            int inputIndex = 0;
-
-            foreach (var neighbor in neighbors)
+            // Render IO Nodes
+            foreach (var ioNode in currentTile.Graph.ioNodes)
             {
-                if (neighbor is ResourceTile resourceTile)
-                {
-                    var output = resourceTile.GetOutput();
-                    if (output.IsValid)
-                    {
-                        var ioNode = new TileIONode(
-                            TileIOType.Input,
-                            neighbor.CellPosition,
-                            neighbor.Type,
-                            output,
-                            inputIndex++
-                        );
-                        _canvasView.CurrentGraph.ioNodes.Add(ioNode);
-                        CreateIOCardUI(ioNode);
-                    }
-                }
-                else if (neighbor is ProductionTile productionTile)
-                {
-                    var graphOutputs = GetProductionTileOutputs(productionTile);
-                    foreach (var outputItem in graphOutputs)
-                    {
-                        var ioNode = new TileIONode(
-                            TileIOType.Input,
-                            neighbor.CellPosition,
-                            neighbor.Type,
-                            outputItem,
-                            inputIndex++
-                        );
-                        _canvasView.CurrentGraph.ioNodes.Add(ioNode);
-                        CreateIOCardUI(ioNode);
-                    }
-                }
+                CreateIOCardUI(ioNode);
             }
-
-            // Create single output card
-            var outputNode = new TileIONode(
-                TileIOType.Output,
-                currentTile.CellPosition,
-                currentTile.Type,
-                new ItemStack(),
-                0
-            );
-            _canvasView.CurrentGraph.ioNodes.Add(outputNode);
-            CreateIOCardUI(outputNode);
-        }
-
-        private List<ItemStack> GetProductionTileOutputs(ProductionTile tile)
-        {
-            var outputs = new List<ItemStack>();
-            var graph = tile.Graph;
-
-            if (graph == null || graph.nodes.Count == 0)
-                return outputs;
-
-            // Find connections that go to the output IO node
-            var outputConnections = graph.connections
-                .Where(c => c.toNodeId.StartsWith("tile_io_output"))
-                .ToList();
-
-            foreach (var conn in outputConnections)
-            {
-                var sourceNode = graph.GetNode(conn.fromNodeId);
-                if (sourceNode?.blueprint != null && sourceNode.blueprint.Output.IsValid)
-                {
-                    outputs.Add(sourceNode.blueprint.Output);
-                }
-            }
-
-            // Fallback: unconnected producers
-            if (outputs.Count == 0)
-            {
-                var connectedOutputs = new HashSet<(string nodeId, int portIndex)>();
-                foreach (var conn in graph.connections)
-                {
-                    connectedOutputs.Add((conn.fromNodeId, conn.fromPortIndex));
-                }
-
-                foreach (var node in graph.nodes)
-                {
-                    if (node.blueprint == null || !node.blueprint.IsProducer)
-                        continue;
-
-                    for (int i = 0; i < node.blueprint.OutputCount; i++)
-                    {
-                        if (!connectedOutputs.Contains((node.id, i)) && node.blueprint.Output.IsValid)
-                        {
-                            outputs.Add(node.blueprint.Output);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return outputs;
         }
 
         private void CreateIOCardUI(TileIONode ioNode)

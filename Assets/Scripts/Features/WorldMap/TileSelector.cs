@@ -29,6 +29,7 @@ namespace CarbonWorld.Features.WorldMap
         public BaseTile SelectedTile => _selectedTile;
 
         public event Action<BaseTile> OnTileHovered;
+        public event Action OnTileHoverEnded;
         public event Action<BaseTile> OnTileSelected;
         public event Action OnTileDeselected;
 
@@ -135,6 +136,7 @@ namespace CarbonWorld.Features.WorldMap
                 }
                 _hoveredTile = null;
                 _hoveredCell = default;
+                OnTileHoverEnded?.Invoke();
             }
         }
 

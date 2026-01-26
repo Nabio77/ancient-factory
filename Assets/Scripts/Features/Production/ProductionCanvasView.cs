@@ -301,9 +301,9 @@ namespace CarbonWorld.Features.Production
             paint.Stroke();
         }
 
-        public void TryDeleteConnectionAt(Vector2 point)
+        public bool TryDeleteConnectionAt(Vector2 point)
         {
-            if (_currentGraph == null) return;
+            if (_currentGraph == null) return false;
             
             const float hitDistance = 10f;
             
@@ -343,7 +343,9 @@ namespace CarbonWorld.Features.Production
             {
                 _currentGraph.connections.Remove(connToDelete);
                 MarkConnectionsDirty();
+                return true;
             }
+            return false;
         }
 
         private bool IsPointNearPolyline(Vector2 point, Vector2 start, Vector2 end, float maxDistance)

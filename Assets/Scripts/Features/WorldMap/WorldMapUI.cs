@@ -1,7 +1,9 @@
 using System.Text;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
+using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 
@@ -30,6 +32,10 @@ namespace CarbonWorld.Features.WorldMap
         private Label _resourceTier;
         private Label _resourceOutput;
 
+        private VisualElement _productionInfo;
+        private Label _productionInputs;
+        private Label _productionOutputs;
+
         void Awake()
         {
             var root = uiDocument.rootVisualElement;
@@ -43,21 +49,63 @@ namespace CarbonWorld.Features.WorldMap
             _resourceName = root.Q<Label>("resource-name");
             _resourceTier = root.Q<Label>("resource-tier");
             _resourceOutput = root.Q<Label>("resource-output");
+
+            _productionInfo = root.Q<VisualElement>("production-info");
+            _productionInputs = root.Q<Label>("production-inputs");
+            _productionOutputs = root.Q<Label>("production-outputs");
         }
 
         void OnEnable()
         {
             tileSelector.OnTileSelected += OnTileSelected;
             tileSelector.OnTileDeselected += OnTileDeselected;
+            tileSelector.OnTileHovered += OnTileHovered;
+            tileSelector.OnTileHoverEnded += OnTileHoverEnded;
         }
 
         void OnDisable()
         {
             tileSelector.OnTileSelected -= OnTileSelected;
             tileSelector.OnTileDeselected -= OnTileDeselected;
+            tileSelector.OnTileHovered -= OnTileHovered;
+            tileSelector.OnTileHoverEnded -= OnTileHoverEnded;
+        }
+
+        private void OnTileHovered(BaseTile tile)
+        {
+            UpdateUI(tile);
+        }
+
+        private void OnTileHoverEnded()
+        {
+            if (tileSelector.SelectedTile != null)
+            {
+                UpdateUI(tileSelector.SelectedTile);
+            }
+            else
+            {
+                _tileInfoPanel.AddToClassList("hidden");
+            }
         }
 
         private void OnTileSelected(BaseTile tile)
+        {
+            UpdateUI(tile);
+        }
+
+        private void OnTileDeselected()
+        {
+            if (tileSelector.HoveredTile != null)
+            {
+                UpdateUI(tileSelector.HoveredTile);
+            }
+            else
+            {
+                _tileInfoPanel.AddToClassList("hidden");
+            }
+        }
+
+        private void UpdateUI(BaseTile tile)
         {
             _tileType.text = $"{tile.Type} Tile";
             _tileCoords.text = $"({tile.CellPosition.x}, {tile.CellPosition.y})";
@@ -72,12 +120,37 @@ namespace CarbonWorld.Features.WorldMap
                 _resourceInfo.AddToClassList("hidden");
             }
 
+            if (tile is ProductionTile productionTile)
+            {
+                ShowProductionInfo(productionTile);
+            }
+            else
+            {
+                _productionInfo.AddToClassList("hidden");
+            }
+
             _tileInfoPanel.RemoveFromClassList("hidden");
         }
 
-        private void OnTileDeselected()
+        private void ShowProductionInfo(ProductionTile tile)
         {
-            _tileInfoPanel.AddToClassList("hidden");
+            // Ensure IO nodes are up to date
+            tile.UpdateIO(worldMap.TileData);
+
+            var inputs = tile.Graph.ioNodes
+                .Where(n => n.type == TileIOType.Input && n.availableItem.IsValid)
+                .Select(n => $"{n.availableItem.Item.ItemName} (Tier {n.availableItem.Item.Tier})")
+                .ToList();
+
+            var outputs = tile.Graph.ioNodes
+                .Where(n => n.type == TileIOType.Output && n.availableItem.IsValid)
+                .Select(n => $"{n.availableItem.Item.ItemName} (Tier {n.availableItem.Item.Tier})")
+                .ToList();
+
+            _productionInputs.text = inputs.Any() ? string.Join("\n", inputs) : "None";
+            _productionOutputs.text = outputs.Any() ? string.Join("\n", outputs) : "None";
+            
+            _productionInfo.RemoveFromClassList("hidden");
         }
 
         private void ShowResourceInfo(ResourceTile tile)

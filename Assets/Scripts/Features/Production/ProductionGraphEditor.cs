@@ -72,6 +72,7 @@ namespace CarbonWorld.Features.Production
 
             // 2. Interaction
             _input = new ProductionGraphInput(_canvasView, _canvas);
+            _input.OnGraphChanged += OnGraphChanged;
             _canvasView.Input = _input;
 
             // 3. IO Manager
@@ -80,6 +81,15 @@ namespace CarbonWorld.Features.Production
 
             // 4. Palette
             _paletteView = new ProductionPaletteView(_root, _palettePanel, database, cardTemplate, _canvasView);
+        }
+
+        private void OnGraphChanged()
+        {
+            if (_currentTile != null)
+            {
+                _ioView.PopulateIOCards(_currentTile);
+                _root.schedule.Execute(() => _canvasView.MarkConnectionsDirty()).ExecuteLater(50);
+            }
         }
 
         void OnEnable()
@@ -158,7 +168,9 @@ namespace CarbonWorld.Features.Production
         // Ensure we clean up listeners on destroy
         private void OnDestroy()
         {
-             _input?.Cleanup();
+            if (_input != null)
+                _input.OnGraphChanged -= OnGraphChanged;
+            _input?.Cleanup();
         }
     }
 }

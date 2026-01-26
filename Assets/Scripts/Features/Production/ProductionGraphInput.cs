@@ -36,6 +36,8 @@ namespace CarbonWorld.Features.Production
         public Vector2 ConnectionStartPos => _connectionStartPos;
         public Vector2 CurrentMousePos => _currentMousePos;
 
+        public event Action OnGraphChanged;
+
         public ProductionGraphInput(ProductionCanvasView canvasView, VisualElement canvas)
         {
             _canvasView = canvasView;
@@ -80,7 +82,10 @@ namespace CarbonWorld.Features.Production
             if (evt.button == 1)
             {
                 var contentPos = _canvasView.ScreenToContent(evt.localMousePosition);
-                _canvasView.TryDeleteConnectionAt(contentPos);
+                if (_canvasView.TryDeleteConnectionAt(contentPos))
+                {
+                    OnGraphChanged?.Invoke();
+                }
                 evt.StopPropagation();
                 return;
             }
@@ -190,6 +195,7 @@ namespace CarbonWorld.Features.Production
             {
                 _canvasView.CurrentGraph.connections.Add(conn);
                 _canvasView.MarkConnectionsDirty();
+                OnGraphChanged?.Invoke();
             }
 
             _isConnecting = false;

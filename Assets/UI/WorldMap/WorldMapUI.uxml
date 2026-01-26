@@ -21,6 +21,18 @@
                 <ui:Label name="resource-output" class="value" text="1" />
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="production-info" class="hidden">
+            <ui:VisualElement class="divider" />
+            <ui:Label text="Production" class="section-title" />
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Inputs" class="label" />
+                <ui:Label name="production-inputs" class="value" text="None" />
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Outputs" class="label" />
+                <ui:Label name="production-outputs" class="value" text="None" />
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement class="divider" />
         <ui:Label text="Neighbors" class="section-title" />
         <ui:Label name="tile-neighbors" class="neighbors-list" text="" />
