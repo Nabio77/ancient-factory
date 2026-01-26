@@ -47,6 +47,10 @@ namespace CarbonWorld.Core.Data
         [SerializeField, ShowIf("IsPowerGenerator"), Tooltip("Power produced per tick")]
         private int powerOutput = 0;
 
+        [Title("Carbon")]
+        [SerializeField, ShowIf("@IsProducer || IsPowerGenerator"), Tooltip("Carbon emitted per production cycle")]
+        private int carbonEmission = 0;
+
         [Title("Acquisition")]
         [SerializeField, Tooltip("Available from the start of the game")]
         private bool isStarterCard = true;
@@ -76,6 +80,9 @@ namespace CarbonWorld.Core.Data
 
         // Power Generation Properties
         public int PowerOutput => powerOutput;
+
+        // Carbon Properties
+        public int CarbonEmission => carbonEmission;
 
         // Production Logic Helpers
         public bool CanProduce(Inventory inventory)

@@ -7,6 +7,10 @@ namespace CarbonWorld.Types
         Production,
         Enhancement,
         Power,
-        Nature
+        Nature,
+        Flooded,
+        DeadZone,
+        RefugeeCamp,
+        Heatwave
     }
 }

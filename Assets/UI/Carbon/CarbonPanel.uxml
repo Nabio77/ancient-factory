@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="CarbonPanel.uss" />
+    <ui:VisualElement name="carbon-panel" class="panel">
+        <ui:Label text="Climate" class="title" />
+        <ui:VisualElement class="divider" />
+
+        <ui:VisualElement name="carbon-status" class="carbon-status">
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Total Carbon" class="label" />
+                <ui:Label name="total-carbon" class="value highlight" text="0" />
+            </ui:VisualElement>
+            <ui:VisualElement class="progress-bar-container">
+                <ui:VisualElement name="carbon-progress-fill" class="progress-bar-fill carbon-fill" />
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Net/tick" class="label" />
+                <ui:Label name="net-carbon" class="value" text="+0" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="divider" />
+
+        <ui:Label text="Breakdown" class="section-title" />
+        <ui:VisualElement name="carbon-breakdown">
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Emitted" class="label" />
+                <ui:Label name="carbon-emitted" class="value emission" text="0" />
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Absorbed" class="label" />
+                <ui:Label name="carbon-absorbed" class="value absorption" text="0" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="divider" />
+
+        <ui:Label text="Climate State" class="section-title" />
+        <ui:VisualElement name="threshold-indicator" class="threshold-indicator safe">
+            <ui:Label name="threshold-name" class="threshold-label" text="Safe" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

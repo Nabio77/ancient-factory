@@ -1,0 +1,136 @@
+.panel {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 260px;
+    padding: 12px;
+    background-color: rgba(30, 30, 30, 0.9);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.title {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+}
+
+.divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-bottom: 8px;
+}
+
+.info-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+}
+
+.value {
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+}
+
+.value.highlight {
+    color: rgb(100, 200, 255);
+    -unity-font-style: bold;
+}
+
+.section-title {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+/* Progress Bars */
+.progress-bar-container {
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background-color: rgb(100, 200, 100);
+    border-radius: 4px;
+    transition-property: width;
+    transition-duration: 0.3s;
+}
+
+.carbon-fill {
+    background-color: rgb(255, 100, 100);
+}
+
+/* Carbon-specific colors */
+.value.emission {
+    color: rgb(255, 150, 100);
+}
+
+.value.absorption {
+    color: rgb(100, 200, 150);
+}
+
+.value.positive {
+    color: rgb(255, 100, 100);
+}
+
+.value.negative {
+    color: rgb(100, 200, 100);
+}
+
+/* Carbon Status */
+.carbon-status {
+    margin-bottom: 4px;
+}
+
+.carbon-breakdown {
+    margin-bottom: 4px;
+}
+
+/* Threshold Indicator */
+.threshold-indicator {
+    padding: 8px;
+    border-radius: 4px;
+    -unity-text-align: middle-center;
+}
+
+.threshold-indicator.safe {
+    background-color: rgba(100, 200, 100, 0.15);
+}
+
+.threshold-indicator.warning {
+    background-color: rgba(255, 200, 50, 0.15);
+}
+
+.threshold-indicator.danger {
+    background-color: rgba(255, 100, 100, 0.15);
+}
+
+.threshold-label {
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.safe .threshold-label {
+    color: rgb(100, 200, 100);
+}
+
+.warning .threshold-label {
+    color: rgb(255, 200, 50);
+}
+
+.danger .threshold-label {
+    color: rgb(255, 100, 100);
+}

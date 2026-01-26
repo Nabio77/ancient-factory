@@ -274,7 +274,10 @@ namespace CarbonWorld.Core.Systems
 
             UpdatePopulation();
 
-            int foodNeeded = FoodNeededPerTick;
+            // Calculate base food needed plus refugee drain
+            int refugeeFoodDrain = CalculateRefugeeFoodDrain();
+            int foodNeeded = FoodNeededPerTick + refugeeFoodDrain;
+
             if (foodNeeded <= 0)
             {
                 _foodConsumedLastTick = 0;
@@ -316,6 +319,21 @@ namespace CarbonWorld.Core.Systems
             }
 
             _population = tileCount * populationPerTile;
+        }
+
+        private int CalculateRefugeeFoodDrain()
+        {
+            if (worldMap == null) return 0;
+
+            int totalDrain = 0;
+            foreach (var tile in worldMap.TileData.GetAllTiles())
+            {
+                if (tile is RefugeeCampTile refugeeCamp)
+                {
+                    totalDrain += refugeeCamp.FoodDrainPerTick;
+                }
+            }
+            return totalDrain;
         }
     }
 }

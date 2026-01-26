@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
 using CarbonWorld.Core.Systems;
+using CarbonWorld.Features.Production;
 
 namespace CarbonWorld.Features.Core
 {
@@ -18,6 +19,10 @@ namespace CarbonWorld.Features.Core
         [SerializeField, Required]
         private CoreDemandSystem demandSystem;
 
+        [SerializeField]
+        private ProductionGraphEditor graphEditor;
+
+        private VisualElement _root;
         private VisualElement _demandsContainer;
         private Label _coreLevelLabel;
         private Label _demandsFulfilledLabel;
@@ -33,43 +38,66 @@ namespace CarbonWorld.Features.Core
 
         void Awake()
         {
-            var root = uiDocument.rootVisualElement;
-            _demandsContainer = root.Q<VisualElement>("demands-container");
-            _coreLevelLabel = root.Q<Label>("core-level");
-            _demandsFulfilledLabel = root.Q<Label>("demands-fulfilled");
-            _victoryProgressFill = root.Q<VisualElement>("victory-progress-fill");
+            _root = uiDocument.rootVisualElement;
+            _demandsContainer = _root.Q<VisualElement>("demands-container");
+            _coreLevelLabel = _root.Q<Label>("core-level");
+            _demandsFulfilledLabel = _root.Q<Label>("demands-fulfilled");
+            _victoryProgressFill = _root.Q<VisualElement>("victory-progress-fill");
 
             // Food UI
-            _populationLabel = root.Q<Label>("population");
-            _foodNeededLabel = root.Q<Label>("food-needed");
-            _foodStockLabel = root.Q<Label>("food-stock");
-            _foodStatusLabel = root.Q<Label>("food-status");
+            _populationLabel = _root.Q<Label>("population");
+            _foodNeededLabel = _root.Q<Label>("food-needed");
+            _foodStockLabel = _root.Q<Label>("food-stock");
+            _foodStatusLabel = _root.Q<Label>("food-status");
         }
 
         void OnEnable()
         {
-            if (demandSystem == null) return;
+            if (demandSystem != null)
+            {
+                demandSystem.OnDemandCreated += OnDemandCreated;
+                demandSystem.OnDemandProgress += OnDemandProgress;
+                demandSystem.OnDemandFulfilled += OnDemandFulfilled;
+                demandSystem.OnCoreLevelUp += OnCoreLevelUp;
+                demandSystem.OnVictory += OnVictory;
+                demandSystem.OnFoodUpdated += OnFoodUpdated;
+                RefreshAll();
+            }
 
-            demandSystem.OnDemandCreated += OnDemandCreated;
-            demandSystem.OnDemandProgress += OnDemandProgress;
-            demandSystem.OnDemandFulfilled += OnDemandFulfilled;
-            demandSystem.OnCoreLevelUp += OnCoreLevelUp;
-            demandSystem.OnVictory += OnVictory;
-            demandSystem.OnFoodUpdated += OnFoodUpdated;
-
-            RefreshAll();
+            if (graphEditor != null)
+            {
+                graphEditor.OnEditorOpened += Hide;
+                graphEditor.OnEditorClosed += Show;
+            }
         }
 
         void OnDisable()
         {
-            if (demandSystem == null) return;
+            if (demandSystem != null)
+            {
+                demandSystem.OnDemandCreated -= OnDemandCreated;
+                demandSystem.OnDemandProgress -= OnDemandProgress;
+                demandSystem.OnDemandFulfilled -= OnDemandFulfilled;
+                demandSystem.OnCoreLevelUp -= OnCoreLevelUp;
+                demandSystem.OnVictory -= OnVictory;
+                demandSystem.OnFoodUpdated -= OnFoodUpdated;
+            }
 
-            demandSystem.OnDemandCreated -= OnDemandCreated;
-            demandSystem.OnDemandProgress -= OnDemandProgress;
-            demandSystem.OnDemandFulfilled -= OnDemandFulfilled;
-            demandSystem.OnCoreLevelUp -= OnCoreLevelUp;
-            demandSystem.OnVictory -= OnVictory;
-            demandSystem.OnFoodUpdated -= OnFoodUpdated;
+            if (graphEditor != null)
+            {
+                graphEditor.OnEditorOpened -= Hide;
+                graphEditor.OnEditorClosed -= Show;
+            }
+        }
+
+        private void Show()
+        {
+            _root.style.display = DisplayStyle.Flex;
+        }
+
+        private void Hide()
+        {
+            _root.style.display = DisplayStyle.None;
         }
 
         private void RefreshAll()

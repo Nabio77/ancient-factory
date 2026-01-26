@@ -11,6 +11,9 @@ namespace CarbonWorld.Features.Production
 {
     public class ProductionGraphEditor : MonoBehaviour
     {
+        public event Action OnEditorOpened;
+        public event Action OnEditorClosed;
+
         [Title("References")]
         [SerializeField, Required]
         private UIDocument uiDocument;
@@ -145,6 +148,8 @@ namespace CarbonWorld.Features.Production
 
             // Re-render connections after layout
             _root.schedule.Execute(() => _canvasView.MarkConnectionsDirty()).ExecuteLater(50);
+
+            OnEditorOpened?.Invoke();
         }
 
         public void Hide()
@@ -168,6 +173,8 @@ namespace CarbonWorld.Features.Production
             _currentTile = null;
             _canvasView.Clear();
             _ioView.Cleanup();
+
+            OnEditorClosed?.Invoke();
         }
         
         // Ensure we clean up listeners on destroy

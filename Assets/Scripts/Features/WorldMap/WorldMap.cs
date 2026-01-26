@@ -39,6 +39,21 @@ namespace CarbonWorld.Features.WorldMap
         private TileBase powerTile;
 
         [SerializeField]
+        private TileBase natureTile;
+
+        [SerializeField]
+        private TileBase floodedTile;
+
+        [SerializeField]
+        private TileBase deadZoneTile;
+
+        [SerializeField]
+        private TileBase refugeeCampTile;
+
+        [SerializeField]
+        private TileBase heatwaveTile;
+
+        [SerializeField]
         private TileBase hoverHighlightTile;
 
         [SerializeField]
@@ -74,6 +89,13 @@ namespace CarbonWorld.Features.WorldMap
 
         [SerializeField, Min(1)]
         private int minPowerDistanceFromCore = 2;
+
+        [Title("Nature Tiles")]
+        [SerializeField, Min(0)]
+        private int natureTileCount = 6;
+
+        [SerializeField, Min(1)]
+        private int minNatureDistanceFromCore = 3;
 
         [SerializeField, HideInInspector]
         private List<TileSaveData> _savedTiles = new();
@@ -122,6 +144,21 @@ namespace CarbonWorld.Features.WorldMap
                             break;
                         case TileType.Power:
                             tileData = new PowerTile(data.Position);
+                            break;
+                        case TileType.Nature:
+                            tileData = new NatureTile(data.Position);
+                            break;
+                        case TileType.Flooded:
+                            tileData = new FloodedTile(data.Position, 0);
+                            break;
+                        case TileType.DeadZone:
+                            tileData = new DeadZoneTile(data.Position, 0);
+                            break;
+                        case TileType.RefugeeCamp:
+                            tileData = new RefugeeCampTile(data.Position, 0, 50);
+                            break;
+                        case TileType.Heatwave:
+                            tileData = new HeatwaveTile(data.Position, 0);
                             break;
                         case TileType.Production:
                         default:
@@ -187,7 +224,15 @@ namespace CarbonWorld.Features.WorldMap
                 assignments[powerCandidates[i]] = new TileAssignment { Type = TileType.Power };
             }
 
-            // Phase 5: Fill remaining with production tiles
+            // Phase 5: Nature tiles
+            var natureCandidates = GetValidCandidates(coords, assignments, minNatureDistanceFromCore);
+            Shuffle(natureCandidates, rng);
+            for (int i = 0; i < natureTileCount && i < natureCandidates.Count; i++)
+            {
+                assignments[natureCandidates[i]] = new TileAssignment { Type = TileType.Nature };
+            }
+
+            // Phase 6: Fill remaining with production tiles
             foreach (var coord in coords)
             {
                 if (!assignments.ContainsKey(coord))
@@ -263,6 +308,11 @@ namespace CarbonWorld.Features.WorldMap
                         tileData = new PowerTile(coord);
                         break;
 
+                    case TileType.Nature:
+                        visualTile = natureTile;
+                        tileData = new NatureTile(coord);
+                        break;
+
                     case TileType.Production:
                     default:
                         visualTile = productionTile;
@@ -293,6 +343,54 @@ namespace CarbonWorld.Features.WorldMap
             // Use tilemap.WorldToCell for correct hexagonal coordinate conversion
             // Grid.WorldToCell uses simple floor which doesn't work for hex tiles
             return tilemap.WorldToCell(worldPos);
+        }
+
+        /// <summary>
+        /// Updates the visual tile at the given position to match the tile type.
+        /// Called by CarbonSystem when disasters spawn.
+        /// </summary>
+        public void UpdateTileVisual(Vector3Int position)
+        {
+            var tile = _tileData.GetTile(position);
+            if (tile == null) return;
+
+            TileBase visualTile = tile.Type switch
+            {
+                TileType.Core => coreTile,
+                TileType.Resource => resourceTile,
+                TileType.Production => productionTile,
+                TileType.Enhancement => enhancementTile,
+                TileType.Power => powerTile,
+                TileType.Nature => natureTile,
+                TileType.Flooded => floodedTile,
+                TileType.DeadZone => deadZoneTile,
+                TileType.RefugeeCamp => refugeeCampTile,
+                TileType.Heatwave => heatwaveTile,
+                _ => productionTile
+            };
+
+            tilemap.SetTile(position, visualTile);
+        }
+
+        /// <summary>
+        /// Gets the visual tile asset for a given tile type.
+        /// </summary>
+        public TileBase GetTileAsset(TileType type)
+        {
+            return type switch
+            {
+                TileType.Core => coreTile,
+                TileType.Resource => resourceTile,
+                TileType.Production => productionTile,
+                TileType.Enhancement => enhancementTile,
+                TileType.Power => powerTile,
+                TileType.Nature => natureTile,
+                TileType.Flooded => floodedTile,
+                TileType.DeadZone => deadZoneTile,
+                TileType.RefugeeCamp => refugeeCampTile,
+                TileType.Heatwave => heatwaveTile,
+                _ => productionTile
+            };
         }
 
         private struct TileAssignment

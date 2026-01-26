@@ -1364,6 +1364,7 @@ RectTransform:
   - {fileID: 361049209}
   - {fileID: 278508776}
   - {fileID: 610185975}
+  - {fileID: 836090402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1725,6 +1726,66 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &507291320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 507291322}
+  - component: {fileID: 507291321}
+  m_Layer: 0
+  m_Name: CarbonSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &507291321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507291320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a46915590804e2192ff4dfe82ce88f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.CarbonSystem
+  worldMap: {fileID: 998030626}
+  tickInterval: 1
+  carbonAbsorptionPerNatureTile: 5
+  maxDisasterTilesPerTick: 1
+  minDisasterSpacing: 2
+  thresholds:
+  - name: 
+    carbonLevel: 0
+    effect: 0
+    effectProbabilityPerTick: 0.1
+    warningMessage: 
+  - name: 
+    carbonLevel: 0
+    effect: 0
+    effectProbabilityPerTick: 0.1
+    warningMessage: 
+--- !u!4 &507291322
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507291320}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &610185974
 GameObject:
   m_ObjectHideFlags: 0
@@ -1894,6 +1955,76 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &836090401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 836090402}
+  - component: {fileID: 836090404}
+  - component: {fileID: 836090403}
+  m_Layer: 5
+  m_Name: CarbonUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &836090402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836090401}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 314444046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &836090403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836090401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f58d1f33ac7a45e4b54a5c4499dd971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.Carbon.CarbonUI
+  uiDocument: {fileID: 836090404}
+  carbonSystem: {fileID: 507291321}
+--- !u!114 &836090404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836090401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 28d646fdc98164fa490d0d71600f695c, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 4ceb7aafaa55d4795a023c8f8caef840, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
 --- !u!1 &998030624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,6 +2077,10 @@ MonoBehaviour:
   productionTile: {fileID: 11400000, guid: 1720b1748ca184f599a7cf1df30ff703, type: 2}
   enhancementTile: {fileID: 11400000, guid: e0206771911af42a2a62189bc18e96c1, type: 2}
   powerTile: {fileID: 11400000, guid: 833580c44b6294905bfe4c6cd3aef52b, type: 2}
+  natureTile: {fileID: 0}
+  floodedTile: {fileID: 0}
+  deadZoneTile: {fileID: 0}
+  refugeeCampTile: {fileID: 0}
   hoverHighlightTile: {fileID: 11400000, guid: f8b4b48c426064fb388cd3feff621cfc, type: 2}
   selectedHighlightTile: {fileID: 11400000, guid: 9125d4b13c4ed454d9b311009c649fd4, type: 2}
   powerRangeHighlightTile: {fileID: 11400000, guid: 6980d6bfa1ee14a30ab6666cc1d8db91, type: 2}
@@ -1972,6 +2107,8 @@ MonoBehaviour:
   minEnhancementDistanceFromCore: 2
   powerTileCount: 4
   minPowerDistanceFromCore: 2
+  natureTileCount: 6
+  minNatureDistanceFromCore: 3
   _savedTiles:
   - Position: {x: 0, y: 0, z: 0}
     Type: 0
@@ -2750,3 +2887,4 @@ SceneRoots:
   - {fileID: 1013268114}
   - {fileID: 1777488289}
   - {fileID: 743360586}
+  - {fileID: 507291322}
