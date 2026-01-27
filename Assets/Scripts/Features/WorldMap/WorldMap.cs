@@ -6,12 +6,15 @@ using Sirenix.OdinInspector;
 using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Core.Data;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Features.WorldMap
 {
     public class WorldMap : MonoBehaviour
     {
+        public event Action OnMapGenerated;
+        public event Action<Vector3Int> OnTileChanged;
+
         [Title("Tilemap References")]
         [SerializeField, Required]
         private UnityEngine.Grid grid;
@@ -86,13 +89,6 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, Min(1)]
         private int minEnhancementDistanceFromCore = 2;
 
-        [Title("Power Tiles")]
-        [SerializeField, Min(0)]
-        private int powerTileCount = 4;
-
-        [SerializeField, Min(1)]
-        private int minPowerDistanceFromCore = 2;
-
         [Title("Nature Tiles")]
         [SerializeField, Min(0)]
         private int natureTileCount = 6;
@@ -103,9 +99,14 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, HideInInspector]
         private List<TileSaveData> _savedTiles = new();
 
+        [Title("Systems")]
+        [SerializeField]
+        private TileGraphSystem graphSystem;
+
         private TileDataGrid _tileData = new();
 
         public TileDataGrid TileData => _tileData;
+        public TileGraphSystem GraphSystem => graphSystem;
         public UnityEngine.Grid Grid => grid;
         public Tilemap Tilemap => tilemap;
         public Tilemap HighlightTilemap => highlightTilemap;
@@ -117,6 +118,18 @@ namespace CarbonWorld.Features.WorldMap
 
         private void Awake()
         {
+            // Ensure system exists
+            if (graphSystem == null)
+            {
+                graphSystem = GetComponent<TileGraphSystem>();
+                if (graphSystem == null)
+                {
+                    graphSystem = gameObject.AddComponent<TileGraphSystem>();
+                }
+            }
+            
+            graphSystem.Initialize(_tileData, this);
+
             // Ensure highlight is drawn on top
             var mainRenderer = tilemap.GetComponent<TilemapRenderer>();
             var highlightRenderer = highlightTilemap.GetComponent<TilemapRenderer>();
@@ -173,6 +186,9 @@ namespace CarbonWorld.Features.WorldMap
                     }
                     _tileData.Add(data.Position, tileData);
                 }
+
+                // Initialize Graph Tiles after loading
+                graphSystem.RefreshAll(_tileData);
             }
         }
 
@@ -222,16 +238,6 @@ namespace CarbonWorld.Features.WorldMap
                 assignments[enhancementCandidates[i]] = new TileAssignment { Type = TileType.Enhancement };
             }
 
-            // Phase 4: Power tiles - DISABLED
-            /*
-            var powerCandidates = GetValidCandidates(coords, assignments, minPowerDistanceFromCore);
-            Shuffle(powerCandidates, rng);
-            for (int i = 0; i < powerTileCount && i < powerCandidates.Count; i++)
-            {
-                assignments[powerCandidates[i]] = new TileAssignment { Type = TileType.Power };
-            }
-            */
-
             // Phase 5: Nature tiles
             var natureCandidates = GetValidCandidates(coords, assignments, minNatureDistanceFromCore);
             Shuffle(natureCandidates, rng);
@@ -249,6 +255,11 @@ namespace CarbonWorld.Features.WorldMap
 
             // Phase 5: Create tiles
             CreateTiles(assignments);
+
+            // Phase 6: Initialize Graph Tiles
+            graphSystem.RefreshAll(_tileData);
+
+            OnMapGenerated?.Invoke();
         }
 
         [Button("Clear"), GUIColor(0.8f, 0.4f, 0.4f)]
@@ -404,25 +415,14 @@ namespace CarbonWorld.Features.WorldMap
             
             // 5. Notify neighbors if they are graph tiles to update IO?
             // This is important for immediate feedback in UI if lines are drawn
-            foreach (var neighborPos in HexUtils.GetNeighbors(position))
-            {
-                var neighbor = _tileData.GetTile(neighborPos);
-                if (neighbor is IGraphTile graphTile)
-                {
-                    graphTile.UpdateIO(_tileData);
-                }
-            }
-            
-            // Update self if graph tile
-            if (newTileData is IGraphTile newGraphTile)
-            {
-                newGraphTile.UpdateIO(_tileData);
-            }
+            graphSystem.UpdateNeighbors(_tileData, position);
+
+            OnTileChanged?.Invoke(position);
         }
 
         public Vector3 CellToWorld(Vector3Int cellPos)
         {
-            return grid.CellToWorld(cellPos);
+            return tilemap.GetCellCenterWorld(cellPos);
         }
 
         public Vector3Int WorldToCell(Vector3 worldPos)

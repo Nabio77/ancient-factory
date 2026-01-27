@@ -15,8 +15,6 @@ namespace CarbonWorld.Core.Types
         Merger,
 
         // Power Generation Types
-        CoalGenerator,
-        SolarArray,
-        WindTurbine,
+        Power,
     }
 }

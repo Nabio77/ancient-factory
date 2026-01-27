@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Features.WorldMap;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Features.Production
 {
@@ -57,16 +58,27 @@ namespace CarbonWorld.Features.Production
         private void BindTabs()
         {
             if (_tabsContainer == null) return;
+            
+            _tabsContainer.Clear();
 
-            var tabAll = _tabsContainer.Q<Label>("tab-all");
-            var tabProd = _tabsContainer.Q<Label>("tab-production");
-            var tabLog = _tabsContainer.Q<Label>("tab-logistics");
-            var tabPow = _tabsContainer.Q<Label>("tab-power");
+            // Add "All" Tab
+            CreateTab("All", b => true, true);
 
-            tabAll?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabAll, b => true));
-            tabProd?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabProd, b => b.IsProducer));
-            tabLog?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabLog, b => b.IsLogistics));
-            tabPow?.RegisterCallback<MouseDownEvent>(evt => SelectTab(tabPow, b => b.IsPowerGenerator));
+            // Add Tab for each BlueprintType
+            foreach (BlueprintType type in Enum.GetValues(typeof(BlueprintType)))
+            {
+                CreateTab(type.ToString(), b => b.Type == type);
+            }
+        }
+
+        private void CreateTab(string text, Func<BlueprintDefinition, bool> filter, bool isSelected = false)
+        {
+            var tab = new Label(text);
+            tab.AddToClassList("palette-tab");
+            if (isSelected) tab.AddToClassList("selected");
+            
+            tab.RegisterCallback<MouseDownEvent>(evt => SelectTab(tab, filter));
+            _tabsContainer.Add(tab);
         }
 
         private void SelectTab(VisualElement tab, Func<BlueprintDefinition, bool> filter)

@@ -1,4 +1,4 @@
-namespace Core.Types
+namespace CarbonWorld.Core.Types
 {
     public enum ClimateEffect
     {

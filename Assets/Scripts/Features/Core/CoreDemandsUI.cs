@@ -196,20 +196,20 @@ namespace CarbonWorld.Features.Core
 
         private void OnFoodUpdated(int population, int consumed, int deficit)
         {
-            UpdateFoodStatus();
-        }
-
-        private void UpdateFoodStatus()
-        {
-            _populationLabel.text = demandSystem.Population.ToString();
+            _populationLabel.text = population.ToString();
             _foodNeededLabel.text = demandSystem.FoodNeededPerTick.ToString();
             _foodStockLabel.text = demandSystem.FoodInStock.ToString();
 
-            bool isStarving = demandSystem.FoodDeficit > 0;
+            bool isStarving = deficit > 0;
             _foodStatusLabel.text = isStarving ? "Starving!" : "Fed";
             _foodStatusLabel.RemoveFromClassList("fed");
             _foodStatusLabel.RemoveFromClassList("starving");
             _foodStatusLabel.AddToClassList(isStarving ? "starving" : "fed");
+        }
+
+        private void UpdateFoodStatus()
+        {
+            OnFoodUpdated(demandSystem.Population, demandSystem.FoodConsumedLastTick, demandSystem.FoodDeficit);
         }
     }
 }

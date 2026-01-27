@@ -69,9 +69,6 @@ namespace CarbonWorld.Features.Production
         {
             if (graphTile == null || _worldMap == null || _canvasView.CurrentGraph == null) return;
 
-            // Update IO nodes
-            graphTile.UpdateIO(_worldMap.TileData);
-
             _ioCardElements.Clear();
             _ioCardPorts.Clear();
 

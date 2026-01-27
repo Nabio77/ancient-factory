@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Tiles;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 using CarbonWorld.Features.Production;
 
 namespace CarbonWorld.Features.WorldMap
@@ -35,6 +35,19 @@ namespace CarbonWorld.Features.WorldMap
         {
             _root = uiDocument.rootVisualElement;
             
+            var container = _root.Q<VisualElement>("palette-container");
+            if (container != null)
+            {
+                container.RegisterCallback<MouseEnterEvent>(evt => 
+                {
+                    if (tileSelector != null) tileSelector.IsInputBlocked = true;
+                });
+                container.RegisterCallback<MouseLeaveEvent>(evt => 
+                {
+                    if (tileSelector != null) tileSelector.IsInputBlocked = false;
+                });
+            }
+
             _btnPower = _root.Q<Button>("btn-power");
             _btnNature = _root.Q<Button>("btn-nature");
             _btnTransport = _root.Q<Button>("btn-transport");
@@ -67,6 +80,7 @@ namespace CarbonWorld.Features.WorldMap
             if (tileSelector != null)
             {
                 tileSelector.OnPlacementClick -= OnPlacementClick;
+                tileSelector.IsInputBlocked = false;
             }
 
             if (graphEditor != null)
@@ -87,6 +101,7 @@ namespace CarbonWorld.Features.WorldMap
             _isGraphEditorOpen = true;
             // Also cancel any active brush when opening editor (though technically editor opening usually implies brush is off)
             CancelBrush();
+            if (tileSelector != null) tileSelector.IsInputBlocked = false;
             RefreshVisibility();
         }
 

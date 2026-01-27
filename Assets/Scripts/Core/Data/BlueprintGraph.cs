@@ -7,9 +7,16 @@ namespace CarbonWorld.Core.Data
     [Serializable]
     public class BlueprintGraph
     {
+        public event Action OnGraphUpdated;
+
         public List<BlueprintNode> nodes = new();
         public List<BlueprintConnection> connections = new();
         public List<TileIONode> ioNodes = new();
+
+        public void NotifyGraphUpdated()
+        {
+            OnGraphUpdated?.Invoke();
+        }
 
         // Helper to find a node by ID
         public BlueprintNode GetNode(string id)

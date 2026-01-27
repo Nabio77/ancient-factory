@@ -5,7 +5,6 @@ using Sirenix.OdinInspector;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
-using CarbonWorld.Types;
 
 namespace CarbonWorld.Features.Production
 {
@@ -92,6 +91,12 @@ namespace CarbonWorld.Features.Production
         {
             if (_currentGraphTile != null)
             {
+                // Force backend update to recalculate outputs/inputs
+                if (worldMap != null && worldMap.GraphSystem != null && _currentTile != null)
+                {
+                    worldMap.GraphSystem.UpdateTile(worldMap.TileData, _currentTile);
+                }
+
                 _ioView.PopulateIOCards(_currentGraphTile);
                 _root.schedule.Execute(() => _canvasView.MarkConnectionsDirty()).ExecuteLater(50);
             }
@@ -138,8 +143,15 @@ namespace CarbonWorld.Features.Production
             }
 
             _currentGraphTile = graphTile;
+            _currentGraphTile.Graph.OnGraphUpdated += OnExternalGraphUpdate;
             _currentTile = tile;
             _root.RemoveFromClassList("hidden");
+
+            // Ensure inputs are up-to-date before showing
+            if (worldMap != null && worldMap.GraphSystem != null)
+            {
+                worldMap.GraphSystem.UpdateTile(worldMap.TileData, tile);
+            }
 
             _ioView.CreateIOZones(_root, graphTile.HasOutput);
             _canvasView.SetGraph(graphTile.Graph);
@@ -154,6 +166,11 @@ namespace CarbonWorld.Features.Production
 
         public void Hide()
         {
+            if (_currentGraphTile != null)
+            {
+                _currentGraphTile.Graph.OnGraphUpdated -= OnExternalGraphUpdate;
+            }
+
             _input.ResetState();
             _paletteView.CleanupDrag();
 
@@ -176,10 +193,24 @@ namespace CarbonWorld.Features.Production
 
             OnEditorClosed?.Invoke();
         }
+
+        private void OnExternalGraphUpdate()
+        {
+            if (_currentGraphTile != null)
+            {
+                // Refresh IO cards and connections
+                _ioView.PopulateIOCards(_currentGraphTile);
+                _root.schedule.Execute(() => _canvasView.MarkConnectionsDirty()).ExecuteLater(50);
+            }
+        }
         
         // Ensure we clean up listeners on destroy
         private void OnDestroy()
         {
+            if (_currentGraphTile != null)
+            {
+                _currentGraphTile.Graph.OnGraphUpdated -= OnExternalGraphUpdate;
+            }
             if (_input != null)
                 _input.OnGraphChanged -= OnGraphChanged;
             _input?.Cleanup();

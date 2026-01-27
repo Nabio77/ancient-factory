@@ -1,5 +1,5 @@
 using UnityEngine;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Features.Tiles
 {

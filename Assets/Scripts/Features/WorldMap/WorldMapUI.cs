@@ -168,7 +168,12 @@ namespace CarbonWorld.Features.WorldMap
         {
             if (_transportInfo == null) return;
 
-            tile.UpdateIO(worldMap.TileData);
+            // Ensure IO nodes are up to date
+            if (worldMap != null && worldMap.GraphSystem != null)
+            {
+                worldMap.GraphSystem.UpdateTile(worldMap.TileData, tile);
+            }
+
             var outputs = tile.GetOutputs()
                 .Select(stack => $"{stack.Item.ItemName} (Tier {stack.Item.Tier})")
                 .Distinct()
@@ -196,7 +201,10 @@ namespace CarbonWorld.Features.WorldMap
         private void ShowProductionInfo(ProductionTile tile)
         {
             // Ensure IO nodes are up to date
-            tile.UpdateIO(worldMap.TileData);
+            if (worldMap != null && worldMap.GraphSystem != null)
+            {
+                worldMap.GraphSystem.UpdateTile(worldMap.TileData, tile);
+            }
 
             var inputs = tile.Graph.ioNodes
                 .Where(n => n.type == TileIOType.Input && n.availableItem.IsValid)

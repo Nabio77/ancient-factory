@@ -26,5 +26,7 @@ MonoBehaviour:
     amount: 1
   productionTime: 1
   powerConsumption: 1
+  powerOutput: 0
+  carbonEmission: 1
   isStarterCard: 1
   unlockCost: 0

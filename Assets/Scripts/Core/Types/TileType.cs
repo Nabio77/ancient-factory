@@ -1,4 +1,4 @@
-namespace CarbonWorld.Types
+namespace CarbonWorld.Core.Types
 {
     public enum TileType
     {

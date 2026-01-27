@@ -1,6 +1,6 @@
 using UnityEngine;
 using CarbonWorld.Core.Data;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Features.Tiles
 {
@@ -14,6 +14,11 @@ namespace CarbonWorld.Features.Tiles
         {
             ResourceItem = resourceItem;
             OutputPerTick = outputPerTick;
+            
+            if (ResourceItem != null)
+            {
+                Inventory.Add(ResourceItem, 1);
+            }
         }
 
         public ItemStack GetOutput()

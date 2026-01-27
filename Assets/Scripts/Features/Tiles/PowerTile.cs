@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using CarbonWorld.Core.Data;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 using CarbonWorld.Features.Grid;
 
 namespace CarbonWorld.Features.Tiles

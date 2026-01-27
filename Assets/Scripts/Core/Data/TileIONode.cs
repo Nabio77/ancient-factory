@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Core.Data
 {
@@ -18,6 +18,7 @@ namespace CarbonWorld.Core.Data
         public Vector3Int sourceTilePosition;
         public TileType sourceTileType;
         public ItemStack availableItem;
+        public int index;
 
         public TileIONode(TileIOType type, Vector3Int sourcePos, TileType tileType, ItemStack item, int index)
         {
@@ -26,6 +27,7 @@ namespace CarbonWorld.Core.Data
             sourceTilePosition = sourcePos;
             sourceTileType = tileType;
             availableItem = item;
+            this.index = index;
         }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 using CarbonWorld.Features.Inventories;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Features.Tiles
 {

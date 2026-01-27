@@ -3,7 +3,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Core.Systems
 {

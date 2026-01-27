@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 namespace CarbonWorld.Core.Data
 {
     [Serializable]
-    public struct ItemStack
+    public struct ItemStack : IEquatable<ItemStack>
     {
         [HorizontalGroup("Stack"), HideLabel]
         [SerializeField]
@@ -35,6 +35,31 @@ namespace CarbonWorld.Core.Data
         public override string ToString()
         {
             return item != null ? $"{amount}x {item.ItemName}" : "Empty";
+        }
+
+        public bool Equals(ItemStack other)
+        {
+            return Equals(item, other.item) && amount == other.amount;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ItemStack other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(item, amount);
+        }
+
+        public static bool operator ==(ItemStack left, ItemStack right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ItemStack left, ItemStack right)
+        {
+            return !left.Equals(right);
         }
     }
 }

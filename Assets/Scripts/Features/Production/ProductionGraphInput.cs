@@ -84,6 +84,7 @@ namespace CarbonWorld.Features.Production
                 var contentPos = _canvasView.ScreenToContent(evt.localMousePosition);
                 if (_canvasView.TryDeleteConnectionAt(contentPos))
                 {
+                    _canvasView.CurrentGraph.NotifyGraphUpdated();
                     OnGraphChanged?.Invoke();
                 }
                 evt.StopPropagation();
@@ -194,6 +195,7 @@ namespace CarbonWorld.Features.Production
             if (_canvasView.CurrentGraph != null)
             {
                 _canvasView.CurrentGraph.connections.Add(conn);
+                _canvasView.CurrentGraph.NotifyGraphUpdated();
                 _canvasView.MarkConnectionsDirty();
                 OnGraphChanged?.Invoke();
             }

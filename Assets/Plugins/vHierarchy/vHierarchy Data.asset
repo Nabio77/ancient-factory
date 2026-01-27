@@ -13,7 +13,46 @@ MonoBehaviour:
   m_Name: vHierarchy Data
   m_EditorClassIdentifier: VHierarchy::VHierarchy.VHierarchyData
   sceneDatas_byGuid:
-    keys: []
-    values: []
+    keys:
+    - 99c9720ab356a0642a771bea13969a05
+    values:
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-314444042-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1877084595-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1013268112-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-743360584-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-507291320-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-971684618-0
+        - globalObjectIdString: GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-998030624-0
+        values:
+        - colorIndex: 9
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 1
+        - colorIndex: 7
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 1
+        - colorIndex: 7
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 1
+        - colorIndex: 3
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 1
+        - colorIndex: 7
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 1
+        - colorIndex: 6
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 1
+        - colorIndex: 4
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 1
   bookmarks: []
   bookmarkedScenePaths: []

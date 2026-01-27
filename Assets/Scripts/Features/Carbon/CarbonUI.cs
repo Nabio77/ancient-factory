@@ -82,7 +82,24 @@ namespace CarbonWorld.Features.Carbon
 
         private void OnCarbonUpdated(int total, int emitted, int absorbed)
         {
-            RefreshUI();
+            _totalCarbonLabel.text = total.ToString();
+
+            int net = emitted - absorbed;
+            _netCarbonLabel.text = net >= 0 ? $"+{net}" : net.ToString();
+            _netCarbonLabel.RemoveFromClassList("positive");
+            _netCarbonLabel.RemoveFromClassList("negative");
+            _netCarbonLabel.AddToClassList(net >= 0 ? "positive" : "negative");
+
+            _emittedLabel.text = emitted.ToString();
+            _absorbedLabel.text = absorbed.ToString();
+
+            if (_progressBarFill != null)
+            {
+                float progress = Mathf.Clamp01(total / 500f);
+                _progressBarFill.style.width = Length.Percent(progress * 100);
+            }
+
+            UpdateClimateDisplay(carbonSystem.CurrentClimateState);
         }
 
         private void OnClimateStateChanged(string state)

@@ -6,8 +6,7 @@ using Sirenix.OdinInspector;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
 using CarbonWorld.Features.Grid;
-using CarbonWorld.Types;
-using Core.Types;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Core.Systems
 {
@@ -24,9 +23,6 @@ namespace CarbonWorld.Core.Systems
         private float tickInterval = 1f;
 
         [Title("Carbon Settings")]
-        [SerializeField, Tooltip("Base carbon absorbed per nature tile per tick")]
-        private int carbonAbsorptionPerNatureTile = 5;
-
         [SerializeField, Tooltip("Minimum distance between disaster tiles")]
         private int minDisasterSpacing = 2;
 

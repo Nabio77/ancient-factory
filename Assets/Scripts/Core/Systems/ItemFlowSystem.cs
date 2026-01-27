@@ -2,7 +2,8 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
+using CarbonWorld.Features.Inventories;
 
 namespace CarbonWorld.Core.Systems
 {
@@ -63,10 +64,13 @@ namespace CarbonWorld.Core.Systems
 
             foreach (var neighborTile in worldMap.TileData.GetNeighbors(resourceTile.CellPosition))
             {
-                // Resources flow to production tiles, power tiles, transport tiles, and core
-                if (neighborTile.Type == TileType.Production || neighborTile.Type == TileType.Power || neighborTile.Type == TileType.Transport || neighborTile.Type == TileType.Core)
+                if (neighborTile.Type == TileType.Production || neighborTile.Type == TileType.Power ||
+                    neighborTile.Type == TileType.Transport || neighborTile.Type == TileType.Core)
                 {
-                    neighborTile.Inventory.Add(output);
+                    using (new InventoryBatch(neighborTile.Inventory, this, "ResourceDistribution"))
+                    {
+                        neighborTile.Inventory.Add(output);
+                    }
                 }
             }
         }

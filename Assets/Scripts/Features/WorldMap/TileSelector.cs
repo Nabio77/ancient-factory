@@ -44,6 +44,8 @@ namespace CarbonWorld.Features.WorldMap
         public bool IsPlacementMode { get; set; }
         public event Action<BaseTile> OnPlacementClick;
 
+        public bool IsInputBlocked { get; set; }
+
         private Camera _camera;
 
         void Awake()
@@ -59,6 +61,12 @@ namespace CarbonWorld.Features.WorldMap
 
         private void HandleHover()
         {
+            if (IsInputBlocked)
+            {
+                ClearHover();
+                return;
+            }
+
             var mouse = Mouse.current;
             if (mouse == null) return;
             
@@ -106,6 +114,8 @@ namespace CarbonWorld.Features.WorldMap
 
         private void HandleClick()
         {
+            if (IsInputBlocked) return;
+
             var mouse = Mouse.current;
             if (mouse == null || !mouse.leftButton.wasPressedThisFrame) return;
 

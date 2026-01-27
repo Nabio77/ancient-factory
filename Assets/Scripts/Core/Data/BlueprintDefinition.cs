@@ -76,7 +76,7 @@ namespace CarbonWorld.Core.Data
 
         public bool IsProducer => type == BlueprintType.Smelter || type == BlueprintType.Furnace || type == BlueprintType.Constructor || type == BlueprintType.Assembler;
         public bool IsLogistics => type == BlueprintType.Splitter || type == BlueprintType.Merger;
-        public bool IsPowerGenerator => type == BlueprintType.CoalGenerator || type == BlueprintType.SolarArray || type == BlueprintType.WindTurbine;
+        public bool IsPowerGenerator => type == BlueprintType.Power;
 
         // Power Generation Properties
         public int PowerOutput => powerOutput;

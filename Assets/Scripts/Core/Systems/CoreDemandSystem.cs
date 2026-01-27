@@ -6,8 +6,9 @@ using Sirenix.OdinInspector;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Core;
 using CarbonWorld.Features.WorldMap;
-using CarbonWorld.Types;
+using CarbonWorld.Core.Types;
 using CarbonWorld.Features.Tiles;
+using CarbonWorld.Features.Inventories;
 
 namespace CarbonWorld.Core.Systems
 {
@@ -209,20 +210,23 @@ namespace CarbonWorld.Core.Systems
         {
             var inventory = _coreTileData.Inventory;
 
-            foreach (var demand in _activeDemands)
+            using (new InventoryBatch(inventory, this, "DemandProcessing"))
             {
-                if (demand.State != DemandState.Active) continue;
-
-                int available = inventory.Get(demand.Item);
-                if (available <= 0) continue;
-
-                int oldAmount = demand.CurrentAmount;
-                int consumed = demand.Contribute(available);
-
-                if (consumed > 0)
+                foreach (var demand in _activeDemands)
                 {
-                    inventory.Remove(demand.Item, consumed);
-                    OnDemandProgress?.Invoke(demand, oldAmount, demand.CurrentAmount);
+                    if (demand.State != DemandState.Active) continue;
+
+                    int available = inventory.Get(demand.Item);
+                    if (available <= 0) continue;
+
+                    int oldAmount = demand.CurrentAmount;
+                    int consumed = demand.Contribute(available);
+
+                    if (consumed > 0)
+                    {
+                        inventory.Remove(demand.Item, consumed);
+                        OnDemandProgress?.Invoke(demand, oldAmount, demand.CurrentAmount);
+                    }
                 }
             }
 
@@ -292,7 +296,10 @@ namespace CarbonWorld.Core.Systems
 
             if (consumed > 0)
             {
-                inventory.Remove(_foodItem, consumed);
+                using (new InventoryBatch(inventory, this, "FoodConsumption"))
+                {
+                    inventory.Remove(_foodItem, consumed);
+                }
             }
 
             _foodConsumedLastTick = consumed;
