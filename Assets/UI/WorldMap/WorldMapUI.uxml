@@ -45,6 +45,12 @@
                 <ui:Label name="power-radius" class="value" text="0" />
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="settlement-info" class="hidden">
+            <ui:VisualElement class="divider" />
+            <ui:Label text="Settlement Demands" class="section-title" />
+            <ui:Label name="settlement-status" class="settlement-status" text="Needs Supplies" />
+            <ui:VisualElement name="settlement-demands" class="settlement-demands" />
+        </ui:VisualElement>
         <ui:VisualElement class="divider" />
         <ui:Label text="Neighbors" class="section-title" />
         <ui:Label name="tile-neighbors" class="neighbors-list" text="" />

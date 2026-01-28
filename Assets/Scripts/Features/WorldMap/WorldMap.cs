@@ -89,6 +89,9 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, Min(1)]
         private int minSettlementDistanceFromCore = 3;
 
+        [SerializeField, Min(1)]
+        private int minSettlementSpacing = 3;
+
         [SerializeField, HideInInspector]
         private List<TileSaveData> _savedTiles = new();
 
@@ -226,9 +229,13 @@ namespace CarbonWorld.Features.WorldMap
             // Phase 3: Settlement tiles (mini settlements as goals)
             var settlementCandidates = GetValidCandidates(coords, assignments, minSettlementDistanceFromCore);
             Shuffle(settlementCandidates, rng);
-            for (int i = 0; i < settlementTileCount && i < settlementCandidates.Count; i++)
+            for (int i = 0; i < settlementTileCount && settlementCandidates.Count > 0; i++)
             {
-                assignments[settlementCandidates[i]] = new TileAssignment { Type = TileType.Settlement };
+                var coord = settlementCandidates[0];
+                settlementCandidates.RemoveAt(0);
+                assignments[coord] = new TileAssignment { Type = TileType.Settlement };
+                // Remove nearby candidates to enforce spacing between settlements
+                settlementCandidates.RemoveAll(c => HexUtils.Distance(coord, c) < minSettlementSpacing);
             }
 
             // Note: No longer filling with production tiles - player will place tiles manually

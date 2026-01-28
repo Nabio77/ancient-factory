@@ -83,3 +83,44 @@
     color: rgba(255, 255, 255, 0.6);
     font-size: 11px;
 }
+
+.settlement-status {
+    font-size: 12px;
+    margin-bottom: 6px;
+    -unity-font-style: bold;
+}
+
+.settlement-status.satisfied {
+    color: rgb(100, 200, 100);
+}
+
+.settlement-status.unsatisfied {
+    color: rgb(255, 180, 100);
+}
+
+.settlement-demands {
+    margin-top: 4px;
+}
+
+.demand-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    padding: 4px 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.demand-row.fulfilled {
+    background-color: rgba(100, 200, 100, 0.15);
+}
+
+.demand-name {
+    color: rgb(255, 255, 255);
+    font-size: 11px;
+}
+
+.demand-progress {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+}

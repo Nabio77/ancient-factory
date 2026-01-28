@@ -43,6 +43,10 @@ namespace CarbonWorld.Features.WorldMap
         private VisualElement _transportInfo;
         private Label _transportOutputs;
 
+        private VisualElement _settlementInfo;
+        private Label _settlementStatus;
+        private VisualElement _settlementDemandsContainer;
+
         void Awake()
         {
             var root = uiDocument.rootVisualElement;
@@ -67,6 +71,10 @@ namespace CarbonWorld.Features.WorldMap
 
             _transportInfo = root.Q<VisualElement>("transport-info");
             _transportOutputs = root.Q<Label>("transport-outputs");
+
+            _settlementInfo = root.Q<VisualElement>("settlement-info");
+            _settlementStatus = root.Q<Label>("settlement-status");
+            _settlementDemandsContainer = root.Q<VisualElement>("settlement-demands");
         }
 
         void OnEnable()
@@ -161,6 +169,15 @@ namespace CarbonWorld.Features.WorldMap
                 _transportInfo?.AddToClassList("hidden");
             }
 
+            if (tile is SettlementTile settlementTile)
+            {
+                ShowSettlementInfo(settlementTile);
+            }
+            else
+            {
+                _settlementInfo?.AddToClassList("hidden");
+            }
+
             _tileInfoPanel.RemoveFromClassList("hidden");
         }
 
@@ -185,6 +202,54 @@ namespace CarbonWorld.Features.WorldMap
             }
 
             _transportInfo.RemoveFromClassList("hidden");
+        }
+
+        private void ShowSettlementInfo(SettlementTile tile)
+        {
+            if (_settlementInfo == null) return;
+
+            // Update status
+            if (_settlementStatus != null)
+            {
+                _settlementStatus.text = tile.IsSatisfied ? "Satisfied" : "Needs Supplies";
+                _settlementStatus.RemoveFromClassList("satisfied");
+                _settlementStatus.RemoveFromClassList("unsatisfied");
+                _settlementStatus.AddToClassList(tile.IsSatisfied ? "satisfied" : "unsatisfied");
+            }
+
+            // Update demands list
+            if (_settlementDemandsContainer != null)
+            {
+                _settlementDemandsContainer.Clear();
+
+                foreach (var demand in tile.Demands)
+                {
+                    if (!demand.IsValid) continue;
+
+                    int current = tile.Inventory.Get(demand.Item);
+                    int needed = demand.Amount;
+                    bool isFulfilled = current >= needed;
+
+                    var demandRow = new VisualElement();
+                    demandRow.AddToClassList("demand-row");
+                    if (isFulfilled)
+                    {
+                        demandRow.AddToClassList("fulfilled");
+                    }
+
+                    var nameLabel = new Label($"{demand.Item.ItemName} (T{demand.Item.Tier})");
+                    nameLabel.AddToClassList("demand-name");
+
+                    var progressLabel = new Label($"{current}/{needed}");
+                    progressLabel.AddToClassList("demand-progress");
+
+                    demandRow.Add(nameLabel);
+                    demandRow.Add(progressLabel);
+                    _settlementDemandsContainer.Add(demandRow);
+                }
+            }
+
+            _settlementInfo.RemoveFromClassList("hidden");
         }
 
         private void ShowPowerInfo(PowerTile tile)
