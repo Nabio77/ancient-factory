@@ -5,7 +5,7 @@ namespace CarbonWorld.Core.Types
         Core,
         Resource,
         Production,
-        Enhancement,
+        Settlement,
         Power,
         Nature,
         Transport,

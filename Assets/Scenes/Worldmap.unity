@@ -414,8 +414,8 @@ Tilemap:
   - first: {x: 0, y: -10, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -544,8 +544,8 @@ Tilemap:
   - first: {x: 1, y: -9, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -594,8 +594,8 @@ Tilemap:
   - first: {x: -6, y: -8, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -704,8 +704,8 @@ Tilemap:
   - first: {x: 5, y: -8, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -714,8 +714,8 @@ Tilemap:
   - first: {x: 6, y: -8, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -734,8 +734,8 @@ Tilemap:
   - first: {x: -6, y: -7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -884,8 +884,8 @@ Tilemap:
   - first: {x: -5, y: -6, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1104,8 +1104,8 @@ Tilemap:
   - first: {x: 1, y: -5, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1154,8 +1154,8 @@ Tilemap:
   - first: {x: 6, y: -5, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 3
-      m_TileSpriteIndex: 3
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1174,8 +1174,8 @@ Tilemap:
   - first: {x: -8, y: -4, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1184,8 +1184,8 @@ Tilemap:
   - first: {x: -7, y: -4, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1204,8 +1204,8 @@ Tilemap:
   - first: {x: -5, y: -4, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1304,8 +1304,8 @@ Tilemap:
   - first: {x: 5, y: -4, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 3
-      m_TileSpriteIndex: 3
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1384,8 +1384,8 @@ Tilemap:
   - first: {x: -5, y: -3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1394,8 +1394,8 @@ Tilemap:
   - first: {x: -4, y: -3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1494,8 +1494,8 @@ Tilemap:
   - first: {x: 6, y: -3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1644,8 +1644,8 @@ Tilemap:
   - first: {x: 3, y: -2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1664,8 +1664,8 @@ Tilemap:
   - first: {x: 5, y: -2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1694,8 +1694,8 @@ Tilemap:
   - first: {x: 8, y: -2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1744,8 +1744,8 @@ Tilemap:
   - first: {x: -7, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1754,8 +1754,8 @@ Tilemap:
   - first: {x: -6, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1764,8 +1764,8 @@ Tilemap:
   - first: {x: -5, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1844,8 +1844,8 @@ Tilemap:
   - first: {x: 3, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1854,8 +1854,8 @@ Tilemap:
   - first: {x: 4, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1864,8 +1864,8 @@ Tilemap:
   - first: {x: 5, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1894,8 +1894,8 @@ Tilemap:
   - first: {x: 8, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1974,8 +1974,8 @@ Tilemap:
   - first: {x: -4, y: 0, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2114,8 +2114,8 @@ Tilemap:
   - first: {x: 10, y: 0, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2134,8 +2134,8 @@ Tilemap:
   - first: {x: -9, y: 1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2144,8 +2144,8 @@ Tilemap:
   - first: {x: -8, y: 1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2284,8 +2284,8 @@ Tilemap:
   - first: {x: 6, y: 1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2314,8 +2314,8 @@ Tilemap:
   - first: {x: 9, y: 1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2374,8 +2374,8 @@ Tilemap:
   - first: {x: -4, y: 2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 3
-      m_TileSpriteIndex: 3
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2394,8 +2394,8 @@ Tilemap:
   - first: {x: -2, y: 2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2444,8 +2444,8 @@ Tilemap:
   - first: {x: 3, y: 2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2464,8 +2464,8 @@ Tilemap:
   - first: {x: 5, y: 2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 3
-      m_TileSpriteIndex: 3
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2524,8 +2524,8 @@ Tilemap:
   - first: {x: -8, y: 3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2554,8 +2554,8 @@ Tilemap:
   - first: {x: -5, y: 3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2604,8 +2604,8 @@ Tilemap:
   - first: {x: 0, y: 3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2684,8 +2684,8 @@ Tilemap:
   - first: {x: 8, y: 3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2774,8 +2774,8 @@ Tilemap:
   - first: {x: 0, y: 4, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2814,8 +2814,8 @@ Tilemap:
   - first: {x: 4, y: 4, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2844,8 +2844,8 @@ Tilemap:
   - first: {x: 7, y: 4, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2934,8 +2934,8 @@ Tilemap:
   - first: {x: -1, y: 5, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3034,8 +3034,8 @@ Tilemap:
   - first: {x: -6, y: 6, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3044,8 +3044,8 @@ Tilemap:
   - first: {x: -5, y: 6, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 3
-      m_TileSpriteIndex: 3
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3074,8 +3074,8 @@ Tilemap:
   - first: {x: -2, y: 6, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 3
-      m_TileSpriteIndex: 3
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3094,8 +3094,8 @@ Tilemap:
   - first: {x: 0, y: 6, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3184,8 +3184,8 @@ Tilemap:
   - first: {x: -6, y: 7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3194,8 +3194,8 @@ Tilemap:
   - first: {x: -5, y: 7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3214,8 +3214,8 @@ Tilemap:
   - first: {x: -3, y: 7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3224,8 +3224,8 @@ Tilemap:
   - first: {x: -2, y: 7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3244,8 +3244,8 @@ Tilemap:
   - first: {x: 0, y: 7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3254,8 +3254,8 @@ Tilemap:
   - first: {x: 1, y: 7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3264,8 +3264,8 @@ Tilemap:
   - first: {x: 2, y: 7, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3354,8 +3354,8 @@ Tilemap:
   - first: {x: -2, y: 8, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 2
-      m_TileSpriteIndex: 2
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3374,8 +3374,8 @@ Tilemap:
   - first: {x: 0, y: 8, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3454,8 +3454,8 @@ Tilemap:
   - first: {x: -5, y: 9, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3464,8 +3464,8 @@ Tilemap:
   - first: {x: -4, y: 9, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3484,8 +3484,8 @@ Tilemap:
   - first: {x: -2, y: 9, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3554,8 +3554,8 @@ Tilemap:
   - first: {x: 5, y: 9, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3594,8 +3594,8 @@ Tilemap:
   - first: {x: -2, y: 10, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3675,24 +3675,24 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 7
     m_Data: {fileID: 11400000, guid: 278af164446a6454f9bbb71ce2747341, type: 2}
-  - m_RefCount: 21
+  - m_RefCount: 20
     m_Data: {fileID: 11400000, guid: 37071a9e0957a438fa15d0b2b3cfb121, type: 2}
   - m_RefCount: 8
     m_Data: {fileID: 11400000, guid: e0206771911af42a2a62189bc18e96c1, type: 2}
   - m_RefCount: 6
     m_Data: {fileID: 11400000, guid: 37c1a60bc9fc5427eaa72a1052a686a0, type: 2}
-  - m_RefCount: 289
+  - m_RefCount: 290
     m_Data: {fileID: 11400000, guid: 1720b1748ca184f599a7cf1df30ff703, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 7
     m_Data: {fileID: 21300000, guid: 4b5cd799f613248958034c941ae7d0a7, type: 3}
-  - m_RefCount: 21
+  - m_RefCount: 20
     m_Data: {fileID: 21300000, guid: ee95c7314e4204f919edc2e1ca683502, type: 3}
   - m_RefCount: 8
     m_Data: {fileID: 21300000, guid: a82b2f159430b4255bc776b3134c910b, type: 3}
   - m_RefCount: 6
     m_Data: {fileID: 21300000, guid: 9200ec0e95cd24ac49e5c7e45695c512, type: 3}
-  - m_RefCount: 289
+  - m_RefCount: 290
     m_Data: {fileID: 21300000, guid: c78146947dbb34b158a01e0a57aaab1f, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 331
@@ -4599,7 +4599,7 @@ MonoBehaviour:
   coreTile: {fileID: 11400000, guid: 278af164446a6454f9bbb71ce2747341, type: 2}
   resourceTile: {fileID: 11400000, guid: 37071a9e0957a438fa15d0b2b3cfb121, type: 2}
   productionTile: {fileID: 11400000, guid: 1720b1748ca184f599a7cf1df30ff703, type: 2}
-  enhancementTile: {fileID: 11400000, guid: e0206771911af42a2a62189bc18e96c1, type: 2}
+  settlementTile: {fileID: 0}
   powerTile: {fileID: 11400000, guid: 833580c44b6294905bfe4c6cd3aef52b, type: 2}
   transportTile: {fileID: 11400000, guid: 13634d23a2520430cbbd365efe0bf713, type: 2}
   natureTile: {fileID: 11400000, guid: 37c1a60bc9fc5427eaa72a1052a686a0, type: 2}
@@ -4629,10 +4629,8 @@ MonoBehaviour:
     minDistanceFromCore: 5
     outputPerTick: 1
   minResourceSpacing: 2
-  enhancementTileCount: 8
-  minEnhancementDistanceFromCore: 2
-  natureTileCount: 6
-  minNatureDistanceFromCore: 3
+  settlementTileCount: 3
+  minSettlementDistanceFromCore: 3
   _savedTiles:
   - Position: {x: 0, y: 0, z: 0}
     Type: 0
@@ -4662,39 +4660,67 @@ MonoBehaviour:
     Type: 0
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 8, y: -2, z: 0}
+  - Position: {x: 8, y: -1, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: 4, y: 4, z: 0}
+  - Position: {x: 6, y: 1, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: -2, y: 7, z: 0}
+  - Position: {x: -5, y: -4, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: -9, y: 1, z: 0}
+  - Position: {x: -1, y: 5, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: 0, y: 3, z: 0}
+  - Position: {x: -6, y: -1, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: -6, y: 6, z: 0}
+  - Position: {x: 8, y: 3, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: 2, y: 7, z: 0}
+  - Position: {x: -6, y: 7, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: 5, y: 9, z: 0}
+  - Position: {x: 5, y: -1, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
     OutputPerTick: 1
-  - Position: {x: -5, y: 7, z: 0}
+  - Position: {x: -4, y: 0, z: 0}
+    Type: 1
+    Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
+    OutputPerTick: 1
+  - Position: {x: -8, y: -4, z: 0}
+    Type: 1
+    Item: {fileID: 11400000, guid: d69031d5a0cbf4e9f9ad8b2dc53a72cc, type: 2}
+    OutputPerTick: 1
+  - Position: {x: 6, y: -5, z: 0}
+    Type: 1
+    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    OutputPerTick: 1
+  - Position: {x: 1, y: -5, z: 0}
+    Type: 1
+    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    OutputPerTick: 1
+  - Position: {x: 0, y: -10, z: 0}
+    Type: 1
+    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    OutputPerTick: 1
+  - Position: {x: 1, y: -9, z: 0}
+    Type: 1
+    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    OutputPerTick: 1
+  - Position: {x: 0, y: 8, z: 0}
+    Type: 1
+    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    OutputPerTick: 1
+  - Position: {x: 3, y: -2, z: 0}
     Type: 1
     Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
     OutputPerTick: 1
@@ -4702,103 +4728,71 @@ MonoBehaviour:
     Type: 1
     Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
     OutputPerTick: 1
-  - Position: {x: 0, y: 7, z: 0}
+  - Position: {x: -8, y: 1, z: 0}
     Type: 1
-    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
     OutputPerTick: 1
-  - Position: {x: 0, y: 4, z: 0}
+  - Position: {x: -2, y: 10, z: 0}
     Type: 1
-    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
     OutputPerTick: 1
-  - Position: {x: -5, y: 9, z: 0}
+  - Position: {x: -4, y: -3, z: 0}
     Type: 1
-    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
     OutputPerTick: 1
-  - Position: {x: -5, y: -6, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
-    OutputPerTick: 1
+  - Position: {x: 0, y: 6, z: 0}
+    Type: 3
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 4, y: -1, z: 0}
+    Type: 3
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: -7, y: -4, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
-    OutputPerTick: 1
-  - Position: {x: 7, y: 4, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
-    OutputPerTick: 1
-  - Position: {x: -5, y: -1, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
-    OutputPerTick: 1
-  - Position: {x: 6, y: -3, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
-    OutputPerTick: 1
-  - Position: {x: -2, y: 9, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
-    OutputPerTick: 1
-  - Position: {x: -5, y: 3, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
-    OutputPerTick: 1
-  - Position: {x: 9, y: 1, z: 0}
-    Type: 1
-    Item: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
-    OutputPerTick: 1
-  - Position: {x: 5, y: -2, z: 0}
     Type: 3
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -6, y: -7, z: 0}
+  - Position: {x: -5, y: -6, z: 0}
     Type: 3
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 6, y: 1, z: 0}
+  - Position: {x: -7, y: -1, z: 0}
     Type: 3
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 6, y: -8, z: 0}
+  - Position: {x: -6, y: -8, z: 0}
     Type: 3
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -5, y: -3, z: 0}
+  - Position: {x: 1, y: 7, z: 0}
     Type: 3
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -2, y: 2, z: 0}
+  - Position: {x: -3, y: 7, z: 0}
     Type: 3
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 5, y: -8, z: 0}
-    Type: 3
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -2, y: 8, z: 0}
-    Type: 3
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -4, y: 2, z: 0}
+  - Position: {x: -4, y: 9, z: 0}
     Type: 5
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 5, y: 2, z: 0}
+  - Position: {x: 10, y: 0, z: 0}
     Type: 5
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -2, y: 6, z: 0}
+  - Position: {x: -9, y: 1, z: 0}
     Type: 5
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 5, y: -4, z: 0}
+  - Position: {x: -8, y: 3, z: 0}
     Type: 5
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -5, y: 6, z: 0}
+  - Position: {x: 3, y: 2, z: 0}
     Type: 5
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 6, y: -5, z: 0}
+  - Position: {x: 3, y: -1, z: 0}
     Type: 5
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -4890,11 +4884,19 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: 0, y: 3, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: -1, y: 3, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -2, y: 3, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: -2, y: 2, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -4938,23 +4940,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 3, y: -2, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: 3, y: -1, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
   - Position: {x: 4, y: 0, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 3, y: 1, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: 3, y: 2, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -4967,6 +4957,10 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 1, y: 4, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 0, y: 4, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -4983,10 +4977,6 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -4, y: 1, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -4, y: 0, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5018,10 +5008,6 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 1, y: -5, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
   - Position: {x: 2, y: -5, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5035,10 +5021,6 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 4, y: -2, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: 4, y: -1, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5074,10 +5056,6 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -1, y: 5, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
   - Position: {x: -2, y: 5, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5094,6 +5072,10 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: -4, y: 2, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: -5, y: 1, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5102,11 +5084,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -4, y: -2, z: 0}
+  - Position: {x: -5, y: -1, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -4, y: -3, z: 0}
+  - Position: {x: -4, y: -2, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5154,7 +5136,7 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 5, y: -1, z: 0}
+  - Position: {x: 5, y: -2, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5166,7 +5148,15 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: 5, y: 2, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: 4, y: 3, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 4, y: 4, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5186,11 +5176,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 0, y: 6, z: 0}
+  - Position: {x: -1, y: 6, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -1, y: 6, z: 0}
+  - Position: {x: -2, y: 6, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5206,6 +5196,10 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: -5, y: 3, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: -5, y: 2, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5218,11 +5212,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -6, y: -1, z: 0}
+  - Position: {x: -5, y: -2, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -5, y: -2, z: 0}
+  - Position: {x: -5, y: -3, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5274,6 +5268,10 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: 5, y: -4, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: 5, y: -3, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5314,7 +5312,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 1, y: 7, z: 0}
+  - Position: {x: 2, y: 7, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 0, y: 7, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5322,7 +5324,7 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -3, y: 7, z: 0}
+  - Position: {x: -2, y: 7, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5358,19 +5360,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -7, y: -1, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
   - Position: {x: -6, y: -2, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -6, y: -3, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -5, y: -4, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5434,6 +5428,10 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: 6, y: -3, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: 7, y: -2, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5490,11 +5488,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 0, y: 8, z: 0}
+  - Position: {x: -1, y: 8, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -1, y: 8, z: 0}
+  - Position: {x: -2, y: 8, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5503,6 +5501,14 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -4, y: 8, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: -5, y: 7, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: -5, y: 6, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5519,10 +5525,6 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -7, y: 2, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -8, y: 1, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5578,10 +5580,6 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 1, y: -9, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
   - Position: {x: 2, y: -9, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5591,6 +5589,10 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 4, y: -9, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 5, y: -8, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5610,7 +5612,7 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 8, y: -1, z: 0}
+  - Position: {x: 8, y: -2, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5627,6 +5629,10 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 7, y: 3, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 7, y: 4, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5670,11 +5676,15 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: -2, y: 9, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: -3, y: 9, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -4, y: 9, z: 0}
+  - Position: {x: -5, y: 9, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5682,7 +5692,7 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -6, y: 7, z: 0}
+  - Position: {x: -6, y: 6, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5691,10 +5701,6 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -7, y: 4, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -8, y: 3, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5726,6 +5732,10 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
+  - Position: {x: -6, y: -7, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
   - Position: {x: -5, y: -8, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5750,10 +5760,6 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 0, y: -10, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
   - Position: {x: 1, y: -10, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5775,6 +5781,10 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 5, y: -9, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 6, y: -8, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5806,15 +5816,11 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: 10, y: 0, z: 0}
+  - Position: {x: 9, y: 1, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 9, y: 2, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: 8, y: 3, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5835,6 +5841,10 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: 6, y: 8, z: 0}
+    Type: 2
+    Item: {fileID: 0}
+    OutputPerTick: 0
+  - Position: {x: 5, y: 9, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5863,10 +5873,6 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -1, y: 10, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -2, y: 10, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
@@ -5934,10 +5940,6 @@ MonoBehaviour:
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0
-  - Position: {x: -8, y: -4, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
   - Position: {x: -8, y: -5, z: 0}
     Type: 2
     Item: {fileID: 0}
@@ -5947,10 +5949,6 @@ MonoBehaviour:
     Item: {fileID: 0}
     OutputPerTick: 0
   - Position: {x: -7, y: -7, z: 0}
-    Type: 2
-    Item: {fileID: 0}
-    OutputPerTick: 0
-  - Position: {x: -6, y: -8, z: 0}
     Type: 2
     Item: {fileID: 0}
     OutputPerTick: 0

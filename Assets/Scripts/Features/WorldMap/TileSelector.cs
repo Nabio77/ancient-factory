@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Tiles;
+using CarbonWorld.Core.Types;
 using System.Collections.Generic;
 
 namespace CarbonWorld.Features.WorldMap
@@ -42,7 +43,14 @@ namespace CarbonWorld.Features.WorldMap
         
         // Placement Mode
         public bool IsPlacementMode { get; set; }
+        public TileType? PlacementTileType { get; set; }
         public event Action<BaseTile> OnPlacementClick;
+        public event Action<Vector3Int> OnPlacementCellClick;
+
+        [ShowInInspector, ReadOnly]
+        private Vector3Int? _hoveredPlacementCell;
+
+        public Vector3Int? HoveredPlacementCell => _hoveredPlacementCell;
 
         public bool IsInputBlocked { get; set; }
 
@@ -102,14 +110,24 @@ namespace CarbonWorld.Features.WorldMap
 
             if (tile != null)
             {
+                ClearPlacementHover();
                 if (tile != _hoveredTile)
                 {
                     SetHoveredTile(tile, cellPos);
                 }
                 return;
             }
-            
+
+            // In placement mode, check if this is a valid placement cell
+            if (IsPlacementMode && worldMap.CanPlaceTile(cellPos))
+            {
+                ClearHover();
+                SetHoveredPlacementCell(cellPos);
+                return;
+            }
+
             ClearHover();
+            ClearPlacementHover();
         }
 
         private void HandleClick()
@@ -134,11 +152,14 @@ namespace CarbonWorld.Features.WorldMap
                     SelectTile(_hoveredTile, _hoveredCell);
                 }
             }
+            else if (IsPlacementMode && _hoveredPlacementCell.HasValue)
+            {
+                // Click on valid empty cell in placement mode
+                OnPlacementCellClick?.Invoke(_hoveredPlacementCell.Value);
+            }
             else
             {
-                // Only deselect if NOT in placement mode? 
-                // Or maybe clicking empty space cancels placement mode?
-                // Let's keep it simple: clicking empty space always deselects.
+                // Clicking empty space deselects
                 Deselect();
             }
         }
@@ -184,9 +205,40 @@ namespace CarbonWorld.Features.WorldMap
                 }
                 _hoveredTile = null;
                 _hoveredCell = default;
-                
+
                 UpdatePowerHighlights();
                 OnTileHoverEnded?.Invoke();
+            }
+        }
+
+        private void SetHoveredPlacementCell(Vector3Int cellPos)
+        {
+            if (_hoveredPlacementCell == cellPos) return;
+
+            ClearPlacementHover();
+            _hoveredPlacementCell = cellPos;
+
+            // Show actual tile preview (not just highlight)
+            if (PlacementTileType.HasValue)
+            {
+                var previewTile = worldMap.GetTileAsset(PlacementTileType.Value);
+                if (previewTile != null)
+                {
+                    worldMap.Tilemap.SetTile(cellPos, previewTile);
+                }
+            }
+        }
+
+        private void ClearPlacementHover()
+        {
+            if (_hoveredPlacementCell.HasValue)
+            {
+                // Only clear if no real tile exists (don't clear if tile was actually placed)
+                if (!worldMap.TileData.Contains(_hoveredPlacementCell.Value))
+                {
+                    worldMap.Tilemap.SetTile(_hoveredPlacementCell.Value, null);
+                }
+                _hoveredPlacementCell = null;
             }
         }
 

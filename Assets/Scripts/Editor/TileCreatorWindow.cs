@@ -9,7 +9,7 @@ namespace CarbonWorld.Editor
         private Sprite coreSprite;
         private Sprite resourceSprite;
         private Sprite productionSprite;
-        private Sprite enhancementSprite;
+        private Sprite settlementSprite;
         private Sprite hoverHighlightSprite;
         private Sprite selectedHighlightSprite;
 
@@ -33,7 +33,7 @@ namespace CarbonWorld.Editor
             coreSprite = (Sprite)EditorGUILayout.ObjectField("Core Tile", coreSprite, typeof(Sprite), false);
             resourceSprite = (Sprite)EditorGUILayout.ObjectField("Resource Tile", resourceSprite, typeof(Sprite), false);
             productionSprite = (Sprite)EditorGUILayout.ObjectField("Production Tile", productionSprite, typeof(Sprite), false);
-            enhancementSprite = (Sprite)EditorGUILayout.ObjectField("Enhancement Tile", enhancementSprite, typeof(Sprite), false);
+            settlementSprite = (Sprite)EditorGUILayout.ObjectField("Settlement Tile", settlementSprite, typeof(Sprite), false);
 
             EditorGUILayout.Space();
             GUILayout.Label("Highlight Sprites (Optional)", EditorStyles.boldLabel);
@@ -91,9 +91,9 @@ namespace CarbonWorld.Editor
                 CreateTile(productionSprite, "ProductionTile");
                 created++;
             }
-            if (enhancementSprite != null)
+            if (settlementSprite != null)
             {
-                CreateTile(enhancementSprite, "EnhancementTile");
+                CreateTile(settlementSprite, "SettlementTile");
                 created++;
             }
             if (hoverHighlightSprite != null)

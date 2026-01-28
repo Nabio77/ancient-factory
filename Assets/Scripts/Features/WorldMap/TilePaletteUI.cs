@@ -64,6 +64,7 @@ namespace CarbonWorld.Features.WorldMap
             if (tileSelector != null)
             {
                 tileSelector.OnPlacementClick += OnPlacementClick;
+                tileSelector.OnPlacementCellClick += OnPlacementCellClick;
             }
 
             if (graphEditor != null)
@@ -80,6 +81,7 @@ namespace CarbonWorld.Features.WorldMap
             if (tileSelector != null)
             {
                 tileSelector.OnPlacementClick -= OnPlacementClick;
+                tileSelector.OnPlacementCellClick -= OnPlacementCellClick;
                 tileSelector.IsInputBlocked = false;
             }
 
@@ -128,6 +130,7 @@ namespace CarbonWorld.Features.WorldMap
         {
             _activeBrush = type;
             tileSelector.IsPlacementMode = true;
+            tileSelector.PlacementTileType = type;
             UpdateButtons();
         }
 
@@ -135,6 +138,7 @@ namespace CarbonWorld.Features.WorldMap
         {
             _activeBrush = null;
             tileSelector.IsPlacementMode = false;
+            tileSelector.PlacementTileType = null;
             UpdateButtons();
         }
 
@@ -173,9 +177,16 @@ namespace CarbonWorld.Features.WorldMap
                 if (tile.Type != _activeBrush.Value)
                 {
                     worldMap.ReplaceTile(tile.CellPosition, _activeBrush.Value);
-                    // Optional: Play sound or particle effect here
                 }
             }
+        }
+
+        private void OnPlacementCellClick(Vector3Int cellPos)
+        {
+            if (_activeBrush == null) return;
+
+            // Place new tile on empty cell
+            worldMap.AddTile(cellPos, _activeBrush.Value);
         }
 
         private bool IsMutable(TileType type)

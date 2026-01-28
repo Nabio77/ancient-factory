@@ -36,7 +36,7 @@ namespace CarbonWorld.Features.WorldMap
         private TileBase productionTile;
 
         [SerializeField, Required]
-        private TileBase enhancementTile;
+        private TileBase settlementTile;
 
         [SerializeField, Required]
         private TileBase powerTile;
@@ -82,19 +82,12 @@ namespace CarbonWorld.Features.WorldMap
         [SerializeField, Min(1)]
         private int minResourceSpacing = 2;
 
-        [Title("Enhancement Tiles")]
+        [Title("Settlement Tiles")]
         [SerializeField, Min(0)]
-        private int enhancementTileCount = 8;
+        private int settlementTileCount = 3;
 
         [SerializeField, Min(1)]
-        private int minEnhancementDistanceFromCore = 2;
-
-        [Title("Nature Tiles")]
-        [SerializeField, Min(0)]
-        private int natureTileCount = 6;
-
-        [SerializeField, Min(1)]
-        private int minNatureDistanceFromCore = 3;
+        private int minSettlementDistanceFromCore = 3;
 
         [SerializeField, HideInInspector]
         private List<TileSaveData> _savedTiles = new();
@@ -155,8 +148,8 @@ namespace CarbonWorld.Features.WorldMap
                         case TileType.Resource:
                             tileData = new ResourceTile(data.Position, data.Item, data.OutputPerTick);
                             break;
-                        case TileType.Enhancement:
-                            tileData = new EnhancementTile(data.Position, TileType.Enhancement);
+                        case TileType.Settlement:
+                            tileData = new SettlementTile(data.Position);
                             break;
                         case TileType.Power:
                             tileData = new PowerTile(data.Position);
@@ -230,28 +223,15 @@ namespace CarbonWorld.Features.WorldMap
                 }
             }
 
-            // Phase 3: Enhancement tiles
-            var enhancementCandidates = GetValidCandidates(coords, assignments, minEnhancementDistanceFromCore);
-            Shuffle(enhancementCandidates, rng);
-            for (int i = 0; i < enhancementTileCount && i < enhancementCandidates.Count; i++)
+            // Phase 3: Settlement tiles (mini settlements as goals)
+            var settlementCandidates = GetValidCandidates(coords, assignments, minSettlementDistanceFromCore);
+            Shuffle(settlementCandidates, rng);
+            for (int i = 0; i < settlementTileCount && i < settlementCandidates.Count; i++)
             {
-                assignments[enhancementCandidates[i]] = new TileAssignment { Type = TileType.Enhancement };
+                assignments[settlementCandidates[i]] = new TileAssignment { Type = TileType.Settlement };
             }
 
-            // Phase 5: Nature tiles
-            var natureCandidates = GetValidCandidates(coords, assignments, minNatureDistanceFromCore);
-            Shuffle(natureCandidates, rng);
-            for (int i = 0; i < natureTileCount && i < natureCandidates.Count; i++)
-            {
-                assignments[natureCandidates[i]] = new TileAssignment { Type = TileType.Nature };
-            }
-
-            // Phase 6: Fill remaining with production tiles
-            foreach (var coord in coords)
-            {
-                if (!assignments.ContainsKey(coord))
-                    assignments[coord] = new TileAssignment { Type = TileType.Production };
-            }
+            // Note: No longer filling with production tiles - player will place tiles manually
 
             // Phase 5: Create tiles
             CreateTiles(assignments);
@@ -317,9 +297,9 @@ namespace CarbonWorld.Features.WorldMap
                         tileData = new ResourceTile(coord, assignment.Item, assignment.OutputPerTick);
                         break;
 
-                    case TileType.Enhancement:
-                        visualTile = enhancementTile;
-                        tileData = new EnhancementTile(coord, TileType.Enhancement);
+                    case TileType.Settlement:
+                        visualTile = settlementTile;
+                        tileData = new SettlementTile(coord);
                         break;
 
                     case TileType.Power:
@@ -446,7 +426,7 @@ namespace CarbonWorld.Features.WorldMap
                 TileType.Core => coreTile,
                 TileType.Resource => resourceTile,
                 TileType.Production => productionTile,
-                TileType.Enhancement => enhancementTile,
+                TileType.Settlement => settlementTile,
                 TileType.Power => powerTile,
                 TileType.Nature => natureTile,
                 TileType.Transport => transportTile,
@@ -470,7 +450,7 @@ namespace CarbonWorld.Features.WorldMap
                 TileType.Core => coreTile,
                 TileType.Resource => resourceTile,
                 TileType.Production => productionTile,
-                TileType.Enhancement => enhancementTile,
+                TileType.Settlement => settlementTile,
                 TileType.Power => powerTile,
                 TileType.Nature => natureTile,
                 TileType.Transport => transportTile,
@@ -480,6 +460,81 @@ namespace CarbonWorld.Features.WorldMap
                 TileType.Heatwave => heatwaveTile,
                 _ => productionTile
             };
+        }
+
+        public bool CanPlaceTile(Vector3Int position)
+        {
+            // Position must be empty
+            if (_tileData.Contains(position))
+                return false;
+
+            // Must be adjacent to at least one existing tile
+            var neighbors = HexUtils.GetNeighbors(position);
+            foreach (var neighbor in neighbors)
+            {
+                if (_tileData.Contains(neighbor))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool AddTile(Vector3Int position, TileType type)
+        {
+            if (!CanPlaceTile(position))
+                return false;
+
+            BaseTile tileData;
+            switch (type)
+            {
+                case TileType.Production:
+                    tileData = new ProductionTile(position);
+                    break;
+                case TileType.Power:
+                    tileData = new PowerTile(position);
+                    break;
+                case TileType.Nature:
+                    tileData = new NatureTile(position);
+                    break;
+                case TileType.Transport:
+                    tileData = new TransportTile(position);
+                    break;
+                default:
+                    Debug.LogWarning($"AddTile: Cannot place tile of type {type}");
+                    return false;
+            }
+
+            _tileData.Add(position, tileData);
+            tilemap.SetTile(position, GetTileAsset(type));
+            _savedTiles.Add(new TileSaveData
+            {
+                Position = position,
+                Type = type
+            });
+
+            // Update graph system
+            graphSystem.UpdateNeighbors(_tileData, position);
+
+            OnTileChanged?.Invoke(position);
+            return true;
+        }
+
+        public List<Vector3Int> GetValidPlacementPositions()
+        {
+            var validPositions = new HashSet<Vector3Int>();
+
+            foreach (var tile in _tileData.GetAllTiles())
+            {
+                var neighbors = HexUtils.GetNeighbors(tile.CellPosition);
+                foreach (var neighbor in neighbors)
+                {
+                    if (!_tileData.Contains(neighbor))
+                    {
+                        validPositions.Add(neighbor);
+                    }
+                }
+            }
+
+            return new List<Vector3Int>(validPositions);
         }
 
         private struct TileAssignment
