@@ -164,6 +164,16 @@ namespace CarbonWorld.Features.WorldMap
                 }
             }
 
+            // For transport tiles, show the first transported item
+            if (tile is TransportTile transportTile)
+            {
+                var outputs = transportTile.GetOutputs();
+                if (outputs.Count > 0 && outputs[0].IsValid)
+                {
+                    return outputs[0].Item?.Icon;
+                }
+            }
+
             // For other tiles, show the first item in inventory
             var firstItem = tile.Inventory.GetAll().FirstOrDefault();
             if (firstItem.IsValid)

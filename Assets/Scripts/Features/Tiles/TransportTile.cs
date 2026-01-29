@@ -7,6 +7,18 @@ using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Features.Tiles
 {
+    public struct TileOutput
+    {
+        public ItemStack Item;
+        public Vector3Int OriginalSource;
+
+        public TileOutput(ItemStack item, Vector3Int originalSource)
+        {
+            Item = item;
+            OriginalSource = originalSource;
+        }
+    }
+
     public class TransportTile : BaseTile, IGraphTile
     {
         public BlueprintGraph Graph { get; } = new();
@@ -25,6 +37,14 @@ namespace CarbonWorld.Features.Tiles
             return Graph.ioNodes
                 .Where(n => n.type == TileIOType.Input && n.availableItem.IsValid)
                 .Select(n => n.availableItem)
+                .ToList();
+        }
+
+        public List<TileOutput> GetOutputsWithSource()
+        {
+            return Graph.ioNodes
+                .Where(n => n.type == TileIOType.Input && n.availableItem.IsValid)
+                .Select(n => new TileOutput(n.availableItem, n.originalSourcePosition))
                 .ToList();
         }
     }

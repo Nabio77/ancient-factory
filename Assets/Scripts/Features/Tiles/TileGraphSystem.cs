@@ -95,38 +95,43 @@ namespace CarbonWorld.Features.Tiles
             var graph = tile.Graph;
             bool changed = false;
 
-            // 1. Update Inputs
+            // 1. Update Inputs (with deduplication by original source)
             var newInputs = new List<TileIONode>();
             var neighbors = tileData.GetNeighbors(tile.CellPosition);
+            var seenOriginalSources = new HashSet<Vector3Int>();
             int inputIndex = 0;
 
             foreach (var neighbor in neighbors)
             {
-                var outputs = GetOutputs(neighbor);
+                var outputs = GetOutputsWithSource(neighbor);
                 foreach (var output in outputs)
                 {
+                    // Skip if we've already seen this original source (prevents doubling via transport)
+                    if (!seenOriginalSources.Add(output.OriginalSource))
+                        continue;
+
                     // Find existing or create new
-                    var existingNode = graph.ioNodes.Find(n => 
-                        n.type == TileIOType.Input && 
-                        n.sourceTilePosition == neighbor.CellPosition && 
-                        n.index == inputIndex);
+                    var existingNode = graph.ioNodes.Find(n =>
+                        n.type == TileIOType.Input &&
+                        n.originalSourcePosition == output.OriginalSource);
 
                     if (existingNode != null)
                     {
                         // Update existing
-                        if (existingNode.availableItem != output) // Check value equality if possible, or just reassign
+                        if (existingNode.availableItem != output.Item)
                         {
-                            existingNode.availableItem = output;
+                            existingNode.availableItem = output.Item;
                             changed = true;
                         }
-                        // Ensure other properties are sync'd if needed
+                        existingNode.sourceTilePosition = neighbor.CellPosition;
                         existingNode.sourceTileType = neighbor.Type;
+                        existingNode.index = inputIndex;
                         newInputs.Add(existingNode);
                     }
                     else
                     {
                         // Create new
-                        var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output, inputIndex);
+                        var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output.Item, inputIndex, output.OriginalSource);
                         newInputs.Add(newNode);
                         changed = true;
                     }
@@ -199,31 +204,37 @@ namespace CarbonWorld.Features.Tiles
 
             var newInputs = new List<TileIONode>();
             var neighbors = tileData.GetNeighbors(tile.CellPosition);
+            var seenOriginalSources = new HashSet<Vector3Int>();
             int inputIndex = 0;
 
             foreach (var neighbor in neighbors)
             {
-                var outputs = GetOutputs(neighbor);
+                var outputs = GetOutputsWithSource(neighbor);
                 foreach (var output in outputs)
                 {
-                    var existingNode = graph.ioNodes.Find(n => 
-                        n.type == TileIOType.Input && 
-                        n.sourceTilePosition == neighbor.CellPosition && 
-                        n.index == inputIndex);
+                    // Skip if we've already seen this original source (prevents doubling in chains)
+                    if (!seenOriginalSources.Add(output.OriginalSource))
+                        continue;
+
+                    var existingNode = graph.ioNodes.Find(n =>
+                        n.type == TileIOType.Input &&
+                        n.originalSourcePosition == output.OriginalSource);
 
                     if (existingNode != null)
                     {
-                        if (existingNode.availableItem != output)
+                        if (existingNode.availableItem != output.Item)
                         {
-                            existingNode.availableItem = output;
+                            existingNode.availableItem = output.Item;
                             changed = true;
                         }
+                        existingNode.sourceTilePosition = neighbor.CellPosition;
                         existingNode.sourceTileType = neighbor.Type;
+                        existingNode.index = inputIndex;
                         newInputs.Add(existingNode);
                     }
                     else
                     {
-                        var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output, inputIndex);
+                        var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output.Item, inputIndex, output.OriginalSource);
                         newInputs.Add(newNode);
                         changed = true;
                     }
@@ -243,28 +254,51 @@ namespace CarbonWorld.Features.Tiles
                 if (!graph.ioNodes.Contains(node)) graph.ioNodes.Add(node);
             }
 
+            // Sync Inventory for icon display
+            using (new InventoryBatch(tile.Inventory, this, "TransportGraphUpdate"))
+            {
+                tile.Inventory.Clear();
+                var outputs = tile.GetOutputs();
+                foreach (var output in outputs)
+                {
+                    if (output.IsValid)
+                    {
+                        tile.Inventory.Add(output);
+                    }
+                }
+            }
+
             if (changed)
             {
                 graph.NotifyGraphUpdated();
+                EventBus.Publish(new GraphUpdated { Position = tile.CellPosition });
             }
         }
 
-        private List<ItemStack> GetOutputs(BaseTile tile)
+        private List<TileOutput> GetOutputsWithSource(BaseTile tile)
         {
             if (tile is ResourceTile resourceTile)
             {
                 var output = resourceTile.GetOutput();
-                return output.IsValid ? new List<ItemStack> { output } : new List<ItemStack>();
+                if (output.IsValid)
+                {
+                    return new List<TileOutput> { new TileOutput(output, tile.CellPosition) };
+                }
+                return new List<TileOutput>();
             }
             else if (tile is ProductionTile productionTile)
             {
-                return productionTile.GetOutputs();
+                return productionTile.GetOutputs()
+                    .Where(o => o.IsValid)
+                    .Select(o => new TileOutput(o, tile.CellPosition))
+                    .ToList();
             }
             else if (tile is TransportTile transportTile)
             {
-                return transportTile.GetOutputs();
+                // Transport tiles preserve original source from their inputs
+                return transportTile.GetOutputsWithSource();
             }
-            return new List<ItemStack>();
+            return new List<TileOutput>();
         }
 
         private ItemStack GetGraphOutputItem(ProductionTile tile)

@@ -19,8 +19,9 @@ namespace CarbonWorld.Core.Data
         public TileType sourceTileType;
         public ItemStack availableItem;
         public int index;
+        public Vector3Int originalSourcePosition;
 
-        public TileIONode(TileIOType type, Vector3Int sourcePos, TileType tileType, ItemStack item, int index)
+        public TileIONode(TileIOType type, Vector3Int sourcePos, TileType tileType, ItemStack item, int index, Vector3Int? originalSource = null)
         {
             id = $"tile_io_{type.ToString().ToLower()}_{index}";
             this.type = type;
@@ -28,6 +29,7 @@ namespace CarbonWorld.Core.Data
             sourceTileType = tileType;
             availableItem = item;
             this.index = index;
+            originalSourcePosition = originalSource ?? sourcePos;
         }
     }
 }
