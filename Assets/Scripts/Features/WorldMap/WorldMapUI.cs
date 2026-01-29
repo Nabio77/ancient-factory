@@ -93,6 +93,18 @@ namespace CarbonWorld.Features.WorldMap
             tileSelector.OnTileHoverEnded -= OnTileHoverEnded;
         }
 
+        void Update()
+        {
+            if (tileSelector.SelectedTile != null)
+            {
+                UpdateUI(tileSelector.SelectedTile);
+            }
+            else if (tileSelector.HoveredTile != null)
+            {
+                UpdateUI(tileSelector.HoveredTile);
+            }
+        }
+
         private void OnTileHovered(BaseTile tile)
         {
             UpdateUI(tile);
@@ -271,19 +283,52 @@ namespace CarbonWorld.Features.WorldMap
                 worldMap.GraphSystem.UpdateTile(worldMap.TileData, tile);
             }
 
+            // Show power status
+            var powerStatus = tile.IsPowered ? "POWERED" : "NO POWER";
+
+            // Show available inputs from IO nodes
             var inputs = tile.Graph.ioNodes
                 .Where(n => n.type == TileIOType.Input && n.availableItem.IsValid)
-                .Select(n => $"{n.availableItem.Item.ItemName} (Tier {n.availableItem.Item.Tier})")
+                .Select(n => $"{n.availableItem.Item.ItemName} x{n.availableItem.Amount}")
                 .ToList();
 
-            var outputs = tile.Graph.ioNodes
+            // Show input buffer contents
+            var inputBufferItems = tile.InputBuffer.GetAll()
+                .Where(s => s.IsValid)
+                .Select(s => $"[Buffer] {s.Item.ItemName} x{s.Amount}")
+                .ToList();
+
+            // Show potential outputs (from graph) and actual outputs (from buffer)
+            var potentialOutputs = tile.Graph.ioNodes
                 .Where(n => n.type == TileIOType.Output && n.availableItem.IsValid)
-                .Select(n => $"{n.availableItem.Item.ItemName} (Tier {n.availableItem.Item.Tier})")
+                .Select(n => $"[Potential] {n.availableItem.Item.ItemName}")
                 .ToList();
 
-            _productionInputs.text = inputs.Any() ? string.Join("\n", inputs) : "None";
-            _productionOutputs.text = outputs.Any() ? string.Join("\n", outputs) : "None";
-            
+            var actualOutputs = tile.OutputBuffer.GetAll()
+                .Where(s => s.IsValid)
+                .Select(s => $"[Ready] {s.Item.ItemName} x{s.Amount}")
+                .ToList();
+
+            // Show production states
+            var productionStates = tile.GetAllProductionStates()
+                .Select(s => $"{s.Status}: {s.Progress:P0}")
+                .ToList();
+
+            var inputText = new System.Text.StringBuilder();
+            inputText.AppendLine($"Power: {powerStatus}");
+            if (inputs.Any()) inputText.AppendLine(string.Join("\n", inputs));
+            if (inputBufferItems.Any()) inputText.AppendLine(string.Join("\n", inputBufferItems));
+            if (!inputs.Any() && !inputBufferItems.Any()) inputText.AppendLine("No inputs");
+
+            var outputText = new System.Text.StringBuilder();
+            if (potentialOutputs.Any()) outputText.AppendLine(string.Join("\n", potentialOutputs));
+            if (actualOutputs.Any()) outputText.AppendLine(string.Join("\n", actualOutputs));
+            if (productionStates.Any()) outputText.AppendLine(string.Join("\n", productionStates));
+            if (!potentialOutputs.Any() && !actualOutputs.Any()) outputText.AppendLine("None");
+
+            _productionInputs.text = inputText.ToString().TrimEnd();
+            _productionOutputs.text = outputText.ToString().TrimEnd();
+
             _productionInfo.RemoveFromClassList("hidden");
         }
 
@@ -298,7 +343,10 @@ namespace CarbonWorld.Features.WorldMap
 
             _resourceName.text = item.ItemName;
             _resourceTier.text = $"Tier {item.Tier} - {item.Category}";
-            _resourceOutput.text = tile.OutputPerTick.ToString();
+
+            // Show quality, output rate, and current inventory
+            int currentStock = tile.Inventory.Get(item);
+            _resourceOutput.text = $"{tile.Quality} ({tile.GetOutputPerTick()}/tick) - Stock: {currentStock}";
 
             // Clear and set the icon
             _resourceIcon.style.backgroundImage = StyleKeyword.None;

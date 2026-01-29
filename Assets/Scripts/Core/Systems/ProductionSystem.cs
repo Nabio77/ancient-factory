@@ -1,0 +1,410 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using Sirenix.OdinInspector;
+using CarbonWorld.Core.Data;
+using CarbonWorld.Core.Types;
+using CarbonWorld.Features.Tiles;
+using CarbonWorld.Features.WorldMap;
+using CarbonWorld.Features.Inventories;
+
+namespace CarbonWorld.Core.Systems
+{
+    public class ProductionSystem : MonoBehaviour
+    {
+        public static ProductionSystem Instance { get; private set; }
+
+        [Title("References")]
+        [SerializeField, Required]
+        private WorldMap worldMap;
+
+        [Title("Settings")]
+        [SerializeField]
+        private float tickInterval = 1f;
+
+        private float _tickTimer;
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+
+            if (worldMap == null)
+            {
+                worldMap = FindFirstObjectByType<WorldMap>();
+            }
+        }
+
+        private void Update()
+        {
+            _tickTimer += Time.deltaTime;
+            if (_tickTimer >= tickInterval)
+            {
+                _tickTimer = 0f;
+                ProcessProductionTick();
+            }
+        }
+
+        [Button("Process Tick")]
+        public void ProcessProductionTick()
+        {
+            // Phase 1: Collect inputs from adjacent tiles
+            CollectInputs();
+
+            // Phase 2: Process production for each tile
+            foreach (var tile in worldMap.TileData.GetAllTiles())
+            {
+                if (tile is ProductionTile productionTile)
+                {
+                    ProcessProductionTile(productionTile);
+                }
+            }
+
+            // Phase 3: Distribute outputs to settlements
+            DistributeToSettlements();
+        }
+
+        [Button("Debug: Show All Production Status")]
+        public void DebugShowProductionStatus()
+        {
+            Debug.Log("=== PRODUCTION SYSTEM DEBUG ===");
+
+            foreach (var tile in worldMap.TileData.GetAllTiles())
+            {
+                if (tile is ProductionTile productionTile)
+                {
+                    var pos = productionTile.CellPosition;
+                    Debug.Log($"ProductionTile at {pos}:");
+                    Debug.Log($"  - IsPowered: {productionTile.IsPowered}");
+                    Debug.Log($"  - IO Nodes: {productionTile.Graph.ioNodes.Count}");
+                    Debug.Log($"  - Blueprint Nodes: {productionTile.Graph.nodes.Count}");
+                    Debug.Log($"  - Connections: {productionTile.Graph.connections.Count}");
+
+                    foreach (var io in productionTile.Graph.ioNodes)
+                    {
+                        Debug.Log($"    IO: {io.type} - {io.id} - Item: {(io.availableItem.IsValid ? io.availableItem.Item.ItemName : "None")}");
+                    }
+
+                    Debug.Log($"  - InputBuffer: {productionTile.InputBuffer.TotalItemCount} items");
+                    Debug.Log($"  - OutputBuffer: {productionTile.OutputBuffer.TotalItemCount} items");
+
+                    foreach (var state in productionTile.GetAllProductionStates())
+                    {
+                        Debug.Log($"    State: {state.NodeId} - {state.Status} ({state.Progress:P0})");
+                    }
+                }
+                else if (tile is ResourceTile resourceTile)
+                {
+                    var pos = resourceTile.CellPosition;
+                    var output = resourceTile.GetOutput();
+                    var stock = resourceTile.Inventory.Get(resourceTile.ResourceItem);
+                    Debug.Log($"ResourceTile at {pos}: {resourceTile.Quality} {output.Item?.ItemName ?? "None"} - Stock: {stock}");
+                }
+            }
+        }
+
+        private void CollectInputs()
+        {
+            foreach (var tile in worldMap.TileData.GetAllTiles())
+            {
+                if (tile is ProductionTile productionTile)
+                {
+                    CollectInputsForTile(productionTile);
+                }
+            }
+        }
+
+        private void CollectInputsForTile(ProductionTile tile)
+        {
+            // For each input IO node that has a valid item
+            foreach (var ioNode in tile.Graph.ioNodes)
+            {
+                if (ioNode.type != TileIOType.Input || !ioNode.availableItem.IsValid)
+                    continue;
+
+                // Check if this input is connected to any blueprint node
+                var isConnected = tile.Graph.connections.Any(c => c.fromNodeId == ioNode.id);
+                if (!isConnected)
+                    continue;
+
+                // Get the source tile
+                var sourceTile = worldMap.TileData.GetTile(ioNode.sourceTilePosition);
+                if (sourceTile == null)
+                    continue;
+
+                // If source is transport, we need to trace back to the original source to actually consume the item
+                var actualSourceTile = sourceTile;
+                if (sourceTile is TransportTile)
+                {
+                    actualSourceTile = worldMap.TileData.GetTile(ioNode.originalSourcePosition);
+                }
+
+                if (actualSourceTile == null)
+                    continue;
+
+                var item = ioNode.availableItem.Item;
+                var requestedAmount = ioNode.availableItem.Amount;
+                int consumedAmount = 0;
+
+                // Check source based on tile type
+                if (actualSourceTile is ProductionTile sourceProduction)
+                {
+                    // Consume from OutputBuffer for production tiles
+                    int available = sourceProduction.OutputBuffer.Get(item);
+                    consumedAmount = Mathf.Min(requestedAmount, available);
+                    if (consumedAmount > 0)
+                    {
+                        sourceProduction.OutputBuffer.Remove(item, consumedAmount);
+                    }
+                }
+                else
+                {
+                    // Consume from Inventory for resource/other tiles
+                    int available = actualSourceTile.Inventory.Get(item);
+                    consumedAmount = Mathf.Min(requestedAmount, available);
+                    if (consumedAmount > 0)
+                    {
+                        actualSourceTile.Inventory.Remove(item, consumedAmount);
+                    }
+                }
+
+                if (consumedAmount > 0)
+                {
+                    // Add to input buffer
+                    tile.InputBuffer.Add(item, consumedAmount);
+                }
+            }
+        }
+
+        private void ProcessProductionTile(ProductionTile tile)
+        {
+            // Check power requirement
+            if (!tile.IsPowered)
+                return;
+
+            // Process each blueprint node
+            foreach (var node in tile.Graph.nodes)
+            {
+                if (node.blueprint == null || !node.blueprint.IsProducer)
+                    continue;
+
+                ProcessBlueprintNode(tile, node);
+            }
+        }
+
+        private void ProcessBlueprintNode(ProductionTile tile, BlueprintNode node)
+        {
+            var state = tile.GetProductionState(node.id);
+            var blueprint = node.blueprint;
+
+            switch (state.Status)
+            {
+                case ProductionStatus.Idle:
+                    TryStartProduction(tile, node, state);
+                    break;
+
+                case ProductionStatus.Producing:
+                    UpdateProduction(state);
+                    break;
+
+                case ProductionStatus.OutputReady:
+                    TryTransferOutput(tile, node, state);
+                    break;
+            }
+        }
+
+        private void TryStartProduction(ProductionTile tile, BlueprintNode node, BlueprintProductionState state)
+        {
+            var blueprint = node.blueprint;
+
+            // Check if inputs are satisfied
+            if (!AreInputsSatisfied(tile, node))
+                return;
+
+            // Consume inputs from InputBuffer
+            foreach (var input in blueprint.Inputs)
+            {
+                tile.InputBuffer.Remove(input.Item, input.Amount);
+            }
+
+            // Start production
+            state.Status = ProductionStatus.Producing;
+            state.ElapsedTime = 0f;
+            state.TotalTime = blueprint.ProductionTime;
+            state.PendingOutput = blueprint.Output;
+        }
+
+        private bool AreInputsSatisfied(ProductionTile tile, BlueprintNode node)
+        {
+            var blueprint = node.blueprint;
+
+            // Find connections TO this node (from IO nodes or other blueprint nodes)
+            var incomingConnections = tile.Graph.connections
+                .Where(c => c.toNodeId == node.id)
+                .ToList();
+
+            // For each required input, check if there's a matching connection with available item
+            foreach (var requiredInput in blueprint.Inputs)
+            {
+                bool inputFound = false;
+
+                foreach (var conn in incomingConnections)
+                {
+                    // Check if connection is from an IO node
+                    var ioNode = tile.Graph.ioNodes.FirstOrDefault(io => io.id == conn.fromNodeId);
+                    if (ioNode != null && ioNode.availableItem.Item == requiredInput.Item)
+                    {
+                        // Check if InputBuffer has enough of this item
+                        if (tile.InputBuffer.Has(requiredInput.Item, requiredInput.Amount))
+                        {
+                            inputFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!inputFound)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private void UpdateProduction(BlueprintProductionState state)
+        {
+            state.ElapsedTime += tickInterval;
+
+            if (state.ElapsedTime >= state.TotalTime)
+            {
+                state.Status = ProductionStatus.OutputReady;
+            }
+        }
+
+        private void TryTransferOutput(ProductionTile tile, BlueprintNode node, BlueprintProductionState state)
+        {
+            // Check if this node is connected to the output IO node
+            var outputConnection = tile.Graph.connections
+                .FirstOrDefault(c => c.fromNodeId == node.id &&
+                    tile.Graph.ioNodes.Any(io => io.id == c.toNodeId && io.type == TileIOType.Output));
+
+            if (outputConnection != null && state.PendingOutput.IsValid)
+            {
+                // Add to output buffer
+                tile.OutputBuffer.Add(state.PendingOutput.Item, state.PendingOutput.Amount);
+
+                // Reset state
+                state.PendingOutput = ItemStack.Empty;
+                state.Status = ProductionStatus.Idle;
+            }
+        }
+
+        private void DistributeToSettlements()
+        {
+            foreach (var tile in worldMap.TileData.GetAllTiles())
+            {
+                if (tile is SettlementTile settlement)
+                {
+                    DistributeToSettlement(settlement);
+                }
+            }
+        }
+
+        private void DistributeToSettlement(SettlementTile settlement)
+        {
+            var neighbors = worldMap.TileData.GetNeighbors(settlement.CellPosition);
+
+            foreach (var neighbor in neighbors)
+            {
+                if (neighbor is ProductionTile sourceProd)
+                {
+                    TransferItemsToSettlement(sourceProd.OutputBuffer, settlement);
+                }
+                else if (neighbor is TransportTile sourceTrans)
+                {
+                    TransferItemsToSettlementFromTransport(sourceTrans, settlement);
+                }
+            }
+        }
+
+        private void TransferItemsToSettlement(Inventory sourceBuffer, SettlementTile settlement)
+        {
+            // Get all items in the source buffer
+            var items = sourceBuffer.GetAll().ToList();
+
+            foreach (var stack in items)
+            {
+                if (!stack.IsValid)
+                    continue;
+
+                // Check if settlement has demand for this item
+                var demand = settlement.Demands.FirstOrDefault(d => d.Item == stack.Item);
+                if (!demand.IsValid)
+                    continue;
+
+                // Calculate how much is needed
+                int currentAmount = settlement.Inventory.Get(stack.Item);
+                int needed = demand.Amount - currentAmount;
+                if (needed <= 0)
+                    continue;
+
+                // Transfer min(needed, available)
+                int toTransfer = Mathf.Min(needed, stack.Amount);
+                sourceBuffer.Remove(stack.Item, toTransfer);
+                settlement.Inventory.Add(stack.Item, toTransfer);
+            }
+        }
+
+        private void TransferItemsToSettlementFromTransport(TransportTile transport, SettlementTile settlement)
+        {
+            // For each input of the transport tile, check if it can supply the settlement
+            foreach (var node in transport.Graph.ioNodes)
+            {
+                if (node.type != TileIOType.Input || !node.availableItem.IsValid)
+                    continue;
+
+                var item = node.availableItem.Item;
+                
+                // Check demand
+                var demand = settlement.Demands.FirstOrDefault(d => d.Item == item);
+                if (!demand.IsValid) continue;
+
+                int currentAmount = settlement.Inventory.Get(item);
+                int needed = demand.Amount - currentAmount;
+                if (needed <= 0) continue;
+
+                // Pull from original source
+                var sourceTile = worldMap.TileData.GetTile(node.originalSourcePosition);
+                if (sourceTile == null) continue;
+
+                int toTransfer = 0;
+                if (sourceTile is ProductionTile sourceProd)
+                {
+                    int available = sourceProd.OutputBuffer.Get(item);
+                    toTransfer = Mathf.Min(needed, Mathf.Min(node.availableItem.Amount, available));
+                    if (toTransfer > 0)
+                    {
+                        sourceProd.OutputBuffer.Remove(item, toTransfer);
+                    }
+                }
+                else
+                {
+                    int available = sourceTile.Inventory.Get(item);
+                    toTransfer = Mathf.Min(needed, Mathf.Min(node.availableItem.Amount, available));
+                    if (toTransfer > 0)
+                    {
+                        sourceTile.Inventory.Remove(item, toTransfer);
+                    }
+                }
+
+                if (toTransfer > 0)
+                {
+                    settlement.Inventory.Add(item, toTransfer);
+                }
+            }
+        }
+    }
+}

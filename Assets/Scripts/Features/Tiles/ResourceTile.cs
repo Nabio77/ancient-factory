@@ -7,23 +7,34 @@ namespace CarbonWorld.Features.Tiles
     public class ResourceTile : BaseTile
     {
         public ItemDefinition ResourceItem { get; set; }
-        public int OutputPerTick { get; set; }
+        public ResourceQuality Quality { get; set; }
 
-        public ResourceTile(Vector3Int cellPosition, ItemDefinition resourceItem, int outputPerTick)
+        public ResourceTile(Vector3Int cellPosition, ItemDefinition resourceItem, ResourceQuality quality = ResourceQuality.Normal)
             : base(cellPosition, TileType.Resource)
         {
             ResourceItem = resourceItem;
-            OutputPerTick = outputPerTick;
-            
+            Quality = quality;
+
             if (ResourceItem != null)
             {
                 Inventory.Add(ResourceItem, 1);
             }
         }
 
+        public int GetOutputPerTick()
+        {
+            return Quality switch
+            {
+                ResourceQuality.Impure => 1,
+                ResourceQuality.Normal => 2,
+                ResourceQuality.Pure => 3,
+                _ => 1
+            };
+        }
+
         public ItemStack GetOutput()
         {
-            return new ItemStack(ResourceItem, OutputPerTick);
+            return new ItemStack(ResourceItem, GetOutputPerTick());
         }
     }
 }

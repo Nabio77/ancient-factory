@@ -19,6 +19,11 @@ namespace CarbonWorld.Core.Systems
                 return;
             }
             Instance = this;
+
+            if (worldMap == null)
+            {
+                worldMap = FindFirstObjectByType<WorldMap>();
+            }
         }
 
         [Title("References")]
@@ -53,25 +58,20 @@ namespace CarbonWorld.Core.Systems
             {
                 if (tile is ResourceTile resourceTile)
                 {
-                    DistributeResource(resourceTile);
+                    ReplenishResourceInventory(resourceTile);
                 }
             }
         }
 
-        private void DistributeResource(ResourceTile resourceTile)
+        private void ReplenishResourceInventory(ResourceTile resourceTile)
         {
             var output = resourceTile.GetOutput();
+            if (!output.IsValid)
+                return;
 
-            foreach (var neighborTile in worldMap.TileData.GetNeighbors(resourceTile.CellPosition))
+            using (new InventoryBatch(resourceTile.Inventory, this, "ResourceReplenish"))
             {
-                if (neighborTile.Type == TileType.Production || neighborTile.Type == TileType.Power ||
-                    neighborTile.Type == TileType.Transport || neighborTile.Type == TileType.Core)
-                {
-                    using (new InventoryBatch(neighborTile.Inventory, this, "ResourceDistribution"))
-                    {
-                        neighborTile.Inventory.Add(output);
-                    }
-                }
+                resourceTile.Inventory.Add(output);
             }
         }
     }

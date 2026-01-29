@@ -5,6 +5,7 @@ using CarbonWorld.Core.Data;
 using CarbonWorld.Core.Events;
 using CarbonWorld.Features.Inventories;
 using Drawing;
+using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Features.Tiles
 {
@@ -27,6 +28,7 @@ namespace CarbonWorld.Features.Tiles
             
             foreach (var tile in _tileData.GetAllTiles())
             {
+                // Draw arrows to Graph Tiles (Production/Transport)
                 if (tile is IGraphTile graphTile)
                 {
                     foreach (var node in graphTile.Graph.ioNodes)
@@ -36,22 +38,58 @@ namespace CarbonWorld.Features.Tiles
                             var start = _worldMap.CellToWorld(node.sourceTilePosition);
                             var end = _worldMap.CellToWorld(tile.CellPosition);
                             
-                            // Offset slightly to avoid Z-fighting or look better
-                            start.z = -0.5f;
-                            end.z = -0.5f;
-
-                            // Shorten the arrow slightly
-                            var dir = (end - start).normalized;
-                            var dist = Vector3.Distance(start, end);
-                            var margin = 0.3f;
+                            // Color based on source
+                            Color color = Color.black;
+                            if (node.sourceTileType == TileType.Resource) color = new Color(0.2f, 0.6f, 1f, 1f); // Blue-ish
+                            else if (node.sourceTileType == TileType.Production) color = new Color(0.2f, 0.8f, 0.2f, 1f); // Green-ish
+                            else if (node.sourceTileType == TileType.Transport) color = new Color(0.2f, 0.8f, 0.2f, 1f); // Also Green-ish
                             
-                            if (dist > margin * 2)
-                            {
-                                draw.Arrow(start + dir * margin, end - dir * margin, new Color(0f, 0f, 0f, 1f));
-                            }
+                            DrawConnectionArrow(draw, start, end, color);
                         }
                     }
                 }
+                
+                // Draw arrows to Settlements
+                if (tile is SettlementTile settlement)
+                {
+                    var neighbors = _tileData.GetNeighbors(settlement.CellPosition);
+                    foreach (var neighbor in neighbors)
+                    {
+                        bool canSupply = false;
+                        if (neighbor is ProductionTile prod)
+                        {
+                            canSupply = prod.GetPotentialOutputs().Any(o => settlement.Demands.Any(d => d.Item == o.Item));
+                        }
+                        else if (neighbor is TransportTile trans)
+                        {
+                            canSupply = trans.GetOutputs().Any(o => settlement.Demands.Any(d => d.Item == o.Item));
+                        }
+
+                        if (canSupply)
+                        {
+                            var start = _worldMap.CellToWorld(neighbor.CellPosition);
+                            var end = _worldMap.CellToWorld(settlement.CellPosition);
+                            DrawConnectionArrow(draw, start, end, new Color(1f, 0.6f, 0.2f, 1f)); // Orange
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DrawConnectionArrow(CommandBuilder draw, Vector3 start, Vector3 end, Color color)
+        {
+            // Offset slightly to avoid Z-fighting or look better
+            start.z = -0.5f;
+            end.z = -0.5f;
+
+            // Shorten the arrow slightly
+            var dir = (end - start).normalized;
+            var dist = Vector3.Distance(start, end);
+            var margin = 0.35f;
+            
+            if (dist > margin * 2)
+            {
+                draw.Arrow(start + dir * margin, end - dir * margin, color);
             }
         }
 
@@ -172,23 +210,18 @@ namespace CarbonWorld.Features.Tiles
                 }
             }
 
-            // 3. Calculate Output
-            var outputItem = GetGraphOutputItem(tile);
-            if (outputNode.availableItem != outputItem)
+            // 3. Calculate potential output for UI visualization only
+            // Actual output is managed by ProductionSystem via OutputBuffer
+            var potentialOutput = GetGraphPotentialOutput(tile);
+            if (outputNode.availableItem != potentialOutput)
             {
-                outputNode.availableItem = outputItem;
+                outputNode.availableItem = potentialOutput;
                 changed = true;
             }
 
-            // Sync Inventory
-            using (new InventoryBatch(tile.Inventory, this, "GraphUpdate"))
-            {
-                tile.Inventory.Clear();
-                if (outputItem.IsValid)
-                {
-                    tile.Inventory.Add(outputItem);
-                }
-            }
+            // Note: We no longer sync the main Inventory here.
+            // ProductionSystem manages InputBuffer/OutputBuffer for actual production flow.
+            // The tile.Inventory is now used by ProductionSystem for the production cycle.
 
             if (changed)
             {
@@ -288,7 +321,10 @@ namespace CarbonWorld.Features.Tiles
             }
             else if (tile is ProductionTile productionTile)
             {
-                return productionTile.GetOutputs()
+                // Use GetPotentialOutputs() for graph visualization
+                // This shows what the tile CAN produce based on its connections
+                // (Actual item transfer uses OutputBuffer in ProductionSystem)
+                return productionTile.GetPotentialOutputs()
                     .Where(o => o.IsValid)
                     .Select(o => new TileOutput(o, tile.CellPosition))
                     .ToList();
@@ -301,9 +337,9 @@ namespace CarbonWorld.Features.Tiles
             return new List<TileOutput>();
         }
 
-        private ItemStack GetGraphOutputItem(ProductionTile tile)
+        private ItemStack GetGraphPotentialOutput(ProductionTile tile)
         {
-            var outputs = tile.GetOutputs();
+            var outputs = tile.GetPotentialOutputs();
             return outputs.Count > 0 ? outputs[0] : ItemStack.Empty;
         }
     }

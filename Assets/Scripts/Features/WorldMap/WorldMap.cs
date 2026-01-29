@@ -7,6 +7,7 @@ using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Core.Types;
+ using CarbonWorld.Core.Systems;
 
 namespace CarbonWorld.Features.WorldMap
 {
@@ -123,6 +124,12 @@ namespace CarbonWorld.Features.WorldMap
                     graphSystem = gameObject.AddComponent<TileGraphSystem>();
                 }
             }
+
+            // Ensure other core systems exist in the scene
+            EnsureSystem<ProductionSystem>();
+            EnsureSystem<ItemFlowSystem>();
+            EnsureSystem<PowerDistributionSystem>();
+            EnsureSystem<SettlementSystem>();
             
             graphSystem.Initialize(_tileData, this);
 
@@ -149,7 +156,7 @@ namespace CarbonWorld.Features.WorldMap
                             tileData = new CoreTile(data.Position, TileType.Core);
                             break;
                         case TileType.Resource:
-                            tileData = new ResourceTile(data.Position, data.Item, data.OutputPerTick);
+                            tileData = new ResourceTile(data.Position, data.Item, data.Quality);
                             break;
                         case TileType.Settlement:
                             tileData = new SettlementTile(data.Position);
@@ -219,7 +226,7 @@ namespace CarbonWorld.Features.WorldMap
                     {
                         Type = TileType.Resource,
                         Item = rule.item,
-                        OutputPerTick = rule.outputPerTick
+                        Quality = rule.quality
                     };
                     // Remove nearby candidates to enforce spacing
                     candidates.RemoveAll(c => HexUtils.Distance(coord, c) < minResourceSpacing);
@@ -301,7 +308,7 @@ namespace CarbonWorld.Features.WorldMap
 
                     case TileType.Resource:
                         visualTile = resourceTile;
-                        tileData = new ResourceTile(coord, assignment.Item, assignment.OutputPerTick);
+                        tileData = new ResourceTile(coord, assignment.Item, assignment.Quality);
                         break;
 
                     case TileType.Settlement:
@@ -336,7 +343,7 @@ namespace CarbonWorld.Features.WorldMap
                     Position = coord,
                     Type = assignment.Type,
                     Item = assignment.Item,
-                    OutputPerTick = assignment.OutputPerTick
+                    Quality = assignment.Quality
                 });
 
                 tilemap.SetTile(coord, visualTile);
@@ -344,9 +351,6 @@ namespace CarbonWorld.Features.WorldMap
             }
         }
 
-        /// <summary>
-        /// Replaces a tile at the given position with a new type.
-        /// </summary>
         public void ReplaceTile(Vector3Int position, TileType newType)
         {
             if (!_tileData.Contains(position)) return;
@@ -385,9 +389,9 @@ namespace CarbonWorld.Features.WorldMap
             {
                 var save = _savedTiles[saveIndex];
                 save.Type = newType;
-                // Reset item/output for non-resource types (assuming we don't convert to resource)
+                // Reset item/quality for non-resource types (assuming we don't convert to resource)
                 save.Item = null;
-                save.OutputPerTick = 0;
+                save.Quality = default;
                 _savedTiles[saveIndex] = save;
             }
             else
@@ -419,10 +423,6 @@ namespace CarbonWorld.Features.WorldMap
             return tilemap.WorldToCell(worldPos);
         }
 
-        /// <summary>
-        /// Updates the visual tile at the given position to match the tile type.
-        /// Called by CarbonSystem when disasters spawn.
-        /// </summary>
         public void UpdateTileVisual(Vector3Int position)
         {
             var tile = _tileData.GetTile(position);
@@ -447,9 +447,6 @@ namespace CarbonWorld.Features.WorldMap
             tilemap.SetTile(position, visualTile);
         }
 
-        /// <summary>
-        /// Gets the visual tile asset for a given tile type.
-        /// </summary>
         public TileBase GetTileAsset(TileType type)
         {
             return type switch
@@ -544,11 +541,19 @@ namespace CarbonWorld.Features.WorldMap
             return new List<Vector3Int>(validPositions);
         }
 
+        private void EnsureSystem<T>() where T : Component
+        {
+            if (FindFirstObjectByType<T>() == null)
+            {
+                gameObject.AddComponent<T>();
+            }
+        }
+
         private struct TileAssignment
         {
             public TileType Type;
             public ItemDefinition Item;
-            public int OutputPerTick;
+            public ResourceQuality Quality;
         }
     }
 
@@ -558,7 +563,7 @@ namespace CarbonWorld.Features.WorldMap
         public Vector3Int Position;
         public TileType Type;
         public ItemDefinition Item;
-        public int OutputPerTick;
+        public ResourceQuality Quality;
     }
 
     [Serializable]
@@ -576,7 +581,6 @@ namespace CarbonWorld.Features.WorldMap
         [Min(1)]
         public int minDistanceFromCore;
 
-        [Min(1)]
-        public int outputPerTick;
+        public ResourceQuality quality;
     }
 }

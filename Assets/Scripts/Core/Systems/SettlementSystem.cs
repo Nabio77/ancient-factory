@@ -67,6 +67,11 @@ namespace CarbonWorld.Core.Systems
             }
             Instance = this;
 
+            if (worldMap == null)
+            {
+                worldMap = FindFirstObjectByType<WorldMap>();
+            }
+
             LoadEligibleItems();
         }
 
