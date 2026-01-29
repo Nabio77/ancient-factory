@@ -7,7 +7,8 @@ using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Core.Types;
- using CarbonWorld.Core.Systems;
+using CarbonWorld.Core.Systems;
+using Drawing;
 
 namespace CarbonWorld.Features.WorldMap
 {
@@ -195,6 +196,54 @@ namespace CarbonWorld.Features.WorldMap
             }
         }
 
+        private void Update()
+        {
+            DrawPowerIndicators();
+        }
+
+        private void DrawPowerIndicators()
+        {
+            if (_tileData == null) return;
+            var powerSystem = PowerDistributionSystem.Instance;
+            if (powerSystem == null) return;
+
+            var draw = Draw.ingame;
+
+            // 1. Draw borders around ALL powered positions (Reach)
+            using (draw.WithColor(Color.yellow))
+            {
+                // Pre-calculate hex points relative to center
+                const float radius = 0.55f;
+                var hexOffsets = new Vector3[7];
+                for (int i = 0; i <= 6; i++)
+                {
+                    float angle = (30 + 60 * i) * Mathf.Deg2Rad;
+                    hexOffsets[i] = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius;
+                }
+
+                foreach (var pos in powerSystem.GetAllPoweredPositions())
+                {
+                    var center = CellToWorld(pos);
+                    var points = new Vector3[7];
+                    for (int i = 0; i <= 6; i++)
+                    {
+                        points[i] = center + hexOffsets[i];
+                    }
+                    draw.Polyline(points);
+                }
+            }
+
+            // 2. Draw labels on Source Tiles
+            foreach (var tile in _tileData.GetAllTiles())
+            {
+                if (tile is PowerTile powerTile && powerTile.TotalPowerOutput > 0)
+                {
+                    var center = CellToWorld(tile.CellPosition);
+                    draw.Label2D(center, $"{powerTile.TotalPowerOutput}kW", 20f);
+                }
+            }
+        }
+
         [Button("Generate", ButtonSizes.Large), GUIColor(0.4f, 0.8f, 0.4f)]
         public void Generate()
         {
@@ -244,8 +293,6 @@ namespace CarbonWorld.Features.WorldMap
                 // Remove nearby candidates to enforce spacing between settlements
                 settlementCandidates.RemoveAll(c => HexUtils.Distance(coord, c) < minSettlementSpacing);
             }
-
-            // Note: No longer filling with production tiles - player will place tiles manually
 
             // Phase 5: Create tiles
             CreateTiles(assignments);

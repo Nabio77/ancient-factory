@@ -18,7 +18,9 @@ MonoBehaviour:
   type: 6
   inputCount: 1
   outputCount: 1
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: d676f706e834745238e93dcb72a95a2d, type: 2}
+    amount: 1
   output:
     item: {fileID: 0}
     amount: 0

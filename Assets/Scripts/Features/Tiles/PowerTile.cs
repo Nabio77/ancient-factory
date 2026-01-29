@@ -15,6 +15,7 @@ namespace CarbonWorld.Features.Tiles
         public Func<BlueprintDefinition, bool> BlueprintFilter => b => b.IsPowerGenerator;
 
         public int TotalPowerOutput { get; private set; }
+        public int TotalPowerConsumption { get; private set; }
         public int EffectiveRadius { get; private set; }
 
         public PowerTile(Vector3Int cellPosition)
@@ -74,13 +75,10 @@ namespace CarbonWorld.Features.Tiles
             Graph.ioNodes.Add(node);
         }
 
-        /// <summary>
-        /// Calculates total power output from all placed blueprints.
-        /// Only blueprints with satisfied fuel inputs produce power.
-        /// </summary>
         public void CalculatePowerOutput()
         {
             TotalPowerOutput = 0;
+            TotalPowerConsumption = 0;
 
             foreach (var node in Graph.nodes)
             {
@@ -92,6 +90,7 @@ namespace CarbonWorld.Features.Tiles
                 if (hasRequiredInputs)
                 {
                     TotalPowerOutput += node.blueprint.PowerOutput;
+                    TotalPowerConsumption += node.blueprint.PowerConsumption;
                 }
             }
 
@@ -134,9 +133,6 @@ namespace CarbonWorld.Features.Tiles
             return true;
         }
 
-        /// <summary>
-        /// Gets all tile positions powered by this PowerTile.
-        /// </summary>
         public List<Vector3Int> GetPoweredPositions()
         {
             if (EffectiveRadius <= 0)

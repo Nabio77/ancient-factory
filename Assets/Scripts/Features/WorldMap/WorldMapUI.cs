@@ -38,6 +38,7 @@ namespace CarbonWorld.Features.WorldMap
 
         private VisualElement _powerInfo;
         private Label _powerOutput;
+        private Label _powerUsed;
         private Label _powerRadius;
 
         private VisualElement _transportInfo;
@@ -67,6 +68,7 @@ namespace CarbonWorld.Features.WorldMap
 
             _powerInfo = root.Q<VisualElement>("power-info");
             _powerOutput = root.Q<Label>("power-output");
+            _powerUsed = root.Q<Label>("power-used");
             _powerRadius = root.Q<Label>("power-radius");
 
             _transportInfo = root.Q<VisualElement>("transport-info");
@@ -270,6 +272,7 @@ namespace CarbonWorld.Features.WorldMap
             tile.CalculatePowerOutput();
 
             _powerOutput.text = tile.TotalPowerOutput.ToString();
+            _powerUsed.text = tile.TotalPowerConsumption.ToString();
             _powerRadius.text = tile.EffectiveRadius.ToString();
 
             _powerInfo.RemoveFromClassList("hidden");

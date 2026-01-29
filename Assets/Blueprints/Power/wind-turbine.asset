@@ -15,7 +15,7 @@ MonoBehaviour:
   blueprintName: Wind turbine
   description: Prouce power from the wind
   icon: {fileID: 0}
-  type: 8
+  type: 6
   inputCount: 1
   outputCount: 1
   inputs: []
@@ -24,6 +24,6 @@ MonoBehaviour:
     amount: 0
   productionTime: 1
   powerConsumption: 1
-  powerOutput: 5
+  powerOutput: 50
   isStarterCard: 1
   unlockCost: 0

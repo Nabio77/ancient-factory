@@ -41,6 +41,10 @@
                 <ui:Label name="power-output" class="value" text="0" />
             </ui:VisualElement>
             <ui:VisualElement class="info-row">
+                <ui:Label text="Power Used" class="label" />
+                <ui:Label name="power-used" class="value" text="0" />
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
                 <ui:Label text="Radius" class="label" />
                 <ui:Label name="power-radius" class="value" text="0" />
             </ui:VisualElement>
