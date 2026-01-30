@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Theme.uss"/>
     <Style src="CoreDemandsPanel.uss" />
     <ui:VisualElement name="core-demands-panel" class="panel">
         <ui:Label text="Core Demands" class="title" />

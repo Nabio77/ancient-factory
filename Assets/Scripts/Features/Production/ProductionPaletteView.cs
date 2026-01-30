@@ -104,6 +104,7 @@ namespace CarbonWorld.Features.Production
 
                 var item = new VisualElement();
                 item.AddToClassList("palette-item");
+                item.AddToClassList($"type-{blueprint.Type}");
 
                 var icon = new VisualElement();
                 icon.AddToClassList("palette-icon");
@@ -136,6 +137,7 @@ namespace CarbonWorld.Features.Production
 
             // Create ghost as a card preview
             _paletteDragGhost = _cardTemplate.Instantiate();
+            _paletteDragGhost.AddToClassList($"type-{blueprint.Type}");
             _paletteDragGhost.style.position = Position.Absolute;
             _paletteDragGhost.style.opacity = 0.8f;
             _paletteDragGhost.pickingMode = PickingMode.Ignore;

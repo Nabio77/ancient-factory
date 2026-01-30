@@ -101,6 +101,9 @@ namespace CarbonWorld.Features.Production
             var card = _cardTemplate.Instantiate();
             var bp = node.blueprint;
 
+            // Add type class for styling
+            card.AddToClassList($"type-{bp.Type}");
+
             // Header
             card.Q<Label>("card-title").text = bp.BlueprintName;
             card.Q<Label>("card-type").text = bp.Type.ToString();

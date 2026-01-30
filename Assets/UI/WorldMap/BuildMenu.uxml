@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Theme.uss" />
+    <Style src="BuildMenu.uss" />
+    <ui:VisualElement name="build-menu-container" class="build-menu-container">
+        <ui:Label text="TILE REPLACEMENT" class="build-menu-header" />
+        <ui:VisualElement class="build-menu-buttons">
+            <ui:Button name="btn-power" class="build-menu-btn">
+                <ui:VisualElement class="build-menu-icon power-icon" />
+                <ui:Label text="POWER" />
+            </ui:Button>
+            <ui:Button name="btn-nature" class="build-menu-btn">
+                <ui:VisualElement class="build-menu-icon nature-icon" />
+                <ui:Label text="NATURE" />
+            </ui:Button>
+            <ui:Button name="btn-transport" class="build-menu-btn">
+                <ui:VisualElement class="build-menu-icon transport-icon" />
+                <ui:Label text="TRANSPORT" />
+            </ui:Button>
+            <ui:Button name="btn-production" class="build-menu-btn">
+                <ui:VisualElement class="build-menu-icon production-icon" />
+                <ui:Label text="PROD" />
+            </ui:Button>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

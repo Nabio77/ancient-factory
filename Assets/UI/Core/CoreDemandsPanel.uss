@@ -3,24 +3,24 @@
     left: 20px;
     top: 20px;
     width: 260px;
-    padding: 12px;
-    background-color: rgba(30, 30, 30, 0.9);
-    border-radius: 8px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-bg-panel);
+    border-radius: var(--border-radius-main);
+    border-width: var(--border-width-main);
+    border-color: var(--color-border);
+    padding: var(--spacing-md);
 }
 
 .title {
-    font-size: 16px;
-    color: rgb(255, 255, 255);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
     -unity-font-style: bold;
-    margin-bottom: 8px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .divider {
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.2);
-    margin-bottom: 8px;
+    background-color: var(--color-border-light);
+    margin-bottom: var(--spacing-sm);
 }
 
 .info-row {
@@ -30,24 +30,24 @@
 }
 
 .label {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
 }
 
 .value {
-    color: rgb(255, 255, 255);
-    font-size: 12px;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
 }
 
 .value.highlight {
-    color: rgb(100, 200, 255);
+    color: var(--color-accent);
     -unity-font-style: bold;
 }
 
 .section-title {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-    margin-bottom: 8px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-sm);
 }
 
 /* Core Status */
@@ -57,7 +57,7 @@
 
 .demands-count {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.5); /* Theme var? */
     margin-top: 4px;
     -unity-text-align: middle-center;
 }
@@ -65,7 +65,7 @@
 /* Progress Bars */
 .progress-bar-container {
     height: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-border);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -77,14 +77,14 @@
 .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background-color: rgb(100, 200, 100);
+    background-color: var(--color-success);
     border-radius: 4px;
     transition-property: width;
     transition-duration: 0.3s;
 }
 
 .victory-fill {
-    background-color: rgb(255, 200, 50);
+    background-color: var(--color-warning);
 }
 
 /* Demands Container */
@@ -95,8 +95,8 @@
 /* Demand Entry */
 .demand-entry {
     margin-bottom: 10px;
-    padding: 8px;
-    background-color: rgba(255, 255, 255, 0.05);
+    padding: var(--spacing-sm);
+    background-color: rgba(255, 255, 255, 0.05); /* keep */
     border-radius: 4px;
 }
 
@@ -110,7 +110,7 @@
     width: 28px;
     height: 28px;
     margin-right: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-bg-input);
     border-radius: 4px;
 }
 
@@ -119,14 +119,14 @@
 }
 
 .demand-name {
-    font-size: 12px;
-    color: rgb(255, 255, 255);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
     -unity-font-style: bold;
 }
 
 .demand-quantity {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-secondary);
 }
 
 /* Fulfilled state */
@@ -140,7 +140,7 @@
 }
 
 .food-status {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     padding: 4px 8px;
@@ -149,11 +149,11 @@
 }
 
 .food-status.fed {
-    color: rgb(100, 200, 100);
+    color: var(--color-success);
     background-color: rgba(100, 200, 100, 0.15);
 }
 
 .food-status.starving {
-    color: rgb(255, 100, 100);
+    color: var(--color-danger);
     background-color: rgba(255, 100, 100, 0.15);
 }

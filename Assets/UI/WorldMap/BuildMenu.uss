@@ -1,0 +1,75 @@
+.build-menu-container {
+    position: absolute;
+    bottom: 50px;
+    align-self: center;
+    background-color: var(--color-bg-dark);
+    border-width: var(--border-width-main);
+    border-color: var(--color-border);
+    border-radius: var(--border-radius-main);
+    padding: var(--spacing-md);
+    min-width: 400px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.build-menu-header {
+    -unity-font-style: bold;
+    color: var(--color-text-dim);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 2px;
+    -unity-text-align: middle-center;
+}
+
+.build-menu-buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.build-menu-btn {
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    padding: 5px;
+    background-color: rgba(45, 45, 45, 0.8); /* Keeping slightly custom for buttons or move to theme? */
+    border-radius: var(--border-radius-card);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.05);
+    align-items: center;
+    justify-content: center;
+    transition-duration: 0.1s;
+}
+
+.build-menu-btn:hover {
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-border-light);
+}
+
+.build-menu-btn:active {
+    background-color: var(--color-bg-active);
+}
+
+/* Active State for selected brush */
+.build-menu-btn.selected {
+    background-color: var(--color-bg-selected);
+    border-color: rgba(255, 255, 255, 0.5);
+    scale: 1.1;
+}
+
+.build-menu-btn Label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-primary);
+    margin-top: 4px;
+}
+
+.build-menu-icon {
+    width: 32px;
+    height: 32px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* Removed debug colors from icons */
+.power-icon { }
+.nature-icon { }
+.transport-icon { }
+.production-icon { }

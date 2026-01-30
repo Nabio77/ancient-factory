@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="../Theme.uss"/>
     <Style src="BlueprintCard.uss"/>
     <ui:VisualElement class="blueprint-card">
         <ui:VisualElement class="card-header">

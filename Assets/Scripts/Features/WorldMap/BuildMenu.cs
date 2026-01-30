@@ -7,7 +7,7 @@ using CarbonWorld.Features.Production;
 
 namespace CarbonWorld.Features.WorldMap
 {
-    public class TilePaletteUI : MonoBehaviour
+    public class BuildMenu : MonoBehaviour
     {
         [Title("References")]
         [SerializeField, Required]
@@ -35,7 +35,7 @@ namespace CarbonWorld.Features.WorldMap
         {
             _root = uiDocument.rootVisualElement;
             
-            var container = _root.Q<VisualElement>("palette-container");
+            var container = _root.Q<VisualElement>("build-menu-container");
             if (container != null)
             {
                 container.RegisterCallback<MouseEnterEvent>(evt => 

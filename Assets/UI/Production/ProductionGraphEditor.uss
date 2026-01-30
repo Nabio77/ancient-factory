@@ -1,6 +1,6 @@
 .production-editor-root {
     flex-grow: 1;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8); /* Overlay dimming */
     position: absolute;
     top: 0;
     bottom: 0;
@@ -19,7 +19,7 @@
 
 #graph-canvas {
     flex-grow: 1;
-    background-color: rgb(26, 26, 26);
+    background-color: rgb(26, 26, 26); /* Darker than standard bg */
     overflow: hidden;
     position: relative;
 }
@@ -54,10 +54,10 @@
 
 #palette-bar {
     height: 200px;
-    background-color: rgb(43, 43, 43);
+    background-color: rgb(43, 43, 43); /* Slightly lighter than pure dark */
     border-top-width: 2px;
-    border-top-color: rgb(68, 68, 68);
-    padding: 8px;
+    border-top-color: var(--color-bg-header);
+    padding: var(--spacing-sm);
     flex-direction: column;
 }
 
@@ -68,7 +68,7 @@
     align-items: flex-end;
     padding-left: 5px;
     border-bottom-width: 1px;
-    border-bottom-color: rgb(68, 68, 68);
+    border-bottom-color: var(--color-bg-header);
 }
 
 .palette-tab {
@@ -77,21 +77,21 @@
     background-color: rgb(56, 56, 56);
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    color: rgb(170, 170, 170);
+    color: var(--color-text-secondary); /* 170,170,170 */
     font-size: 11px;
     -unity-font-style: bold;
     border-width: 1px;
     border-bottom-width: 0;
-    border-color: rgb(68, 68, 68);
+    border-color: var(--color-bg-header);
 }
 
 .palette-tab:hover {
-    background-color: rgb(72, 72, 72);
+    background-color: var(--color-bg-hover);
     cursor: link;
 }
 
 .palette-tab.selected {
-    background-color: rgb(43, 43, 43);
+    background-color: rgb(43, 43, 43); /* Match bar bg */
     color: rgb(221, 221, 221);
     height: 31px; /* Overlap border */
     margin-bottom: -1px;
@@ -117,21 +117,41 @@
     padding: 8px;
     color: rgb(221, 221, 221);
     border-width: 1px;
-    border-color: rgb(85, 85, 85);
+    border-color: var(--color-border-card);
     flex-direction: column;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
 }
 
+/* Blueprint Type Specific Palette Colors */
+.type-Smelter.palette-item,
+.type-Furnace.palette-item {
+    background-color: var(--color-bp-processing);
+}
+
+.type-Constructor.palette-item,
+.type-Assembler.palette-item {
+    background-color: var(--color-bp-manufacturing);
+}
+
+.type-Splitter.palette-item,
+.type-Merger.palette-item {
+    background-color: var(--color-bp-logistics);
+}
+
+.type-Power.palette-item {
+    background-color: var(--color-bp-power);
+}
+
 .palette-item:hover {
-    background-color: rgb(72, 72, 72);
-    border-color: rgb(0, 170, 255);
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-accent);
     cursor: grab;
 }
 
 .palette-item:active {
-    background-color: rgb(58, 90, 122);
+    background-color: rgb(58, 90, 122); /* Custom active color or use theme? */
     cursor: grabbing;
 }
 
@@ -143,13 +163,13 @@
 
 .palette-item .palette-label {
     font-size: 11px;
-    color: rgb(204, 204, 204);
+    color: var(--color-text-secondary); /* 204,204,204 */
     -unity-text-align: middle-center;
 }
 
 .palette-item .palette-type {
     font-size: 9px;
-    color: rgb(136, 136, 136);
+    color: var(--color-text-dim); /* 136,136,136 */
     -unity-text-align: middle-center;
 }
 
@@ -185,8 +205,8 @@
 }
 
 .io-zone-title {
-    font-size: 12px;
-    color: rgb(136, 136, 136);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-dim);
     -unity-font-style: bold;
     margin-bottom: 10px;
     -unity-text-align: upper-center;

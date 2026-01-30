@@ -3,24 +3,25 @@
     right: 20px;
     top: 20px;
     width: 260px;
-    padding: 12px;
-    background-color: rgba(30, 30, 30, 0.9);
-    border-radius: 8px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.1);
+    /* .panel already has bg, border, padding from theme utility class if applied, but here we override position/width */
+    background-color: var(--color-bg-panel);
+    border-radius: var(--border-radius-card); /* Using card radius for panel? or main? */
+    border-width: var(--border-width-main);
+    border-color: var(--color-border);
+    padding: var(--spacing-md);
 }
 
 .title {
-    font-size: 16px;
-    color: rgb(255, 255, 255);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
     -unity-font-style: bold;
-    margin-bottom: 8px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .divider {
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.2);
-    margin-bottom: 8px;
+    background-color: var(--color-border-light);
+    margin-bottom: var(--spacing-sm);
 }
 
 .info-row {
@@ -30,63 +31,63 @@
 }
 
 .label {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
 }
 
 .value {
-    color: rgb(255, 255, 255);
-    font-size: 12px;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
 }
 
 .value.highlight {
-    color: rgb(100, 200, 255);
+    color: var(--color-accent); /* slightly different blue but consistent with theme */
     -unity-font-style: bold;
 }
 
 .section-title {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-    margin-bottom: 8px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-sm);
 }
 
 /* Progress Bars */
 .progress-bar-container {
     height: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-border);
     border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background-color: rgb(100, 200, 100);
+    background-color: var(--color-success);
     border-radius: 4px;
     transition-property: width;
     transition-duration: 0.3s;
 }
 
 .carbon-fill {
-    background-color: rgb(255, 100, 100);
+    background-color: var(--color-danger);
 }
 
 /* Carbon-specific colors */
 .value.emission {
-    color: rgb(255, 150, 100);
+    color: rgb(255, 150, 100); /* Custom color - consider adding to theme if used elsewhere */
 }
 
 .value.absorption {
-    color: rgb(100, 200, 150);
+    color: rgb(100, 200, 150); /* Custom color */
 }
 
 .value.positive {
-    color: rgb(255, 100, 100);
+    color: var(--color-danger);
 }
 
 .value.negative {
-    color: rgb(100, 200, 100);
+    color: var(--color-success);
 }
 
 /* Carbon Status */
@@ -100,13 +101,13 @@
 
 /* Threshold Indicator */
 .threshold-indicator {
-    padding: 8px;
+    padding: var(--spacing-sm);
     border-radius: 4px;
     -unity-text-align: middle-center;
 }
 
 .threshold-indicator.safe {
-    background-color: rgba(100, 200, 100, 0.15);
+    background-color: rgba(100, 200, 100, 0.15); /* Opacity versions of theme colors? */
 }
 
 .threshold-indicator.warning {
@@ -118,19 +119,19 @@
 }
 
 .threshold-label {
-    font-size: 14px;
+    font-size: var(--font-size-md);
     -unity-font-style: bold;
     -unity-text-align: middle-center;
 }
 
 .safe .threshold-label {
-    color: rgb(100, 200, 100);
+    color: var(--color-success);
 }
 
 .warning .threshold-label {
-    color: rgb(255, 200, 50);
+    color: var(--color-warning);
 }
 
 .danger .threshold-label {
-    color: rgb(255, 100, 100);
+    color: var(--color-danger);
 }
