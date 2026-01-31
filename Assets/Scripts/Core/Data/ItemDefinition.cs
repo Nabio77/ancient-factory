@@ -23,12 +23,11 @@ namespace CarbonWorld.Core.Data
         [SerializeField]
         private ItemTier category;
 
-        [Title("Properties")]
-        [SerializeField, Tooltip("Base value for economy calculations")]
-        private int baseValue = 1;
-
         [SerializeField, Tooltip("Stack size limit in inventories (0 = unlimited)")]
         private int maxStackSize = 0;
+
+        [SerializeField, Tooltip("Points awarded when sent to Core")]
+        private int techPoints = 1;
 
         [Title("Food Properties")]
         [SerializeField]
@@ -42,8 +41,8 @@ namespace CarbonWorld.Core.Data
         public Sprite Icon => icon;
         public int Tier => tier;
         public ItemTier Category => category;
-        public int BaseValue => baseValue;
         public int MaxStackSize => maxStackSize;
+        public int TechPoints => techPoints;
         public bool IsFood => isFood;
         public int NutritionalValue => nutritionalValue;
 

@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement class="history-item">
+        <ui:VisualElement name="icon" class="history-icon" />
+        <ui:Label name="name" class="history-name" text="Item Name" />
+        <ui:Label name="count" class="history-count" text="0" />
+    </ui:VisualElement>
+</ui:UXML>

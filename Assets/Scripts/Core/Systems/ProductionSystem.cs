@@ -224,7 +224,7 @@ namespace CarbonWorld.Core.Systems
             if (tile is not IGraphTile graphTile) return;
 
             bool isPowered = tile is ProductionTile p ? p.IsPowered : (tile is FoodTile f && f.IsPowered);
-            // Check power requirement
+
             if (!isPowered)
                 return;
 
@@ -267,7 +267,6 @@ namespace CarbonWorld.Core.Systems
         {
             var blueprint = node.blueprint;
 
-            // Check if inputs are satisfied
             if (!AreInputsSatisfied(tile, node))
                 return;
 
@@ -295,12 +294,13 @@ namespace CarbonWorld.Core.Systems
 
             var blueprint = node.blueprint;
 
-            // Find connections TO this node (from IO nodes or other blueprint nodes)
+            // Find connections TO this node
             var incomingConnections = graphTile.Graph.connections
                 .Where(c => c.toNodeId == node.id)
                 .ToList();
 
-            // For each required input, check if there's a matching connection with available item
+            // Debug.Log($"[ProductionSystem] Node {node.id} has {incomingConnections.Count} incoming connections.");
+
             foreach (var requiredInput in blueprint.Inputs)
             {
                 bool inputFound = false;
@@ -308,20 +308,40 @@ namespace CarbonWorld.Core.Systems
                 foreach (var conn in incomingConnections)
                 {
                     // Check if connection is from an IO node
-                    var ioNode = graphTile.Graph.ioNodes.FirstOrDefault(io => io.id == conn.fromNodeId);
-                    if (ioNode != null && ioNode.availableItem.Item == requiredInput.Item)
+                    var ioNode = graphTile.Graph.GetIONode(conn.fromNodeId);
+                    if (ioNode != null)
                     {
-                        // Check if InputBuffer has enough of this item
-                        if (inputBuffer.Has(requiredInput.Item, requiredInput.Amount))
+                        if (ioNode.availableItem.Item == requiredInput.Item)
                         {
-                            inputFound = true;
-                            break;
+                            if (inputBuffer.Has(requiredInput.Item, requiredInput.Amount))
+                            {
+                                inputFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var sourceNode = graphTile.Graph.GetNode(conn.fromNodeId);
+                        if (sourceNode != null)
+                        {
+                            if (sourceNode.blueprint.Output.Item == requiredInput.Item)
+                            {
+                                if (inputBuffer.Has(requiredInput.Item, requiredInput.Amount))
+                                {
+                                    inputFound = true;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
 
                 if (!inputFound)
+                {
+                    // Debug.Log($"[ProductionSystem] Input NOT satisfied for {requiredInput.Item.ItemName}...");
                     return false;
+                }
             }
 
             return true;
@@ -337,25 +357,73 @@ namespace CarbonWorld.Core.Systems
             }
         }
 
+        private CoreTile _coreTile;
+
+        private CoreTile GetCoreTile()
+        {
+            if (_coreTile == null)
+            {
+                _coreTile = worldMap.TileData.GetAllTiles().OfType<CoreTile>().FirstOrDefault();
+            }
+            return _coreTile;
+        }
+
         private void TryTransferOutput(BaseTile tile, BlueprintNode node, BlueprintProductionState state)
         {
             if (tile is not IGraphTile graphTile) return;
             Inventory outputBuffer = tile is ProductionTile p ? p.OutputBuffer : (tile is FoodTile f ? f.OutputBuffer : null);
             if (outputBuffer == null) return;
 
-            // Check if this node is connected to the output IO node
-            var outputConnection = graphTile.Graph.connections
-                .FirstOrDefault(c => c.fromNodeId == node.id &&
-                    graphTile.Graph.ioNodes.Any(io => io.id == c.toNodeId && io.type == TileIOType.Output));
-
-            if (outputConnection != null && state.PendingOutput.IsValid)
+            // Check for connection to either Output or Core
+            // I will update the query to find ANY valid connection (Output, Core, or another Machine)
+            
+            var connection = graphTile.Graph.connections
+                .FirstOrDefault(c => c.fromNodeId == node.id);
+            
+            if (connection != null && state.PendingOutput.IsValid)
             {
-                // Add to output buffer
-                outputBuffer.Add(state.PendingOutput.Item, state.PendingOutput.Amount);
-
-                // Reset state
-                state.PendingOutput = ItemStack.Empty;
-                state.Status = ProductionStatus.Idle;
+                var ioNode = graphTile.Graph.GetIONode(connection.toNodeId);
+                
+                if (ioNode != null)
+                {
+                    if (ioNode.type == TileIOType.Output)
+                    {
+                        outputBuffer.Add(state.PendingOutput.Item, state.PendingOutput.Amount);
+                         state.PendingOutput = ItemStack.Empty;
+                        state.Status = ProductionStatus.Idle;
+                    }
+                    else if (ioNode.type == TileIOType.Core)
+                    {
+                        var core = GetCoreTile();
+                         if (core != null)
+                         {
+                             // Use item points
+                             int points = state.PendingOutput.Item.TechPoints * state.PendingOutput.Amount;
+                             core.AddPoints(points, state.PendingOutput.Item, state.PendingOutput.Amount);
+                         }
+                         else
+                         {
+                             Debug.LogWarning("[ProductionSystem] CoreTile not found!");
+                         }
+    
+                          state.PendingOutput = ItemStack.Empty;
+                        state.Status = ProductionStatus.Idle;
+                    }
+                }
+                else
+                {
+                    var targetNode = graphTile.Graph.GetNode(connection.toNodeId);
+                    if (targetNode != null)
+                    {
+                            Inventory targetInputBuffer = tile is ProductionTile prod ? prod.InputBuffer : (tile is FoodTile food ? food.InputBuffer : null);
+                            if (targetInputBuffer != null)
+                            {
+                                targetInputBuffer.Add(state.PendingOutput.Item, state.PendingOutput.Amount);
+                                state.PendingOutput = ItemStack.Empty;
+                                state.Status = ProductionStatus.Idle;
+                            }
+                    }
+                }
             }
         }
 

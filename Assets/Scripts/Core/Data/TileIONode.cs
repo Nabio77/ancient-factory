@@ -7,7 +7,8 @@ namespace CarbonWorld.Core.Data
     public enum TileIOType
     {
         Input,
-        Output
+        Output,
+        Core
     }
 
     [Serializable]

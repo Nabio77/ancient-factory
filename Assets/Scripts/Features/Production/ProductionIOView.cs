@@ -97,7 +97,12 @@ namespace CarbonWorld.Features.Production
             card.AddToClassList(isInput ? "input-card" : "output-card");
 
             var typeLabel = card.Q<Label>("io-card-type");
-            typeLabel.text = isInput ? ioNode.sourceTileType.ToString() : "Output";
+            if (isInput)
+                typeLabel.text = ioNode.sourceTileType.ToString();
+            else if (ioNode.type == TileIOType.Core)
+                typeLabel.text = "Core";
+            else
+                typeLabel.text = "Output";
 
             var itemLabel = card.Q<Label>("io-card-item");
             var amountLabel = card.Q<Label>("io-card-amount");

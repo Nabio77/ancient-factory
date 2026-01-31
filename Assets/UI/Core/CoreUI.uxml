@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/Theme.uss?fileID=7433441132597879392&amp;guid=theme_uss_guid&amp;type=3#Theme" />
+    <ui:Style src="project://database/Assets/UI/Styles/CoreUI.uss?fileID=7433441132597879392&amp;guid=core_ui_uss_guid&amp;type=3#CoreUI" />
+    
+    <ui:VisualElement name="root" class="core-ui-container">
+        <ui:Label text="CORE STORAGE" class="core-header" />
+        <ui:Label name="point-label" text="0 PTS" class="point-display" />
+        
+        <ui:ScrollView name="history-list" class="history-container">
+            <!-- Items added via code -->
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

@@ -188,6 +188,15 @@ namespace CarbonWorld.Features.Tiles
                 changed = true;
             }
 
+            // 2b. Update Core Output Node (Wireless)
+            var coreOutputNode = graph.ioNodes.Find(n => n.type == TileIOType.Core);
+            if (coreOutputNode == null)
+            {
+                coreOutputNode = new TileIONode(TileIOType.Core, tile.CellPosition, tile.Type, ItemStack.Empty, 0);
+                graph.ioNodes.Add(coreOutputNode);
+                changed = true;
+            }
+
             // Remove stale inputs
             // We keep the output node, and replace the list of inputs with the valid ones we found/created
             var nodesToRemove = graph.ioNodes.Where(n => n.type == TileIOType.Input && !newInputs.Contains(n)).ToList();
