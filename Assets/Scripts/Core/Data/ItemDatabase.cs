@@ -38,6 +38,11 @@ namespace CarbonWorld.Core.Data
             return items.Where(i => i.IsRawResource);
         }
 
+        public IEnumerable<ItemDefinition> GetFoodItems()
+        {
+            return items.Where(i => i.IsFood);
+        }
+
 #if UNITY_EDITOR
         [Button("Auto-populate from project"), PropertyOrder(-1)]
         private void AutoPopulate()

@@ -27,6 +27,7 @@ namespace CarbonWorld.Features.WorldMap
         private Button _btnNature;
         private Button _btnTransport;
         private Button _btnProduction;
+        private Button _btnFood;
 
         private bool _isGraphEditorOpen;
         private TileType? _activeBrush = null;
@@ -52,11 +53,13 @@ namespace CarbonWorld.Features.WorldMap
             _btnNature = _root.Q<Button>("btn-nature");
             _btnTransport = _root.Q<Button>("btn-transport");
             _btnProduction = _root.Q<Button>("btn-production");
+            _btnFood = _root.Q<Button>("btn-food");
 
             if (_btnPower != null) _btnPower.clicked += () => ToggleBrush(TileType.Power);
             if (_btnNature != null) _btnNature.clicked += () => ToggleBrush(TileType.Nature);
             if (_btnTransport != null) _btnTransport.clicked += () => ToggleBrush(TileType.Transport);
             if (_btnProduction != null) _btnProduction.clicked += () => ToggleBrush(TileType.Production);
+            if (_btnFood != null) _btnFood.clicked += () => ToggleBrush(TileType.Food);
         }
 
         void OnEnable()
@@ -148,6 +151,7 @@ namespace CarbonWorld.Features.WorldMap
              SetButtonState(_btnNature, TileType.Nature);
              SetButtonState(_btnTransport, TileType.Transport);
              SetButtonState(_btnProduction, TileType.Production);
+             SetButtonState(_btnFood, TileType.Food);
         }
 
         private void SetButtonState(Button btn, TileType type)
@@ -194,7 +198,8 @@ namespace CarbonWorld.Features.WorldMap
             return type == TileType.Production || 
                    type == TileType.Power || 
                    type == TileType.Nature || 
-                   type == TileType.Transport;
+                   type == TileType.Transport ||
+                   type == TileType.Food;
         }
     }
 }

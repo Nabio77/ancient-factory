@@ -62,6 +62,9 @@ namespace CarbonWorld.Features.WorldMap
         private TileBase heatwaveTile;
 
         [SerializeField]
+        private TileBase foodTile;
+
+        [SerializeField]
         private TileBase hoverHighlightTile;
 
         [SerializeField]
@@ -83,6 +86,11 @@ namespace CarbonWorld.Features.WorldMap
 
         [SerializeField, Min(1)]
         private int minResourceSpacing = 2;
+
+        [SerializeField]
+        private List<ResourceVisualOverride> resourceVisualOverrides = new();
+
+
 
         [Title("Settlement Tiles")]
         [SerializeField, Min(0)]
@@ -131,13 +139,13 @@ namespace CarbonWorld.Features.WorldMap
             EnsureSystem<ItemFlowSystem>();
             EnsureSystem<PowerDistributionSystem>();
             EnsureSystem<SettlementSystem>();
-            
+
             graphSystem.Initialize(_tileData, this);
 
             // Ensure highlight is drawn on top
             var mainRenderer = tilemap.GetComponent<TilemapRenderer>();
             var highlightRenderer = highlightTilemap.GetComponent<TilemapRenderer>();
-            
+
             if (mainRenderer != null && highlightRenderer != null)
             {
                 if (highlightRenderer.sortingOrder <= mainRenderer.sortingOrder)
@@ -182,6 +190,9 @@ namespace CarbonWorld.Features.WorldMap
                             break;
                         case TileType.Heatwave:
                             tileData = new HeatwaveTile(data.Position, 0);
+                            break;
+                        case TileType.Food:
+                            tileData = new FoodTile(data.Position);
                             break;
                         case TileType.Production:
                         default:
@@ -343,44 +354,41 @@ namespace CarbonWorld.Features.WorldMap
             _savedTiles.Clear();
             foreach (var (coord, assignment) in assignments)
             {
-                TileBase visualTile;
+                // Determine Visual Tile first using shared logic
+                TileBase visualTile = GetVisualTile(assignment.Type, assignment.Item);
                 BaseTile tileData;
-
                 switch (assignment.Type)
                 {
                     case TileType.Core:
-                        visualTile = coreTile;
                         tileData = new CoreTile(coord, TileType.Core);
                         break;
 
                     case TileType.Resource:
-                        visualTile = resourceTile;
                         tileData = new ResourceTile(coord, assignment.Item, assignment.Quality);
                         break;
 
                     case TileType.Settlement:
-                        visualTile = settlementTile;
                         tileData = new SettlementTile(coord);
                         break;
 
                     case TileType.Power:
-                        visualTile = powerTile;
                         tileData = new PowerTile(coord);
                         break;
 
                     case TileType.Nature:
-                        visualTile = natureTile;
                         tileData = new NatureTile(coord);
                         break;
 
                     case TileType.Transport:
-                        visualTile = transportTile;
                         tileData = new TransportTile(coord);
+                        break;
+
+                    case TileType.Food:
+                        tileData = new FoodTile(coord);
                         break;
 
                     case TileType.Production:
                     default:
-                        visualTile = productionTile;
                         tileData = new ProductionTile(coord);
                         break;
                 }
@@ -418,6 +426,9 @@ namespace CarbonWorld.Features.WorldMap
                 case TileType.Production:
                     newTileData = new ProductionTile(position);
                     break;
+                case TileType.Food:
+                    newTileData = new FoodTile(position);
+                    break;
                 default:
                     Debug.LogWarning($"ReplaceTile: Unsupported type {newType}");
                     return;
@@ -450,7 +461,7 @@ namespace CarbonWorld.Features.WorldMap
                     Type = newType
                 });
             }
-            
+
             // 5. Notify neighbors if they are graph tiles to update IO?
             // This is important for immediate feedback in UI if lines are drawn
             graphSystem.UpdateNeighbors(_tileData, position);
@@ -475,36 +486,42 @@ namespace CarbonWorld.Features.WorldMap
             var tile = _tileData.GetTile(position);
             if (tile == null) return;
 
-            TileBase visualTile = tile.Type switch
+            TileBase visualTile;
+            if (tile is ResourceTile rt)
             {
-                TileType.Core => coreTile,
-                TileType.Resource => resourceTile,
-                TileType.Production => productionTile,
-                TileType.Settlement => settlementTile,
-                TileType.Power => powerTile,
-                TileType.Nature => natureTile,
-                TileType.Transport => transportTile,
-                TileType.Flooded => floodedTile,
-                TileType.DeadZone => deadZoneTile,
-                TileType.RefugeeCamp => refugeeCampTile,
-                TileType.Heatwave => heatwaveTile,
-                _ => productionTile
-            };
+                visualTile = GetVisualTile(tile.Type, rt.ResourceItem);
+            }
+            else
+            {
+                visualTile = GetVisualTile(tile.Type, null);
+            }
 
             tilemap.SetTile(position, visualTile);
         }
 
         public TileBase GetTileAsset(TileType type)
         {
+            return GetVisualTile(type, null);
+        }
+
+        public TileBase GetVisualTile(TileType type, ItemDefinition item)
+        {
+            if (type == TileType.Resource && item != null)
+            {
+                var overrideRule = resourceVisualOverrides.Find(r => r.item == item);
+                if (overrideRule.tile != null) return overrideRule.tile;
+            }
+
             return type switch
             {
                 TileType.Core => coreTile,
-                TileType.Resource => resourceTile,
+                TileType.Resource => resourceTile, // Fallback
                 TileType.Production => productionTile,
                 TileType.Settlement => settlementTile,
                 TileType.Power => powerTile,
                 TileType.Nature => natureTile,
                 TileType.Transport => transportTile,
+                TileType.Food => foodTile,
                 TileType.Flooded => floodedTile,
                 TileType.DeadZone => deadZoneTile,
                 TileType.RefugeeCamp => refugeeCampTile,
@@ -549,13 +566,16 @@ namespace CarbonWorld.Features.WorldMap
                 case TileType.Transport:
                     tileData = new TransportTile(position);
                     break;
+                case TileType.Food:
+                    tileData = new FoodTile(position);
+                    break;
                 default:
                     Debug.LogWarning($"AddTile: Cannot place tile of type {type}");
                     return false;
             }
 
             _tileData.Add(position, tileData);
-            tilemap.SetTile(position, GetTileAsset(type));
+            tilemap.SetTile(position, GetVisualTile(type, null)); // AddTile is mostly for player placement, usually no Item attached yet
             _savedTiles.Add(new TileSaveData
             {
                 Position = position,
@@ -629,5 +649,12 @@ namespace CarbonWorld.Features.WorldMap
         public int minDistanceFromCore;
 
         public ResourceQuality quality;
+    }
+
+    [Serializable]
+    public struct ResourceVisualOverride
+    {
+        public ItemDefinition item;
+        public TileBase tile;
     }
 }

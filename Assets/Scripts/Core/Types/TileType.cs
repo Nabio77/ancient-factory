@@ -12,6 +12,7 @@ namespace CarbonWorld.Core.Types
         Flooded,
         DeadZone,
         RefugeeCamp,
-        Heatwave
+        Heatwave,
+        Food
     }
 }

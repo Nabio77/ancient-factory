@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1487f6bfa08d420fb9b91b2a0b83b7c, type: 3}
-  m_Name: food
+  m_Name: fruit
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.ItemDefinition
-  itemName: Food
-  description: Food for population
+  itemName: Fruit
+  description: Fresh produce from orchards or forests.
   icon: {fileID: 0}
   tier: 0
-  category: 1
-  baseValue: 1
+  category: 0
+  baseValue: 3
   maxStackSize: 0

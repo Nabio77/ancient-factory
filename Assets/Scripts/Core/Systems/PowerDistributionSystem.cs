@@ -139,6 +139,10 @@ namespace CarbonWorld.Core.Systems
                 {
                     productionTile.IsPowered = _poweredPositions.Contains(tile.CellPosition);
                 }
+                else if (tile is FoodTile foodTile)
+                {
+                    foodTile.IsPowered = _poweredPositions.Contains(tile.CellPosition);
+                }
             }
         }
 

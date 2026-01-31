@@ -20,6 +20,10 @@
                 <ui:VisualElement class="build-menu-icon production-icon" />
                 <ui:Label text="PROD" />
             </ui:Button>
+            <ui:Button name="btn-food" class="build-menu-btn">
+                <ui:VisualElement class="build-menu-icon food-icon" />
+                <ui:Label text="FOOD" />
+            </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -16,5 +16,8 @@ namespace CarbonWorld.Core.Types
 
         // Power Generation Types
         Power,
+
+         // Food Types
+        FoodProcessor
     }
 }

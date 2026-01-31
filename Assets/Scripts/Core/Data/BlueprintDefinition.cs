@@ -74,7 +74,7 @@ namespace CarbonWorld.Core.Data
         public float ProductionTime => productionTime;
         public int PowerConsumption => powerConsumption;
 
-        public bool IsProducer => type == BlueprintType.Smelter || type == BlueprintType.Furnace || type == BlueprintType.Constructor || type == BlueprintType.Assembler;
+        public bool IsProducer => type == BlueprintType.Smelter || type == BlueprintType.Furnace || type == BlueprintType.Constructor || type == BlueprintType.Assembler || type == BlueprintType.FoodProcessor;
         public bool IsLogistics => type == BlueprintType.Splitter || type == BlueprintType.Merger;
         public bool IsPowerGenerator => type == BlueprintType.Power;
 

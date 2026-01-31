@@ -30,6 +30,13 @@ namespace CarbonWorld.Core.Data
         [SerializeField, Tooltip("Stack size limit in inventories (0 = unlimited)")]
         private int maxStackSize = 0;
 
+        [Title("Food Properties")]
+        [SerializeField]
+        private bool isFood;
+
+        [SerializeField, ShowIf("isFood"), Tooltip("Health provided per unit")]
+        private int nutritionalValue = 1;
+
         public string ItemName => string.IsNullOrEmpty(itemName) ? name : itemName;
         public string Description => description;
         public Sprite Icon => icon;
@@ -37,6 +44,8 @@ namespace CarbonWorld.Core.Data
         public ItemTier Category => category;
         public int BaseValue => baseValue;
         public int MaxStackSize => maxStackSize;
+        public bool IsFood => isFood;
+        public int NutritionalValue => nutritionalValue;
 
         public bool IsRawResource => tier == 0;
         public bool IsFinalProduct => tier == 6;

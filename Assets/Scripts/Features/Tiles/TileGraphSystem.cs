@@ -42,6 +42,7 @@ namespace CarbonWorld.Features.Tiles
                             Color color = Color.black;
                             if (node.sourceTileType == TileType.Resource) color = new Color(0.2f, 0.6f, 1f, 1f); // Blue-ish
                             else if (node.sourceTileType == TileType.Production) color = new Color(0.2f, 0.8f, 0.2f, 1f); // Green-ish
+                            else if (node.sourceTileType == TileType.Food) color = new Color(0.8f, 0.6f, 0.2f, 1f); // Orange-ish
                             else if (node.sourceTileType == TileType.Transport) color = new Color(0.2f, 0.8f, 0.2f, 1f); // Also Green-ish
                             
                             DrawConnectionArrow(draw, start, end, color);
@@ -118,9 +119,9 @@ namespace CarbonWorld.Features.Tiles
 
         public void UpdateTile(TileDataGrid tileData, BaseTile tile)
         {
-            if (tile is ProductionTile productionTile)
+            if (tile is ProductionTile || tile is FoodTile)
             {
-                UpdateProductionTile(tileData, productionTile);
+                UpdateGraphTile(tileData, tile);
             }
             else if (tile is TransportTile transportTile)
             {
@@ -128,9 +129,10 @@ namespace CarbonWorld.Features.Tiles
             }
         }
 
-        private void UpdateProductionTile(TileDataGrid tileData, ProductionTile tile)
+        private void UpdateGraphTile(TileDataGrid tileData, BaseTile tile)
         {
-            var graph = tile.Graph;
+            if (tile is not IGraphTile graphTile) return;
+            var graph = graphTile.Graph;
             bool changed = false;
 
             // 1. Update Inputs (with deduplication by original source)
@@ -194,9 +196,6 @@ namespace CarbonWorld.Features.Tiles
                 foreach (var node in nodesToRemove)
                 {
                     graph.ioNodes.Remove(node);
-                    // Also remove connections to this node? 
-                    // Ideally yes, but BlueprintGraph handles loose connections gracefully usually.
-                    // For now, we leave connections until the user deletes them or we implement connection cleanup.
                 }
                 changed = true;
             }
@@ -219,16 +218,14 @@ namespace CarbonWorld.Features.Tiles
                 changed = true;
             }
 
-            // Note: We no longer sync the main Inventory here.
-            // ProductionSystem manages InputBuffer/OutputBuffer for actual production flow.
-            // The tile.Inventory is now used by ProductionSystem for the production cycle.
-
             if (changed)
             {
                 graph.NotifyGraphUpdated();
                 EventBus.Publish(new GraphUpdated { Position = tile.CellPosition });
             }
         }
+
+
 
         private void UpdateTransportTile(TileDataGrid tileData, TransportTile tile)
         {
@@ -319,15 +316,19 @@ namespace CarbonWorld.Features.Tiles
                 }
                 return new List<TileOutput>();
             }
-            else if (tile is ProductionTile productionTile)
+            else if (tile is ProductionTile || tile is FoodTile)
             {
-                // Use GetPotentialOutputs() for graph visualization
-                // This shows what the tile CAN produce based on its connections
-                // (Actual item transfer uses OutputBuffer in ProductionSystem)
-                return productionTile.GetPotentialOutputs()
-                    .Where(o => o.IsValid)
-                    .Select(o => new TileOutput(o, tile.CellPosition))
-                    .ToList();
+                List<ItemStack> potentialOutputs = null;
+                if (tile is ProductionTile p) potentialOutputs = p.GetPotentialOutputs();
+                else if (tile is FoodTile f) potentialOutputs = f.GetPotentialOutputs();
+
+                if (potentialOutputs != null)
+                {
+                    return potentialOutputs
+                        .Where(o => o.IsValid)
+                        .Select(o => new TileOutput(o, tile.CellPosition))
+                        .ToList();
+                }
             }
             else if (tile is TransportTile transportTile)
             {
@@ -337,10 +338,13 @@ namespace CarbonWorld.Features.Tiles
             return new List<TileOutput>();
         }
 
-        private ItemStack GetGraphPotentialOutput(ProductionTile tile)
+        private ItemStack GetGraphPotentialOutput(BaseTile tile)
         {
-            var outputs = tile.GetPotentialOutputs();
-            return outputs.Count > 0 ? outputs[0] : ItemStack.Empty;
+            List<ItemStack> outputs = null;
+            if (tile is ProductionTile p) outputs = p.GetPotentialOutputs();
+            else if (tile is FoodTile f) outputs = f.GetPotentialOutputs();
+
+            return outputs != null && outputs.Count > 0 ? outputs[0] : ItemStack.Empty;
         }
     }
 }

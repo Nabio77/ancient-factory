@@ -80,7 +80,7 @@ namespace CarbonWorld.Core.Systems
         private float _demandCooldownTimer;
         private float _foodTickTimer;
         private List<ItemDefinition> _t6Items = new();
-        private ItemDefinition _foodItem;
+        private List<ItemDefinition> _foodItems = new();
         private BaseTile _coreTileData;
 
         // Events
@@ -101,8 +101,8 @@ namespace CarbonWorld.Core.Systems
         public int FoodNeededPerTick => _population * foodPerPopulation;
         public int FoodConsumedLastTick => _foodConsumedLastTick;
         public int FoodDeficit => _foodDeficit;
-        public int FoodInStock => _coreTileData?.Inventory.Get(_foodItem) ?? 0;
-        public ItemDefinition FoodItem => _foodItem;
+        public int FoodInStock => _foodItems.Sum(i => _coreTileData?.Inventory.Get(i) ?? 0);
+        public IReadOnlyList<ItemDefinition> FoodItems => _foodItems;
 
         void Awake()
         {
@@ -159,16 +159,16 @@ namespace CarbonWorld.Core.Systems
             }
 
             _t6Items = itemDatabase.GetFinalProducts().ToList();
-            _foodItem = itemDatabase.GetByName("Food");
+            _foodItems = itemDatabase.GetFoodItems().ToList();
 
             if (_t6Items.Count == 0)
             {
                 Debug.LogWarning("CoreDemandSystem: No T6 (FinalProduct) items found in ItemDatabase!");
             }
 
-            if (_foodItem == null)
+            if (_foodItems.Count == 0)
             {
-                Debug.LogWarning("CoreDemandSystem: Food item not found in ItemDatabase!");
+               Debug.LogWarning("CoreDemandSystem: No Food items found in ItemDatabase!");
             }
         }
 
@@ -270,7 +270,7 @@ namespace CarbonWorld.Core.Systems
 
         private void ProcessFood()
         {
-            if (_foodItem == null) return;
+            if (_foodItems.Count == 0) return;
 
             _foodTickTimer += Time.deltaTime;
             if (_foodTickTimer < foodTickInterval) return;
@@ -291,21 +291,39 @@ namespace CarbonWorld.Core.Systems
             }
 
             var inventory = _coreTileData.Inventory;
-            int available = inventory.Get(_foodItem);
-            int consumed = Mathf.Min(available, foodNeeded);
+            int totalConsumed = 0;
 
-            if (consumed > 0)
+            using (new InventoryBatch(inventory, this, "FoodConsumption"))
             {
-                using (new InventoryBatch(inventory, this, "FoodConsumption"))
+                foreach (var foodItem in _foodItems)
                 {
-                    inventory.Remove(_foodItem, consumed);
+                    if (totalConsumed >= foodNeeded) break;
+
+                    int needed = foodNeeded - totalConsumed;
+                    // We treat 1 item as 1 unit of food unless we implement nutritional values fully
+                    // Using NutritionalValue property
+                    int nutrition = foodItem.NutritionalValue > 0 ? foodItem.NutritionalValue : 1;
+                    
+                    int availableItems = inventory.Get(foodItem);
+                    if (availableItems <= 0) continue;
+
+                    // How many items do we need to satisfy 'needed' food points?
+                    // Ceil(needed / nutrition)
+                    int itemsNeededToEat = Mathf.CeilToInt((float)needed / nutrition);
+                    int itemsToEat = Mathf.Min(availableItems, itemsNeededToEat);
+
+                    if (itemsToEat > 0)
+                    {
+                        inventory.Remove(foodItem, itemsToEat);
+                        totalConsumed += itemsToEat * nutrition;
+                    }
                 }
             }
 
-            _foodConsumedLastTick = consumed;
-            _foodDeficit = foodNeeded - consumed;
+            _foodConsumedLastTick = totalConsumed;
+            _foodDeficit = Mathf.Max(0, foodNeeded - totalConsumed);
 
-            OnFoodUpdated?.Invoke(_population, consumed, _foodDeficit);
+            OnFoodUpdated?.Invoke(_population, totalConsumed, _foodDeficit);
         }
 
         private void UpdatePopulation()
@@ -319,7 +337,10 @@ namespace CarbonWorld.Core.Systems
             int tileCount = 0;
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (tile.Type == TileType.Production)
+                if (tile.Type == TileType.Production || 
+                    tile.Type == TileType.Power || 
+                    tile.Type == TileType.Food || 
+                    tile.Type == TileType.Transport)
                 {
                     tileCount++;
                 }
