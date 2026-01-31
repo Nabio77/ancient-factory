@@ -38,6 +38,10 @@ namespace CarbonWorld.Core.Systems
         [SerializeField, MinValue(0.1f)]
         private float processingInterval = 1f;
 
+        [Title("Growth Settings")]
+        [SerializeField]
+        private int populationGrowthPerDemand = 5;
+
         [Title("Distance-Based Tier Settings")]
         [SerializeField, Tooltip("Distance at which settlements get lowest tier items (T1)")]
         private int farDistance = 6;
@@ -50,13 +54,17 @@ namespace CarbonWorld.Core.Systems
         private List<SettlementTile> _trackedSettlements = new();
 
         private Dictionary<int, List<ItemDefinition>> _itemsByTier = new();
+        private List<ItemDefinition> _foodItems = new();
         private Vector3Int _corePosition;
         private float _processTimer;
 
         public event Action<SettlementTile> OnSettlementSatisfied;
         public event Action<SettlementTile, ItemDefinition, int, int> OnDemandProgress;
+        public event Action<SettlementTile> OnSettlementUpdated; // New event for UI
 
         public IReadOnlyList<SettlementTile> TrackedSettlements => _trackedSettlements;
+
+        public int TotalPopulation => _trackedSettlements.Sum(s => s.Population);
 
         void Awake()
         {
@@ -124,6 +132,8 @@ namespace CarbonWorld.Core.Systems
                     .ToList();
             }
 
+            _foodItems = itemDatabase.GetFoodItems().ToList();
+
             int totalItems = _itemsByTier.Values.Sum(list => list.Count);
             if (totalItems == 0)
             {
@@ -166,7 +176,10 @@ namespace CarbonWorld.Core.Systems
                     {
                         GenerateDemandsForSettlement(settlement);
                     }
-                    _trackedSettlements.Add(settlement);
+                    if (!_trackedSettlements.Contains(settlement))
+                    {
+                        _trackedSettlements.Add(settlement);
+                    }
                 }
             }
         }
@@ -199,6 +212,7 @@ namespace CarbonWorld.Core.Systems
 
             if (availableItems.Count == 0) return;
 
+            // Generate regular demands
             int demandCount = UnityEngine.Random.Range(minDemands, maxDemands + 1);
 
             for (int i = 0; i < demandCount && availableItems.Count > 0; i++)
@@ -208,28 +222,23 @@ namespace CarbonWorld.Core.Systems
                 availableItems.RemoveAt(index);
 
                 int quantity = GetQuantityForItem(item);
-                settlement.Demands.Add(new ItemStack(item, quantity));
+                
+                // Add new demand if not present
+                if (!settlement.Demands.Any(d => d.Item == item))
+                {
+                    settlement.Demands.Add(new ItemStack(item, quantity));
+                }
             }
+
+            OnSettlementUpdated?.Invoke(settlement);
         }
 
         private (int minTier, int maxTier) GetTierRangeForDistance(int distance)
         {
-            // Close to core (distance <= closeDistance): T4-T5 (high tier)
-            // Far from core (distance >= farDistance): T1-T2 (low tier)
-            // In between: interpolate
+            if (distance <= closeDistance) return (4, 5);
+            if (distance >= farDistance) return (1, 2);
 
-            if (distance <= closeDistance)
-            {
-                return (4, 5);
-            }
-            if (distance >= farDistance)
-            {
-                return (1, 2);
-            }
-
-            // Linear interpolation between close and far
             float t = (float)(distance - closeDistance) / (farDistance - closeDistance);
-            // t=0 -> high tier (4-5), t=1 -> low tier (1-2)
             int centerTier = Mathf.RoundToInt(Mathf.Lerp(4.5f, 1.5f, t));
             int minTier = Mathf.Max(1, centerTier - 1);
             int maxTier = Mathf.Min(5, centerTier + 1);
@@ -239,7 +248,6 @@ namespace CarbonWorld.Core.Systems
 
         private int GetQuantityForItem(ItemDefinition item)
         {
-            // Higher tier items require smaller quantities
             float tierFactor = 1f - (item.Tier - 1) * 0.15f;
             tierFactor = Mathf.Max(0.4f, tierFactor);
 
@@ -256,12 +264,6 @@ namespace CarbonWorld.Core.Systems
                 var settlement = _trackedSettlements[i];
                 if (settlement == null) continue;
 
-                if (settlement.IsSatisfied)
-                {
-                    OnSettlementSatisfied?.Invoke(settlement);
-                    continue;
-                }
-
                 ProcessSettlementDemands(settlement);
             }
         }
@@ -270,17 +272,84 @@ namespace CarbonWorld.Core.Systems
         {
             var inventory = settlement.Inventory;
 
-            foreach (var demand in settlement.Demands)
+            // Check for completed demands
+            for (int i = settlement.Demands.Count - 1; i >= 0; i--)
             {
+                var demand = settlement.Demands[i];
                 if (!demand.IsValid) continue;
 
-                int current = inventory.Get(demand.Item);
-                int needed = demand.Amount;
+                int currentCount = inventory.Get(demand.Item);
+                
+                // Report progress
+                OnDemandProgress?.Invoke(settlement, demand.Item, currentCount, demand.Amount);
 
-                if (current > 0 && current < needed)
+                // Check fulfillment
+                if (currentCount >= demand.Amount)
                 {
-                    OnDemandProgress?.Invoke(settlement, demand.Item, current, needed);
+                    FulfillDemand(settlement, demand);
                 }
+            }
+        }
+
+        private void FulfillDemand(SettlementTile settlement, ItemStack demand)
+        {
+            // 1. Consume Items
+            settlement.Inventory.Remove(demand.Item, demand.Amount);
+
+            // 2. Grant Reward (Placeholder)
+            Debug.Log($"Settlement at {settlement.CellPosition} fulfilled demand for {demand.Amount} {demand.Item.ItemName}. REWARD GRANTED!");
+
+            // 3. Grow Population
+            settlement.Population += populationGrowthPerDemand;
+            
+            // 4. Update Level/Stats
+            settlement.Experience += 10;
+            // Simplified leveling logic
+            if (settlement.Experience >= settlement.Level * 100)
+            {
+                settlement.Level++;
+                settlement.Experience = 0;
+            }
+
+            // 5. Remove completed demand
+            settlement.Demands.Remove(demand);
+
+            // 6. Generate New Demand (loop)
+            AddNewDemand(settlement);
+            
+            // UI Update
+            OnSettlementUpdated?.Invoke(settlement);
+        }
+
+        private void AddNewDemand(SettlementTile settlement)
+        {
+            // Find a new item to demand
+            // In a real system, might be harder based on level
+            
+            int distance = HexUtils.Distance(_corePosition, settlement.CellPosition);
+            var (minTier, maxTier) = GetTierRangeForDistance(distance);
+            
+            // Get all possible items for this tier
+            var eligibleItems = new List<ItemDefinition>();
+            for (int tier = minTier; tier <= maxTier; tier++)
+            {
+                 if (_itemsByTier.TryGetValue(tier, out var list)) eligibleItems.AddRange(list);
+            }
+
+            // Filter out items already demanded
+            var currentDemands = settlement.Demands.Select(d => d.Item).ToHashSet();
+            eligibleItems.RemoveAll(i => currentDemands.Contains(i));
+
+            if (eligibleItems.Count > 0)
+            {
+                 var newItem = eligibleItems[UnityEngine.Random.Range(0, eligibleItems.Count)];
+                 int quantity = GetQuantityForItem(newItem);
+                 settlement.Demands.Add(new ItemStack(newItem, quantity));
+            }
+            else
+            {
+                // Fallback: just increase quantity of something else or wait
+                Debug.Log("SettlementSystem: No new unique items available for demand.");
             }
         }
 

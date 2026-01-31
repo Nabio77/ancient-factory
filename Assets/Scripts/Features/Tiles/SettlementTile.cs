@@ -10,6 +10,10 @@ namespace CarbonWorld.Features.Tiles
         public List<ItemStack> Demands { get; }
         public BlueprintDefinition UnlockedBlueprint { get; }
 
+        public int Population { get; set; } = 10;
+        public int Level { get; set; } = 1;
+        public int Experience { get; set; }
+
         public bool IsSatisfied
         {
             get

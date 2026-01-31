@@ -307,7 +307,7 @@ namespace CarbonWorld.Core.Systems
                     break;
 
                 case ClimateEffect.RefugeeCamp:
-                    int refugeeCount = CoreDemandSystem.Instance?.Population / 10 ?? 50;
+                    int refugeeCount = SettlementSystem.Instance?.TotalPopulation / 10 ?? 50;
                     disasterTile = new RefugeeCampTile(originalTile.CellPosition, _currentTick, refugeeCount);
                     break;
 

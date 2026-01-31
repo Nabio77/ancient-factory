@@ -185,7 +185,8 @@ namespace CarbonWorld.Features.WorldMap
 
             if (tile is SettlementTile settlementTile)
             {
-                ShowSettlementInfo(settlementTile);
+                // Handled by SettlementUI
+                _settlementInfo?.AddToClassList("hidden");
             }
             else
             {

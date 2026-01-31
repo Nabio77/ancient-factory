@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Theme.uss"/>
+    <Style src="SettlementPanel.uss" />
+    <ui:VisualElement name="settlement-container" class="panel">
+        <ui:Label name="settlement-name" text="Settlement" class="title" />
+        <ui:VisualElement class="divider" />
+        
+        <!-- Status Section -->
+        <ui:VisualElement class="section">
+            <ui:Label text="Population" class="section-title" />
+            <ui:VisualElement class="info-row">
+                <ui:Label name="settlement-population" class="value highlight" text="10" style="font-size: 16px;" />
+                <ui:Label name="settlement-growth" class="value" text="Stable" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="divider" />
+
+        <!-- Food Section -->
+        <ui:VisualElement class="section">
+            <ui:Label text="Food Storage" class="section-title" />
+             <ui:VisualElement class="info-row">
+                <ui:Label text="Stock" class="label" />
+                <ui:Label name="settlement-food-level" class="value" text="0 / 100" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="divider" />
+        
+        <ui:Label text="Active Demands" class="section-title" />
+        <ui:ScrollView name="demands-list" class="demands-container">
+            <!-- Dynamic Demand Items go here -->
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

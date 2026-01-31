@@ -138,22 +138,3 @@
 .food-section {
     margin-bottom: 4px;
 }
-
-.food-status {
-    font-size: var(--font-size-sm);
-    -unity-font-style: bold;
-    -unity-text-align: middle-center;
-    padding: 4px 8px;
-    border-radius: 4px;
-    margin-top: 6px;
-}
-
-.food-status.fed {
-    color: var(--color-success);
-    background-color: rgba(100, 200, 100, 0.15);
-}
-
-.food-status.starving {
-    color: var(--color-danger);
-    background-color: rgba(255, 100, 100, 0.15);
-}
