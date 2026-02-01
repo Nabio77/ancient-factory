@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 using CarbonWorld.Core.Data;
+using CarbonWorld.Core.Systems;
 using CarbonWorld.Features.WorldMap;
 using CarbonWorld.Core.Types;
 
@@ -55,6 +56,11 @@ namespace CarbonWorld.Features.Production
             InitializePalette();
         }
 
+        public void Refresh()
+        {
+            InitializePalette();
+        }
+
         private void BindTabs()
         {
             if (_tabsContainer == null) return;
@@ -100,6 +106,10 @@ namespace CarbonWorld.Features.Production
             {
                 // Apply both context filter (game logic) and category filter (user UI)
                 if (!_contextFilter(blueprint) || !_categoryFilter(blueprint))
+                    continue;
+
+                // Check tech tree unlock status
+                if (TechTreeSystem.Instance != null && !TechTreeSystem.Instance.IsBlueprintUnlocked(blueprint))
                     continue;
 
                 var item = new VisualElement();

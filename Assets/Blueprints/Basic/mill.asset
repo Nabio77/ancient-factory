@@ -28,5 +28,5 @@ MonoBehaviour:
   powerConsumption: 1
   powerOutput: 0
   carbonEmission: 0
-  isStarterCard: 1
-  unlockCost: 0
+  isStarterCard: 0
+  unlockCost: 5

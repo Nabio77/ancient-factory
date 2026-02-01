@@ -17,5 +17,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   tier: 1
   category: 1
-  baseValue: 2
   maxStackSize: 0
+  techPoints: 0
+  isFood: 0
+  nutritionalValue: 1

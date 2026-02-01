@@ -156,6 +156,10 @@ namespace CarbonWorld.Features.Production
             _ioView.CreateIOZones(_root, graphTile.HasOutput);
             _canvasView.SetGraph(graphTile.Graph);
             // _paletteView.SetBlueprintFilter(graphTile.BlueprintFilter); // Allow all blueprints, filtered by tabs
+            
+            // Schedule refresh to ensure layout is ready after un-hiding
+            _root.schedule.Execute(() => _paletteView.Refresh());
+            
             _ioView.PopulateIOCards(graphTile);
 
             // Re-render connections after layout

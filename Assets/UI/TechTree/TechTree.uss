@@ -1,0 +1,261 @@
+.techtree-root {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.9);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.techtree-root.hidden {
+    display: none;
+}
+
+.techtree-container {
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+/* Header */
+#header {
+    height: 60px;
+    background-color: var(--color-bg-dark);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-items: center;
+    padding: 0 60px 0 20px;
+    border-bottom-width: 2px;
+    border-bottom-color: var(--color-border);
+}
+
+.techtree-title {
+    font-size: 24px;
+    color: var(--color-text-primary);
+    -unity-font-style: bold;
+}
+
+#points-container {
+    flex-direction: row;
+    align-items: center;
+}
+
+.points-label {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+    margin-right: 8px;
+}
+
+.points-value {
+    font-size: 20px;
+    color: var(--color-accent);
+    -unity-font-style: bold;
+}
+
+/* Canvas */
+#tree-canvas {
+    flex-grow: 1;
+    background-color: rgb(20, 20, 25);
+    overflow: hidden;
+    position: relative;
+}
+
+#canvas-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#connections-layer {
+    position: absolute;
+    left: -5000px;
+    top: -5000px;
+    width: 10000px;
+    height: 10000px;
+}
+
+#nodes-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* Tech Node */
+.tech-node {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    border-width: 3px;
+    align-items: center;
+    justify-content: center;
+    cursor: link;
+    transition-duration: 0.15s;
+}
+
+.tech-node .node-icon {
+    width: 48px;
+    height: 48px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.tech-node .node-label {
+    position: absolute;
+    bottom: -20px;
+    font-size: 10px;
+    color: var(--color-text-secondary);
+    -unity-text-align: upper-center;
+    width: 100px;
+    left: -10px;
+}
+
+/* Node States */
+.tech-node.locked {
+    background-color: rgb(40, 40, 45);
+    border-color: rgb(60, 60, 65);
+    opacity: 0.5;
+}
+
+.tech-node.locked .node-icon {
+    -unity-background-tint-color: rgb(80, 80, 80);
+}
+
+.tech-node.available {
+    background-color: rgb(50, 60, 80);
+    border-color: var(--color-accent);
+}
+
+.tech-node.available:hover {
+    background-color: rgb(60, 75, 100);
+    scale: 1.05;
+}
+
+.tech-node.unlocked {
+    background-color: rgb(45, 70, 55);
+    border-color: var(--color-success);
+}
+
+.tech-node.selected {
+    border-width: 4px;
+    scale: 1.1;
+}
+
+/* Info Panel */
+#info-panel {
+    position: absolute;
+    right: 20px;
+    top: 80px;
+    width: 280px;
+    background-color: var(--color-bg-panel);
+    border-radius: var(--border-radius-main);
+    border-width: 1px;
+    border-color: var(--color-border);
+    padding: 16px;
+}
+
+#info-panel.hidden {
+    display: none;
+}
+
+#info-header {
+    flex-direction: row;
+    margin-bottom: 12px;
+}
+
+#info-icon {
+    width: 48px;
+    height: 48px;
+    margin-right: 12px;
+    border-radius: 8px;
+    background-color: var(--color-bg-card);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+#info-title-container {
+    flex-grow: 1;
+    justify-content: center;
+}
+
+#info-name {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
+    -unity-font-style: bold;
+}
+
+#info-type {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+#info-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+    white-space: normal;
+}
+
+#info-cost-row,
+#info-prereqs-row {
+    flex-direction: row;
+    margin-bottom: 8px;
+}
+
+.info-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-dim);
+    width: 70px;
+}
+
+#info-cost {
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+    -unity-font-style: bold;
+}
+
+#info-prereqs {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    flex-grow: 1;
+    white-space: normal;
+}
+
+#unlock-button {
+    height: 36px;
+    margin-top: 12px;
+    background-color: var(--color-accent);
+    color: white;
+    border-radius: 6px;
+    font-size: var(--font-size-md);
+    -unity-font-style: bold;
+    border-width: 0;
+}
+
+#unlock-button:hover {
+    background-color: rgb(0, 200, 255);
+}
+
+#unlock-button:disabled {
+    background-color: rgb(60, 60, 65);
+    color: var(--color-text-dim);
+}
+
+/* Close Button */
+#close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(170, 51, 51);
+    color: white;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    -unity-font-style: bold;
+    border-width: 0;
+}
+
+#close-button:hover {
+    background-color: rgb(221, 68, 68);
+}

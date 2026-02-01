@@ -1,0 +1,22 @@
+GridBackground {
+    --grid-background-color: #2b2b2b;
+    --line-color: rgba(193, 196, 192, 0.1);
+    --thick-line-color: rgba(193, 196, 192, 0.1);
+    --spacing: 15;
+}
+
+TechTreeNodeView {
+    background-color: #383838;
+    border-radius: 8px;
+    border-color: #888;
+    border-width: 1px;
+}
+
+TechTreeNodeView:hover {
+    border-color: #4f96e8;
+}
+
+TechTreeNodeView:selected {
+    border-color: #44C0FF;
+    border-width: 2px;
+}

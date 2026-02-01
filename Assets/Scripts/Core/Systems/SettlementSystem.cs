@@ -58,7 +58,6 @@ namespace CarbonWorld.Core.Systems
         private Vector3Int _corePosition;
         private float _processTimer;
 
-        public event Action<SettlementTile> OnSettlementSatisfied;
         public event Action<SettlementTile, ItemDefinition, int, int> OnDemandProgress;
         public event Action<SettlementTile> OnSettlementUpdated; // New event for UI
 

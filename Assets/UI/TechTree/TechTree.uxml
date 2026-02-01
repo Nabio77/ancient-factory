@@ -1,0 +1,50 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Theme.uss?fileID=7433441132597879392&amp;guid=1b6402eea5965428d9a5d70fa84b338c&amp;type=3#Theme"/>
+    <Style src="project://database/Assets/UI/TechTree/TechTree.uss?fileID=7433441132597879392&amp;guid=51d14a3c04e1542a799cd03871b2b0fd&amp;type=3#TechTree"/>
+    <ui:VisualElement name="root" class="techtree-root">
+        <ui:VisualElement class="techtree-container">
+            <ui:VisualElement name="header">
+                <ui:Label name="title-label" text="Tech Tree" class="techtree-title"/>
+                <ui:VisualElement name="points-container">
+                    <ui:Label text="Tech Points:" class="points-label"/>
+                    <ui:Label name="points-value" text="1250" class="points-value"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="tree-canvas">
+                <ui:VisualElement name="canvas-content" picking-mode="Ignore">
+                    <ui:VisualElement name="connections-layer" picking-mode="Ignore"/>
+                    <ui:VisualElement name="nodes-container">
+                        <ui:VisualElement class="tech-node unlocked" style="left: 100px; top: 100px;">
+                            <ui:VisualElement class="node-icon" style="background-color: gray;"/>
+                            <ui:Label text="Iron Smelting" class="node-label"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="tech-node available" style="left: 300px; top: 100px;">
+                            <ui:VisualElement class="node-icon" style="background-color: gray;"/>
+                            <ui:Label text="Steel" class="node-label"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="info-panel">
+                <ui:VisualElement name="info-header">
+                    <ui:VisualElement name="info-icon"/>
+                    <ui:VisualElement name="info-title-container">
+                        <ui:Label name="info-name" text="Node Name"/>
+                        <ui:Label name="info-type" text="Blueprint Type"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label name="info-description" text="Description goes here"/>
+                <ui:VisualElement name="info-cost-row">
+                    <ui:Label text="Cost:" class="info-label"/>
+                    <ui:Label name="info-cost" text="100"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="info-prereqs-row">
+                    <ui:Label text="Requires:" class="info-label"/>
+                    <ui:Label name="info-prereqs" text="None"/>
+                </ui:VisualElement>
+                <ui:Button name="unlock-button" text="Unlock"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button name="close-button" text="X"/>
+    </ui:VisualElement>
+</ui:UXML>
