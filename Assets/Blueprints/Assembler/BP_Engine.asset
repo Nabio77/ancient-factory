@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0929d3f20898041ca886698bcb855fe7, type: 3}
+  m_Name: BP_Engine
+  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.BlueprintDefinition
+  blueprintName: Engine
+  description: 
+  icon: {fileID: 0}
+  type: 3
+  inputCount: 3
+  outputCount: 1
+  inputs:
+  - item: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d7, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 04e7bcf6d73774ab48593fd197069dc4, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: 901278c4f607c4c1d86fd790cea78817, type: 2}
+    amount: 1
+  output:
+    item: {fileID: 11400000, guid: 3b23cdee7719a46b49dc8501555a9f23, type: 2}
+    amount: 1
+  productionTime: 8
+  powerConsumption: 1
+  powerOutput: 0
+  carbonEmission: 10
+  isStarterCard: 0
+  unlockCost: 500
