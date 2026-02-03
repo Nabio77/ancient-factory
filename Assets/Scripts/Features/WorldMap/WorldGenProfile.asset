@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a761d0695b53441c7b286442d197eff2, type: 3}
+  m_Name: WorldGenProfile
+  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.WorldGenProfile
+  Rings: 5
+  CoreRadius: 1
+  SettlementTileCount: 3
+  MinSettlementDistanceFromCore: 3
+  MinSettlementSpacing: 3
+  ImpureAmounts: {x: 20, y: 55}
+  NormalAmounts: {x: 56, y: 135}
+  PureAmounts: {x: 136, y: 250}
+  ResourceRules:
+  - Item: {fileID: 11400000, guid: 9051fdc7422794723a3b88e30181bd85, type: 2}
+    CountMin: 1
+    CountMax: 5
+    MinDistanceFromCore: 4
+    UseClustering: 0
+    ClusterSizeMin: 1
+    ClusterSizeMax: 3
+    ClusterRadius: 1
+    QualitySettings:
+    - Quality: 0
+      Weight: 10
+    - Quality: 2
+      Weight: 3
+    LinkedRules: []
+  - Item: {fileID: 11400000, guid: d5750c8d9b7724cf9a51caeda5d177b0, type: 2}
+    CountMin: 2
+    CountMax: 4
+    MinDistanceFromCore: 4
+    UseClustering: 0
+    ClusterSizeMin: 1
+    ClusterSizeMax: 3
+    ClusterRadius: 1
+    QualitySettings:
+    - Quality: 0
+      Weight: 10
+    LinkedRules: []
+  - Item: {fileID: 11400000, guid: d676f706e834745238e93dcb72a95a2d, type: 2}
+    CountMin: 4
+    CountMax: 10
+    MinDistanceFromCore: 4
+    UseClustering: 1
+    ClusterSizeMin: 1
+    ClusterSizeMax: 3
+    ClusterRadius: 2
+    QualitySettings:
+    - Quality: 0
+      Weight: 10
+    - Quality: 1
+      Weight: 5
+    - Quality: 2
+      Weight: 2
+    LinkedRules:
+    - Item: {fileID: 11400000, guid: 9051fdc7422794723a3b88e30181bd85, type: 2}
+      Chance: 65
+      DistanceRange: {x: 1, y: 3}
+  - Item: {fileID: 11400000, guid: cfc2daa22ee8a411ca9f564982f19a85, type: 2}
+    CountMin: 1
+    CountMax: 5
+    MinDistanceFromCore: 2
+    UseClustering: 0
+    ClusterSizeMin: 1
+    ClusterSizeMax: 3
+    ClusterRadius: 1
+    QualitySettings: []
+    LinkedRules: []
+  - Item: {fileID: 11400000, guid: dcf52f536fe994f2b80e6ced5108cbdb, type: 2}
+    CountMin: 1
+    CountMax: 5
+    MinDistanceFromCore: 2
+    UseClustering: 0
+    ClusterSizeMin: 1
+    ClusterSizeMax: 3
+    ClusterRadius: 1
+    QualitySettings: []
+    LinkedRules: []

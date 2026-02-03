@@ -13,17 +13,12 @@ MonoBehaviour:
   m_Name: TechTreeGraph
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.TechTreeGraph
   nodes:
-  - guid: 07ab2ea8-46b9-4a60-8c7b-4a5f26d6d03c
-    position: {x: 631, y: 169}
-    blueprint: {fileID: 11400000, guid: 8ec2e6c4388904963a52155799162364, type: 2}
+  - guid: 8e0ecf3b-31b3-4057-8178-bfaef0d997c1
+    position: {x: 740, y: 168}
+    blueprint: {fileID: 11400000, guid: 3bbf96363cf8641028f24c1b52017404, type: 2}
     prerequisites:
-    - 16bb8758-b006-48fc-acc3-3fd3d659710b
-  - guid: 16bb8758-b006-48fc-acc3-3fd3d659710b
-    position: {x: 371, y: 169}
-    blueprint: {fileID: 11400000, guid: 628a2c94882944eb79cfe0fa4f738977, type: 2}
+    - 69b42551-7fa0-44e3-85df-517338ae5516
+  - guid: 69b42551-7fa0-44e3-85df-517338ae5516
+    position: {x: 419, y: 168}
+    blueprint: {fileID: 11400000, guid: ce6efe78e1b384a66bdfd373b67479df, type: 2}
     prerequisites: []
-  - guid: a6e51272-585e-4d4a-8a99-84436acfae81
-    position: {x: 631, y: 321}
-    blueprint: {fileID: 11400000, guid: f3bca748dc25d42ca87eb8da0ded942c, type: 2}
-    prerequisites:
-    - 16bb8758-b006-48fc-acc3-3fd3d659710b

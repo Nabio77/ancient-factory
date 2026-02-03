@@ -349,8 +349,17 @@ namespace CarbonWorld.Features.WorldMap
             _resourceTier.text = $"Tier {item.Tier} - {item.Category}";
 
             // Show quality, output rate, and current inventory
-            int currentStock = tile.Inventory.Get(item);
-            _resourceOutput.text = $"{tile.Quality} ({tile.GetOutputPerTick()}/tick) - Stock: {currentStock}";
+            // int currentStock = tile.Inventory.Get(item); // Inventory is output buffer
+            _resourceOutput.text = $"{tile.Quality} ({tile.GetOutputPerTick()}/tick)\nReserves: {tile.CurrentAmount}/{tile.MaxAmount}";
+            if (tile.IsDepleted)
+            {
+                 _resourceOutput.style.color = new StyleColor(Color.red);
+                 _resourceOutput.text += " (DEPLETED)";
+            }
+            else
+            {
+                 _resourceOutput.style.color = new StyleColor(Color.white); // Accessing default style might be better but hardcoded for now
+            }
 
             // Clear and set the icon
             _resourceIcon.style.backgroundImage = StyleKeyword.None;

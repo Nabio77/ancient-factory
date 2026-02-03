@@ -17,90 +17,9 @@ namespace CarbonWorld.Features.WorldMap
         public event Action OnMapGenerated;
         public event Action<Vector3Int> OnTileChanged;
 
-        [Title("Tilemap References")]
+        [Title("Configuration")]
         [SerializeField, Required]
-        private UnityEngine.Grid grid;
-
-        [SerializeField, Required]
-        private Tilemap tilemap;
-
-        [SerializeField, Required]
-        private Tilemap highlightTilemap;
-
-        [Title("Tile Assets")]
-        [SerializeField, Required]
-        private TileBase coreTile;
-
-        [SerializeField, Required]
-        private TileBase resourceTile;
-
-        [SerializeField, Required]
-        private TileBase productionTile;
-
-        [SerializeField, Required]
-        private TileBase settlementTile;
-
-        [SerializeField, Required]
-        private TileBase powerTile;
-
-        [SerializeField]
-        private TileBase transportTile;
-
-        [SerializeField]
-        private TileBase natureTile;
-
-        [SerializeField]
-        private TileBase floodedTile;
-
-        [SerializeField]
-        private TileBase deadZoneTile;
-
-        [SerializeField]
-        private TileBase refugeeCampTile;
-
-        [SerializeField]
-        private TileBase heatwaveTile;
-
-        [SerializeField]
-        private TileBase foodTile;
-
-        [SerializeField]
-        private TileBase hoverHighlightTile;
-
-        [SerializeField]
-        private TileBase selectedHighlightTile;
-
-        [SerializeField]
-        private TileBase powerRangeHighlightTile;
-
-        [Title("Map Size")]
-        [SerializeField, Min(1)]
-        private int rings = 5;
-
-        [SerializeField, Min(0)]
-        private int coreRadius = 1;
-
-        [Title("Resource Generation")]
-        [SerializeField]
-        private List<ResourceSpawnRule> resourceRules = new();
-
-        [SerializeField, Min(1)]
-        private int minResourceSpacing = 2;
-
-        [SerializeField]
-        private List<ResourceVisualOverride> resourceVisualOverrides = new();
-
-
-
-        [Title("Settlement Tiles")]
-        [SerializeField, Min(0)]
-        private int settlementTileCount = 3;
-
-        [SerializeField, Min(1)]
-        private int minSettlementDistanceFromCore = 3;
-
-        [SerializeField, Min(1)]
-        private int minSettlementSpacing = 3;
+        private WorldGenProfile generationProfile;
 
         [SerializeField, HideInInspector]
         private List<TileSaveData> _savedTiles = new();
@@ -108,19 +27,17 @@ namespace CarbonWorld.Features.WorldMap
         [Title("Systems")]
         [SerializeField]
         private TileGraphSystem graphSystem;
+        
+        [SerializeField]
+        private WorldMapVisualizer visualizer;
 
         private TileDataGrid _tileData = new();
+        private WorldMapGenerator _generator = new();
 
         public TileDataGrid TileData => _tileData;
         public TileGraphSystem GraphSystem => graphSystem;
-        public UnityEngine.Grid Grid => grid;
-        public Tilemap Tilemap => tilemap;
-        public Tilemap HighlightTilemap => highlightTilemap;
-        public TileBase HoverHighlightTile => hoverHighlightTile;
-        public TileBase SelectedHighlightTile => selectedHighlightTile;
-        public TileBase PowerRangeHighlightTile => powerRangeHighlightTile;
-
-        private static readonly Vector3Int Center = Vector3Int.zero;
+        public WorldMapVisualizer Visualizer => visualizer;
+        public WorldGenProfile Profile => generationProfile;
 
         private void Awake()
         {
@@ -133,6 +50,15 @@ namespace CarbonWorld.Features.WorldMap
                     graphSystem = gameObject.AddComponent<TileGraphSystem>();
                 }
             }
+            
+            if (visualizer == null)
+            {
+                visualizer = GetComponent<WorldMapVisualizer>();
+                if (visualizer == null)
+                {
+                    visualizer = gameObject.AddComponent<WorldMapVisualizer>();
+                }
+            }
 
             // Ensure other core systems exist in the scene
             EnsureSystem<ProductionSystem>();
@@ -141,18 +67,6 @@ namespace CarbonWorld.Features.WorldMap
             EnsureSystem<SettlementSystem>();
 
             graphSystem.Initialize(_tileData, this);
-
-            // Ensure highlight is drawn on top
-            var mainRenderer = tilemap.GetComponent<TilemapRenderer>();
-            var highlightRenderer = highlightTilemap.GetComponent<TilemapRenderer>();
-
-            if (mainRenderer != null && highlightRenderer != null)
-            {
-                if (highlightRenderer.sortingOrder <= mainRenderer.sortingOrder)
-                {
-                    highlightRenderer.sortingOrder = mainRenderer.sortingOrder + 1;
-                }
-            }
 
             if (_tileData.Count == 0 && _savedTiles.Count > 0)
             {
@@ -165,7 +79,7 @@ namespace CarbonWorld.Features.WorldMap
                             tileData = new CoreTile(data.Position, TileType.Core);
                             break;
                         case TileType.Resource:
-                            tileData = new ResourceTile(data.Position, data.Item, data.Quality);
+                            tileData = new ResourceTile(data.Position, data.Item, data.Quality, data.Amount);
                             break;
                         case TileType.Settlement:
                             tileData = new SettlementTile(data.Position);
@@ -201,6 +115,9 @@ namespace CarbonWorld.Features.WorldMap
                     }
                     _tileData.Add(data.Position, tileData);
                 }
+                
+                // Refresh visuals from data
+                visualizer.RefreshAll(_tileData);
 
                 // Initialize Graph Tiles after loading
                 graphSystem.RefreshAll(_tileData);
@@ -234,7 +151,7 @@ namespace CarbonWorld.Features.WorldMap
 
                 foreach (var pos in powerSystem.GetAllPoweredPositions())
                 {
-                    var center = CellToWorld(pos);
+                    var center = visualizer.CellToWorld(pos);
                     var points = new Vector3[7];
                     for (int i = 0; i <= 6; i++)
                     {
@@ -249,7 +166,7 @@ namespace CarbonWorld.Features.WorldMap
             {
                 if (tile is PowerTile powerTile && powerTile.TotalPowerOutput > 0)
                 {
-                    var center = CellToWorld(tile.CellPosition);
+                    var center = visualizer.CellToWorld(tile.CellPosition);
                     draw.Label2D(center, $"{powerTile.TotalPowerOutput}kW", 20f);
                 }
             }
@@ -258,55 +175,16 @@ namespace CarbonWorld.Features.WorldMap
         [Button("Generate", ButtonSizes.Large), GUIColor(0.4f, 0.8f, 0.4f)]
         public void Generate()
         {
+            if (generationProfile == null)
+            {
+                Debug.LogError("WorldGenProfile is missing!");
+                return;
+            }
+
             Clear();
 
-            var rng = new System.Random();
-            var coords = HexUtils.GetSpiral(Center, rings);
-            var assignments = new Dictionary<Vector3Int, TileAssignment>();
-
-            // Phase 1: Core tiles (center)
-            foreach (var coord in coords)
-            {
-                if (HexUtils.Distance(Center, coord) <= coreRadius)
-                    assignments[coord] = new TileAssignment { Type = TileType.Core };
-            }
-
-            // Phase 2: Resource tiles
-            foreach (var rule in resourceRules)
-            {
-                int count = rng.Next(rule.minCount, rule.maxCount + 1);
-                var candidates = GetValidCandidates(coords, assignments, rule.minDistanceFromCore);
-                Shuffle(candidates, rng);
-
-                for (int i = 0; i < count && candidates.Count > 0; i++)
-                {
-                    var coord = candidates[0];
-                    candidates.RemoveAt(0);
-                    assignments[coord] = new TileAssignment
-                    {
-                        Type = TileType.Resource,
-                        Item = rule.item,
-                        Quality = rule.quality
-                    };
-                    // Remove nearby candidates to enforce spacing
-                    candidates.RemoveAll(c => HexUtils.Distance(coord, c) < minResourceSpacing);
-                }
-            }
-
-            // Phase 3: Settlement tiles (mini settlements as goals)
-            var settlementCandidates = GetValidCandidates(coords, assignments, minSettlementDistanceFromCore);
-            Shuffle(settlementCandidates, rng);
-            for (int i = 0; i < settlementTileCount && settlementCandidates.Count > 0; i++)
-            {
-                var coord = settlementCandidates[0];
-                settlementCandidates.RemoveAt(0);
-                assignments[coord] = new TileAssignment { Type = TileType.Settlement };
-                // Remove nearby candidates to enforce spacing between settlements
-                settlementCandidates.RemoveAll(c => HexUtils.Distance(coord, c) < minSettlementSpacing);
-            }
-
-            // Phase 5: Create tiles
-            CreateTiles(assignments);
+            var assignments = _generator.Generate(generationProfile);
+            ApplyAssignments(assignments);
 
             // Phase 6: Initialize Graph Tiles
             graphSystem.RefreshAll(_tileData);
@@ -319,90 +197,56 @@ namespace CarbonWorld.Features.WorldMap
         {
             _tileData.Clear();
             _savedTiles.Clear();
-            tilemap.ClearAllTiles();
-            highlightTilemap.ClearAllTiles();
+            visualizer.Clear();
         }
 
-        private List<Vector3Int> GetValidCandidates(
-            List<Vector3Int> allCoords,
-            Dictionary<Vector3Int, TileAssignment> assignments,
-            int minDistanceFromCore)
-        {
-            var candidates = new List<Vector3Int>();
-            foreach (var coord in allCoords)
-            {
-                if (assignments.ContainsKey(coord))
-                    continue;
-                if (HexUtils.Distance(Center, coord) < minDistanceFromCore)
-                    continue;
-                candidates.Add(coord);
-            }
-            return candidates;
-        }
-
-        private void Shuffle<T>(List<T> list, System.Random rng)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int j = rng.Next(i + 1);
-                (list[i], list[j]) = (list[j], list[i]);
-            }
-        }
-
-        private void CreateTiles(Dictionary<Vector3Int, TileAssignment> assignments)
+        private void ApplyAssignments(Dictionary<Vector3Int, TileAssignment> assignments)
         {
             _savedTiles.Clear();
+            
             foreach (var (coord, assignment) in assignments)
             {
-                // Determine Visual Tile first using shared logic
-                TileBase visualTile = GetVisualTile(assignment.Type, assignment.Item);
-                BaseTile tileData;
-                switch (assignment.Type)
-                {
-                    case TileType.Core:
-                        tileData = new CoreTile(coord, TileType.Core);
-                        break;
+                 BaseTile tileData;
+                 switch (assignment.Type)
+                 {
+                     case TileType.Core:
+                         tileData = new CoreTile(coord, TileType.Core);
+                         break;
+                     case TileType.Resource:
+                         tileData = new ResourceTile(coord, assignment.Item, assignment.Quality, assignment.Amount);
+                         break;
+                     case TileType.Settlement:
+                         tileData = new SettlementTile(coord);
+                         break;
+                     case TileType.Power:
+                         tileData = new PowerTile(coord);
+                         break;
+                     case TileType.Nature:
+                         tileData = new NatureTile(coord);
+                         break;
+                     case TileType.Transport:
+                         tileData = new TransportTile(coord);
+                         break;
+                     case TileType.Food:
+                         tileData = new FoodTile(coord);
+                         break;
+                     case TileType.Production:
+                     default:
+                         tileData = new ProductionTile(coord);
+                         break;
+                 }
 
-                    case TileType.Resource:
-                        tileData = new ResourceTile(coord, assignment.Item, assignment.Quality);
-                        break;
+                 _savedTiles.Add(new TileSaveData
+                 {
+                     Position = coord,
+                     Type = assignment.Type,
+                     Item = assignment.Item,
+                     Quality = assignment.Quality,
+                     Amount = assignment.Amount
+                 });
 
-                    case TileType.Settlement:
-                        tileData = new SettlementTile(coord);
-                        break;
-
-                    case TileType.Power:
-                        tileData = new PowerTile(coord);
-                        break;
-
-                    case TileType.Nature:
-                        tileData = new NatureTile(coord);
-                        break;
-
-                    case TileType.Transport:
-                        tileData = new TransportTile(coord);
-                        break;
-
-                    case TileType.Food:
-                        tileData = new FoodTile(coord);
-                        break;
-
-                    case TileType.Production:
-                    default:
-                        tileData = new ProductionTile(coord);
-                        break;
-                }
-
-                _savedTiles.Add(new TileSaveData
-                {
-                    Position = coord,
-                    Type = assignment.Type,
-                    Item = assignment.Item,
-                    Quality = assignment.Quality
-                });
-
-                tilemap.SetTile(coord, visualTile);
-                _tileData.Add(coord, tileData);
+                 _tileData.Add(coord, tileData);
+                 visualizer.SetTile(coord, assignment.Type, assignment.Item);
             }
         }
 
@@ -439,7 +283,7 @@ namespace CarbonWorld.Features.WorldMap
             _tileData.Add(position, newTileData);
 
             // 3. Update Visuals
-            UpdateTileVisual(position);
+            visualizer.SetTile(position, newType, null);
 
             // 4. Update Saved Data
             int saveIndex = _savedTiles.FindIndex(t => t.Position == position);
@@ -454,7 +298,6 @@ namespace CarbonWorld.Features.WorldMap
             }
             else
             {
-                // Should exist, but if not, add it
                 _savedTiles.Add(new TileSaveData
                 {
                     Position = position,
@@ -462,72 +305,10 @@ namespace CarbonWorld.Features.WorldMap
                 });
             }
 
-            // 5. Notify neighbors if they are graph tiles to update IO?
-            // This is important for immediate feedback in UI if lines are drawn
+            // 5. Notify neighbors if they are graph tiles to update IO
             graphSystem.UpdateNeighbors(_tileData, position);
 
             OnTileChanged?.Invoke(position);
-        }
-
-        public Vector3 CellToWorld(Vector3Int cellPos)
-        {
-            return tilemap.GetCellCenterWorld(cellPos);
-        }
-
-        public Vector3Int WorldToCell(Vector3 worldPos)
-        {
-            // Use tilemap.WorldToCell for correct hexagonal coordinate conversion
-            // Grid.WorldToCell uses simple floor which doesn't work for hex tiles
-            return tilemap.WorldToCell(worldPos);
-        }
-
-        public void UpdateTileVisual(Vector3Int position)
-        {
-            var tile = _tileData.GetTile(position);
-            if (tile == null) return;
-
-            TileBase visualTile;
-            if (tile is ResourceTile rt)
-            {
-                visualTile = GetVisualTile(tile.Type, rt.ResourceItem);
-            }
-            else
-            {
-                visualTile = GetVisualTile(tile.Type, null);
-            }
-
-            tilemap.SetTile(position, visualTile);
-        }
-
-        public TileBase GetTileAsset(TileType type)
-        {
-            return GetVisualTile(type, null);
-        }
-
-        public TileBase GetVisualTile(TileType type, ItemDefinition item)
-        {
-            if (type == TileType.Resource && item != null)
-            {
-                var overrideRule = resourceVisualOverrides.Find(r => r.item == item);
-                if (overrideRule.tile != null) return overrideRule.tile;
-            }
-
-            return type switch
-            {
-                TileType.Core => coreTile,
-                TileType.Resource => resourceTile, // Fallback
-                TileType.Production => productionTile,
-                TileType.Settlement => settlementTile,
-                TileType.Power => powerTile,
-                TileType.Nature => natureTile,
-                TileType.Transport => transportTile,
-                TileType.Food => foodTile,
-                TileType.Flooded => floodedTile,
-                TileType.DeadZone => deadZoneTile,
-                TileType.RefugeeCamp => refugeeCampTile,
-                TileType.Heatwave => heatwaveTile,
-                _ => productionTile
-            };
         }
 
         public bool CanPlaceTile(Vector3Int position)
@@ -575,7 +356,8 @@ namespace CarbonWorld.Features.WorldMap
             }
 
             _tileData.Add(position, tileData);
-            tilemap.SetTile(position, GetVisualTile(type, null)); // AddTile is mostly for player placement, usually no Item attached yet
+            visualizer.SetTile(position, type, null);
+            
             _savedTiles.Add(new TileSaveData
             {
                 Position = position,
@@ -587,6 +369,19 @@ namespace CarbonWorld.Features.WorldMap
 
             OnTileChanged?.Invoke(position);
             return true;
+        }
+
+        // Delegate to Visualizer or keep? Keeping for compatibility if other systems use it, 
+        // but implementation calls visualizer.
+        public void UpdateTileVisual(Vector3Int position)
+        {
+             var tile = _tileData.GetTile(position);
+             if (tile == null) return;
+             
+             ItemDefinition item = null;
+             if (tile is ResourceTile rt) item = rt.ResourceItem;
+             
+             visualizer.SetTile(position, tile.Type, item);
         }
 
         public List<Vector3Int> GetValidPlacementPositions()
@@ -608,19 +403,25 @@ namespace CarbonWorld.Features.WorldMap
             return new List<Vector3Int>(validPositions);
         }
 
+        #region Visualizer Proxies
+        public Tilemap Tilemap => visualizer.Tilemap;
+        public Tilemap HighlightTilemap => visualizer.HighlightTilemap;
+        public TileBase HoverHighlightTile => visualizer.HoverHighlightTile;
+        public TileBase SelectedHighlightTile => visualizer.SelectedHighlightTile;
+        public TileBase PowerRangeHighlightTile => visualizer.PowerRangeHighlightTile;
+
+        public Vector3 CellToWorld(Vector3Int cellPos) => visualizer.CellToWorld(cellPos);
+        public Vector3Int WorldToCell(Vector3 worldPos) => visualizer.WorldToCell(worldPos);
+        
+        public TileBase GetTileAsset(TileType type) => visualizer.GetVisualTile(type, null);
+        #endregion
+
         private void EnsureSystem<T>() where T : Component
         {
             if (FindFirstObjectByType<T>() == null)
             {
                 gameObject.AddComponent<T>();
             }
-        }
-
-        private struct TileAssignment
-        {
-            public TileType Type;
-            public ItemDefinition Item;
-            public ResourceQuality Quality;
         }
     }
 
@@ -631,30 +432,6 @@ namespace CarbonWorld.Features.WorldMap
         public TileType Type;
         public ItemDefinition Item;
         public ResourceQuality Quality;
-    }
-
-    [Serializable]
-    public struct ResourceSpawnRule
-    {
-        [Required]
-        public ItemDefinition item;
-
-        [Min(1)]
-        public int minCount;
-
-        [Min(1)]
-        public int maxCount;
-
-        [Min(1)]
-        public int minDistanceFromCore;
-
-        public ResourceQuality quality;
-    }
-
-    [Serializable]
-    public struct ResourceVisualOverride
-    {
-        public ItemDefinition item;
-        public TileBase tile;
+        public int Amount;
     }
 }
