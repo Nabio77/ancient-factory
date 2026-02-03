@@ -112,13 +112,18 @@
 
 /* Node States */
 .tech-node.locked {
-    background-color: rgb(40, 40, 45);
-    border-color: rgb(60, 60, 65);
-    opacity: 0.5;
+    background-color: rgb(30, 30, 35);
+    border-color: rgb(50, 50, 55);
+    /* opacity: 0.5; Removed to prevent seeing lines behind */
 }
 
 .tech-node.locked .node-icon {
     -unity-background-tint-color: rgb(80, 80, 80);
+    opacity: 0.5; /* Dim the icon instead */
+}
+
+.tech-node.locked .node-label {
+    opacity: 0.5;
 }
 
 .tech-node.available {

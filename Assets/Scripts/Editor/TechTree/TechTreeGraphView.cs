@@ -103,7 +103,17 @@ namespace CarbonWorld.Editor.TechTree
                 blueprint = blueprint,
                 position = position
             };
-            
+
+            CreateNodeView(nodeData);
+        }
+        public void CreateItemNode(ItemDefinition item, Vector2 position)
+        {
+            var nodeData = new TechTreeNodeData
+            {
+                item = item,
+                position = position
+            };
+
             CreateNodeView(nodeData);
         }
 
@@ -112,9 +122,13 @@ namespace CarbonWorld.Editor.TechTree
             var node = new TechTreeNodeView(nodeData);
 
             // Input Port (Requires Prerequisite)
-            var inputPort = GeneratePort(node, Direction.Input, Port.Capacity.Multi);
-            inputPort.portName = "Requires";
-            node.inputContainer.Add(inputPort);
+            // Items are roots, so they don't have inputs
+            if (nodeData.item == null)
+            {
+                var inputPort = GeneratePort(node, Direction.Input, Port.Capacity.Multi);
+                inputPort.portName = "Requires";
+                node.inputContainer.Add(inputPort);
+            }
 
             // Output Port (Used as Prerequisite)
             var outputPort = GeneratePort(node, Direction.Output, Port.Capacity.Multi);
@@ -123,7 +137,7 @@ namespace CarbonWorld.Editor.TechTree
 
             node.RefreshExpandedState();
             node.RefreshPorts();
-            
+
             node.SetPosition(new Rect(nodeData.position, Vector2.zero));
 
             AddElement(node);
@@ -169,7 +183,7 @@ namespace CarbonWorld.Editor.TechTree
                     // Flow is Output -> Input
                     // Prereq -> Dependent
                     // So Dependent has Prereq in its list
-                    
+
                     inputNode.NodeData.prerequisites.Add(outputNode.NodeData.guid);
                 }
             }
@@ -186,14 +200,18 @@ namespace CarbonWorld.Editor.TechTree
         public TechTreeNodeView(TechTreeNodeData data)
         {
             NodeData = data;
-            title = data.blueprint != null ? data.blueprint.BlueprintName : "New Node";
+            title = data.Name; // Use the Name property we added to TechTreeNodeData
             viewDataKey = data.guid;
 
             style.width = 200;
-            
+
             if (data.blueprint != null && data.blueprint.Icon != null)
             {
-               // Add icon if possible, simplified for now
+                // Add icon if possible, simplified for now
+            }
+            else if (data.item != null && data.item.Icon != null)
+            {
+                // Add item icon
             }
         }
     }

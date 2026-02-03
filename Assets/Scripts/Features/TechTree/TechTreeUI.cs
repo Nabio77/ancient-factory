@@ -44,12 +44,22 @@ namespace CarbonWorld.Features.TechTree
         private Dictionary<string, VisualElement> _nodeElements = new(); // Keyed by GUID
         private TechTreeNodeData _selectedNode;
 
+        private VisualElement _content; // Added variable for content container
+
+        private bool _isDragging;
+        private Vector2 _panPosition;
+        private float _zoom = 1f;
+        private const float MinZoom = 0.5f;
+        private const float MaxZoom = 2.0f;
+        private const float ZoomStep = 0.1f;
+
         void Awake()
         {
             if (uiDocument == null) return;
 
             _root = uiDocument.rootVisualElement.Q<VisualElement>("root");
             _canvas = _root.Q<VisualElement>("tree-canvas");
+            _content = _root.Q<VisualElement>("canvas-content"); // Query content container
             _connectionsLayer = _root.Q<VisualElement>("connections-layer");
             _nodesContainer = _root.Q<VisualElement>("nodes-container");
             _infoPanel = _root.Q<VisualElement>("info-panel");
@@ -63,15 +73,70 @@ namespace CarbonWorld.Features.TechTree
             _infoIcon = _root.Q<VisualElement>("info-icon");
             _unlockButton = _root.Q<Button>("unlock-button");
             _closeButton = _root.Q<Button>("close-button");
-            
+
             _closeButton.clicked += Hide;
             _unlockButton.clicked += OnUnlockClicked;
 
             _connectionsLayer.generateVisualContent += OnGenerateConnections;
 
+            // Navigation Events
+            _root.RegisterCallback<PointerDownEvent>(OnPointerDown);
+            _root.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            _root.RegisterCallback<PointerUpEvent>(OnPointerUp);
+            _root.RegisterCallback<WheelEvent>(OnWheel);
+
             // Start hidden
             _root.AddToClassList("hidden");
             _infoPanel.AddToClassList("hidden");
+        }
+
+        private void OnPointerDown(PointerDownEvent evt)
+        {
+            if (evt.button == 2) // Middle click
+            {
+                _isDragging = true;
+                _root.CapturePointer(evt.pointerId);
+            }
+        }
+
+        private void OnPointerMove(PointerMoveEvent evt)
+        {
+            if (_isDragging)
+            {
+                _panPosition += (Vector2)evt.deltaPosition;
+                UpdateTransform();
+            }
+        }
+
+        private void OnPointerUp(PointerUpEvent evt)
+        {
+            if (_isDragging && evt.button == 2)
+            {
+                _isDragging = false;
+                _root.ReleasePointer(evt.pointerId);
+            }
+        }
+
+        private void OnWheel(WheelEvent evt)
+        {
+            float delta = -evt.delta.y * 0.01f; // Adjust sensitivity
+            float newZoom = Mathf.Clamp(_zoom + delta, MinZoom, MaxZoom);
+
+            // Optional: Zoom towards mouse position could be added here, 
+            // but simple center zoom or origin zoom is easier for now.
+
+            _zoom = newZoom;
+            UpdateTransform();
+            evt.StopPropagation();
+        }
+
+        private void UpdateTransform()
+        {
+            if (_content != null)
+            {
+                _content.style.translate = new StyleTranslate(new Translate(_panPosition.x, _panPosition.y));
+                _content.style.scale = new StyleScale(new Scale(new Vector2(_zoom, _zoom)));
+            }
         }
 
         void Start()
@@ -83,7 +148,7 @@ namespace CarbonWorld.Features.TechTree
 
             if (TechTreeSystem.Instance != null && TechTreeSystem.Instance.Graph != null)
             {
-               BuildTree();
+                BuildTree();
             }
         }
 
@@ -158,7 +223,7 @@ namespace CarbonWorld.Features.TechTree
 
             _root.AddToClassList("hidden");
             DeselectNode();
-            
+
             // Allow deselecting the core tile when closing manually?
             // Optional: tileSelector.Deselect();
         }
@@ -194,13 +259,28 @@ namespace CarbonWorld.Features.TechTree
 
             var icon = new VisualElement();
             icon.AddToClassList("node-icon");
-            if (nodeData.blueprint != null && nodeData.blueprint.Icon != null)
+
+            Sprite sprite = null;
+            string name = "Unknown";
+
+            if (nodeData.blueprint != null)
             {
-                icon.style.backgroundImage = new StyleBackground(nodeData.blueprint.Icon);
+                sprite = nodeData.blueprint.Icon;
+                name = nodeData.blueprint.BlueprintName;
+            }
+            else if (nodeData.item != null)
+            {
+                sprite = nodeData.item.Icon;
+                name = nodeData.item.ItemName;
+            }
+
+            if (sprite != null)
+            {
+                icon.style.backgroundImage = new StyleBackground(sprite);
             }
             nodeEl.Add(icon);
 
-            var label = new Label(nodeData.blueprint != null ? nodeData.blueprint.BlueprintName : "Unknown");
+            var label = new Label(name);
             label.AddToClassList("node-label");
             nodeEl.Add(label);
 
@@ -302,17 +382,37 @@ namespace CarbonWorld.Features.TechTree
 
         private void UpdateInfoPanel(TechTreeNodeData nodeData)
         {
-            if (nodeData == null || nodeData.blueprint == null) return;
+            if (nodeData == null) return;
 
-            var bp = nodeData.blueprint;
-            _infoName.text = bp.BlueprintName;
-            _infoType.text = bp.Type.ToString();
-            _infoDescription.text = !string.IsNullOrEmpty(bp.Description) ? bp.Description : "No description.";
-            _infoCost.text = bp.UnlockCost.ToString("N0");
-
-            if (bp.Icon != null)
+            if (nodeData.blueprint != null)
             {
-                _infoIcon.style.backgroundImage = new StyleBackground(bp.Icon);
+                var bp = nodeData.blueprint;
+                _infoName.text = bp.BlueprintName;
+                _infoType.text = bp.Type.ToString();
+                _infoDescription.text = !string.IsNullOrEmpty(bp.Description) ? bp.Description : "No description.";
+                _infoCost.text = bp.UnlockCost.ToString("N0");
+
+                if (bp.Icon != null)
+                    _infoIcon.style.backgroundImage = new StyleBackground(bp.Icon);
+                else
+                    _infoIcon.style.backgroundImage = null;
+            }
+            else if (nodeData.item != null)
+            {
+                var item = nodeData.item;
+                _infoName.text = item.ItemName;
+                _infoType.text = "Resource / Item";
+                _infoDescription.text = !string.IsNullOrEmpty(item.Description) ? item.Description : "No description.";
+                _infoCost.text = "Unlocked"; // Items are always unlocked
+
+                if (item.Icon != null)
+                    _infoIcon.style.backgroundImage = new StyleBackground(item.Icon);
+                else
+                    _infoIcon.style.backgroundImage = null;
+            }
+            else
+            {
+                return;
             }
 
             // Prerequisites
@@ -327,8 +427,13 @@ namespace CarbonWorld.Features.TechTree
                 foreach (var guid in nodeData.prerequisites)
                 {
                     var prereqNode = graph.Nodes.FirstOrDefault(n => n.guid == guid);
-                    if (prereqNode != null && prereqNode.blueprint != null)
-                        prereqNames.Add(prereqNode.blueprint.BlueprintName);
+                    if (prereqNode != null)
+                    {
+                        if (prereqNode.blueprint != null)
+                            prereqNames.Add(prereqNode.blueprint.BlueprintName);
+                        else if (prereqNode.item != null)
+                            prereqNames.Add(prereqNode.item.ItemName);
+                    }
                 }
                 _infoPrereqs.text = string.Join(", ", prereqNames);
             }

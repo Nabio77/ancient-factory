@@ -70,27 +70,50 @@ namespace CarbonWorld.Editor.TechTree
                 EditorGUIUtility.ShowObjectPicker<BlueprintDefinition>(null, false, "", 1);
             })
             {
-                text = "Add Node..."
+                text = "Add Blueprint..."
             };
             toolbar.Add(addNodeButton);
-            
+
+            // Add Item Button
+            var addItemButton = new UnityEditor.UIElements.ToolbarButton(() =>
+            {
+                // Open object picker for item
+                EditorGUIUtility.ShowObjectPicker<ItemDefinition>(null, false, "", 2);
+            })
+            {
+                text = "Add Item..."
+            };
+            toolbar.Add(addItemButton);
+
             rootVisualElement.Add(toolbar);
         }
-        
+
         // Handle Object Picker result
         void OnGUI()
         {
-             if (Event.current.type == EventType.ExecuteCommand && 
-                 Event.current.commandName == "ObjectSelectorClosed" &&
-                 EditorGUIUtility.GetObjectPickerControlID() == 1)
-             {
-                 var obj = EditorGUIUtility.GetObjectPickerObject();
-                 if (obj is BlueprintDefinition bp)
-                 {
-                     _graphView.CreateNode(bp, new Vector2(100, 100)); // Default pos
-                     Event.current.Use();
-                 }
-             }
+            if (Event.current.type == EventType.ExecuteCommand &&
+                Event.current.commandName == "ObjectSelectorClosed")
+            {
+                var controlID = EditorGUIUtility.GetObjectPickerControlID();
+                if (controlID == 1)
+                {
+                    var obj = EditorGUIUtility.GetObjectPickerObject();
+                    if (obj is BlueprintDefinition bp)
+                    {
+                        _graphView.CreateNode(bp, new Vector2(100, 100)); // Default pos
+                        Event.current.Use();
+                    }
+                }
+                else if (controlID == 2)
+                {
+                    var obj = EditorGUIUtility.GetObjectPickerObject();
+                    if (obj is ItemDefinition item)
+                    {
+                        _graphView.CreateItemNode(item, new Vector2(100, 150));
+                        Event.current.Use();
+                    }
+                }
+            }
         }
 
         public void LoadGraph(TechTreeGraph graph)

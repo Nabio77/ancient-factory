@@ -44,6 +44,18 @@ namespace CarbonWorld.Core.Systems
             {
                 worldMap = FindFirstObjectByType<WorldMap>();
             }
+
+            // Auto-unlock item nodes (they are starting points)
+            if (techTreeGraph != null)
+            {
+                foreach (var node in techTreeGraph.Nodes)
+                {
+                    if (node.item != null)
+                    {
+                        _unlockedGuids.Add(node.guid);
+                    }
+                }
+            }
         }
 
         private CoreTile GetCoreTile()
@@ -64,11 +76,13 @@ namespace CarbonWorld.Core.Systems
         public bool IsBlueprintUnlocked(BlueprintDefinition blueprint)
         {
             if (blueprint == null) return false;
+            // Starters are always unlocked
             if (blueprint.IsStarterCard) return true;
             if (techTreeGraph == null) return false;
 
             // Find node for this blueprint
             var node = techTreeGraph.Nodes.FirstOrDefault(n => n.blueprint == blueprint);
+            // If not in tree, it's not unlocked (unless starter)
             if (node == null) return false;
 
             return _unlockedGuids.Contains(node.guid);
@@ -76,22 +90,27 @@ namespace CarbonWorld.Core.Systems
 
         public bool IsGuidUnlocked(string guid)
         {
-             return _unlockedGuids.Contains(guid);
+            return _unlockedGuids.Contains(guid);
         }
 
         public bool CanUnlock(TechTreeNodeData node)
         {
-             if (node == null || node.blueprint == null) return false;
-             if (IsBlueprintUnlocked(node.blueprint)) return false;
+            if (node == null) return false;
 
-             // Check prerequisites
-             foreach (var prereqGuid in node.prerequisites)
-             {
-                 if (!_unlockedGuids.Contains(prereqGuid)) return false;
-             }
+            // Items are auto-unlocked, cannot be "unlocked" again
+            if (node.item != null) return false;
 
-             // Check points
-             return GetAvailablePoints() >= node.blueprint.UnlockCost;
+            if (node.blueprint == null) return false;
+            if (IsBlueprintUnlocked(node.blueprint)) return false;
+
+            // Check prerequisites
+            foreach (var prereqGuid in node.prerequisites)
+            {
+                if (!_unlockedGuids.Contains(prereqGuid)) return false;
+            }
+
+            // Check points
+            return GetAvailablePoints() >= node.blueprint.UnlockCost;
         }
 
         public bool TryUnlock(TechTreeNodeData node)

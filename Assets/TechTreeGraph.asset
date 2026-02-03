@@ -13,12 +13,78 @@ MonoBehaviour:
   m_Name: TechTreeGraph
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.TechTreeGraph
   nodes:
+  - guid: 012264c0-1e98-4792-acd0-0d475c1cb43a
+    position: {x: 708, y: 436}
+    blueprint: {fileID: 11400000, guid: 0896453df10ad4fd98fb54dc8f7d50ce, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - aa2a08c0-fb46-471e-a9e9-d330fba322fa
+  - guid: 4386f7fc-2f28-4e67-b573-86a2b949fcc2
+    position: {x: 708, y: 580}
+    blueprint: {fileID: 11400000, guid: 84540f40dd02a4cd59164a79dc7fc786, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - aa2a08c0-fb46-471e-a9e9-d330fba322fa
+  - guid: aa2a08c0-fb46-471e-a9e9-d330fba322fa
+    position: {x: 256, y: 503}
+    blueprint: {fileID: 0}
+    item: {fileID: 11400000, guid: cfc2daa22ee8a411ca9f564982f19a85, type: 2}
+    prerequisites: []
   - guid: 8e0ecf3b-31b3-4057-8178-bfaef0d997c1
-    position: {x: 740, y: 168}
+    position: {x: 970, y: 271}
     blueprint: {fileID: 11400000, guid: 3bbf96363cf8641028f24c1b52017404, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - 12627ed5-07e9-41a8-b779-57d05421cd40
+  - guid: 12627ed5-07e9-41a8-b779-57d05421cd40
+    position: {x: 696, y: 271}
+    blueprint: {fileID: 11400000, guid: 302764926a12745cd8594e56bfb5bcac, type: 2}
+    item: {fileID: 0}
     prerequisites:
     - 69b42551-7fa0-44e3-85df-517338ae5516
   - guid: 69b42551-7fa0-44e3-85df-517338ae5516
-    position: {x: 419, y: 168}
+    position: {x: 385, y: 271}
     blueprint: {fileID: 11400000, guid: ce6efe78e1b384a66bdfd373b67479df, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - 5baef042-a569-479e-95bd-3ffb6effb19a
+  - guid: 5baef042-a569-479e-95bd-3ffb6effb19a
+    position: {x: 115, y: 271}
+    blueprint: {fileID: 0}
+    item: {fileID: 11400000, guid: dcf52f536fe994f2b80e6ced5108cbdb, type: 2}
     prerequisites: []
+  - guid: f094ed83-334c-47db-98c8-0d57f996ef14
+    position: {x: 546, y: -78}
+    blueprint: {fileID: 11400000, guid: c71054ebcf0d846be8a1c848a02e5810, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - 984b183c-d7a8-4884-882b-1e038ecceb68
+    - 80191a6d-8212-421d-ab11-16d248eb1231
+  - guid: 80191a6d-8212-421d-ab11-16d248eb1231
+    position: {x: 115, y: 46}
+    blueprint: {fileID: 0}
+    item: {fileID: 11400000, guid: d676f706e834745238e93dcb72a95a2d, type: 2}
+    prerequisites: []
+  - guid: 0a4a3343-04df-4373-9fd2-6dff317668a2
+    position: {x: 526, y: -282}
+    blueprint: {fileID: 11400000, guid: 37beef7c901ea4028a8a78a34402012f, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - 984b183c-d7a8-4884-882b-1e038ecceb68
+  - guid: 984b183c-d7a8-4884-882b-1e038ecceb68
+    position: {x: 95, y: -282}
+    blueprint: {fileID: 0}
+    item: {fileID: 11400000, guid: 9051fdc7422794723a3b88e30181bd85, type: 2}
+    prerequisites: []
+  - guid: 6bdf2107-d179-44da-9dca-49fbe76a2cec
+    position: {x: 881, y: -78}
+    blueprint: {fileID: 11400000, guid: a3c6852bab3b3404bbf497aee97aa012, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - f094ed83-334c-47db-98c8-0d57f996ef14
+  - guid: a9a0538c-9b0d-4976-82c3-a0cc9d736f8d
+    position: {x: 917, y: -282}
+    blueprint: {fileID: 11400000, guid: bf3bf68ca3ad44b3b8b0d6115880d0fd, type: 2}
+    item: {fileID: 0}
+    prerequisites:
+    - 0a4a3343-04df-4373-9fd2-6dff317668a2

@@ -31,12 +31,20 @@ namespace CarbonWorld.Core.Data
     {
         public string guid;
         public Vector2 position;
+
+        [SerializeField, ShowIf("@item == null"), InlineEditor]
         public BlueprintDefinition blueprint;
+
+        [SerializeField, ShowIf("@blueprint == null"), InlineEditor]
+        public ItemDefinition item;
+
         public List<string> prerequisites = new();
 
         public TechTreeNodeData()
         {
             guid = Guid.NewGuid().ToString();
         }
+
+        public string Name => blueprint != null ? blueprint.BlueprintName : (item != null ? item.ItemName : "Empty Node");
     }
 }
