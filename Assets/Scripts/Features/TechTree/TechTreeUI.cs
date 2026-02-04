@@ -203,8 +203,8 @@ namespace CarbonWorld.Features.TechTree
                 return;
             }
 
-            // Block map input so UI clicks don't deselect the tile
-            if (tileSelector != null) tileSelector.IsInputBlocked = true;
+            if (InterfaceSystem.Instance != null)
+                InterfaceSystem.Instance.SetState(InterfaceState.TechTree);
 
             // Rebuild if needed (e.g. graph changed or first load)
             if (_nodeElements.Count == 0)
@@ -218,8 +218,8 @@ namespace CarbonWorld.Features.TechTree
 
         public void Hide()
         {
-            // Restore map input
-            if (tileSelector != null) tileSelector.IsInputBlocked = false;
+            if (InterfaceSystem.Instance != null)
+                InterfaceSystem.Instance.SetState(InterfaceState.Gameplay);
 
             _root.AddToClassList("hidden");
             DeselectNode();

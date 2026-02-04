@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
 using CarbonWorld.Core.Data;
+using CarbonWorld.Core.Systems;
 using CarbonWorld.Features.Grid;
 using CarbonWorld.Features.Tiles;
 
@@ -85,6 +86,9 @@ namespace CarbonWorld.Features.WorldMap
             tileSelector.OnTileDeselected += OnTileDeselected;
             tileSelector.OnTileHovered += OnTileHovered;
             tileSelector.OnTileHoverEnded += OnTileHoverEnded;
+
+            if (InterfaceSystem.Instance != null)
+                InterfaceSystem.Instance.OnStateChanged += OnInterfaceStateChanged;
         }
 
         void OnDisable()
@@ -93,10 +97,25 @@ namespace CarbonWorld.Features.WorldMap
             tileSelector.OnTileDeselected -= OnTileDeselected;
             tileSelector.OnTileHovered -= OnTileHovered;
             tileSelector.OnTileHoverEnded -= OnTileHoverEnded;
+
+            if (InterfaceSystem.Instance != null)
+                InterfaceSystem.Instance.OnStateChanged -= OnInterfaceStateChanged;
+        }
+
+        private void OnInterfaceStateChanged(InterfaceState newState)
+        {
+            if (newState != InterfaceState.Gameplay)
+            {
+                _tileInfoPanel.AddToClassList("hidden");
+            }
         }
 
         void Update()
         {
+            // Don't update UI when not in Gameplay state
+            if (InterfaceSystem.Instance != null && !InterfaceSystem.Instance.IsState(InterfaceState.Gameplay))
+                return;
+
             if (tileSelector.SelectedTile != null)
             {
                 UpdateUI(tileSelector.SelectedTile);
@@ -353,12 +372,12 @@ namespace CarbonWorld.Features.WorldMap
             _resourceOutput.text = $"{tile.Quality} ({tile.GetOutputPerTick()}/tick)\nReserves: {tile.CurrentAmount}/{tile.MaxAmount}";
             if (tile.IsDepleted)
             {
-                 _resourceOutput.style.color = new StyleColor(Color.red);
-                 _resourceOutput.text += " (DEPLETED)";
+                _resourceOutput.style.color = new StyleColor(Color.red);
+                _resourceOutput.text += " (DEPLETED)";
             }
             else
             {
-                 _resourceOutput.style.color = new StyleColor(Color.white); // Accessing default style might be better but hardcoded for now
+                _resourceOutput.style.color = new StyleColor(Color.white); // Accessing default style might be better but hardcoded for now
             }
 
             // Clear and set the icon

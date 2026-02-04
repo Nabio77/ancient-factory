@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
+using CarbonWorld.Core.Systems;
 
 namespace CarbonWorld.Features.Production
 {
@@ -53,7 +54,7 @@ namespace CarbonWorld.Features.Production
             if (uiDocument == null) return;
             _root = uiDocument.rootVisualElement.Q<VisualElement>("root");
             _root.AddToClassList("hidden"); // Start hidden at runtime
-            
+
             _canvas = _root.Q<VisualElement>("graph-canvas");
             _palettePanel = _root.Q<ScrollView>("palette-panel");
             _closeButton = _root.Q<Button>("close-button");
@@ -136,11 +137,8 @@ namespace CarbonWorld.Features.Production
             if (tileSelector != null && _currentTile == null)
                 tileSelector.OnTileSelected -= OnTileSelected;
 
-            if (worldMapCamera != null)
-            {
-                worldMapCamera.SavePosition();
-                worldMapCamera.InputEnabled = false;
-            }
+            if (InterfaceSystem.Instance != null)
+                InterfaceSystem.Instance.SetState(InterfaceState.ProductionEditor);
 
             _currentGraphTile = graphTile;
             _currentGraphTile.Graph.OnGraphUpdated += OnExternalGraphUpdate;
@@ -156,10 +154,10 @@ namespace CarbonWorld.Features.Production
             _ioView.CreateIOZones(_root, graphTile.HasOutput);
             _canvasView.SetGraph(graphTile.Graph);
             // _paletteView.SetBlueprintFilter(graphTile.BlueprintFilter); // Allow all blueprints, filtered by tabs
-            
+
             // Schedule refresh to ensure layout is ready after un-hiding
             _root.schedule.Execute(() => _paletteView.Refresh());
-            
+
             _ioView.PopulateIOCards(graphTile);
 
             // Re-render connections after layout
@@ -181,11 +179,8 @@ namespace CarbonWorld.Features.Production
             _root.Blur();
             _root.AddToClassList("hidden");
 
-            if (worldMapCamera != null)
-            {
-                worldMapCamera.RestorePosition();
-                worldMapCamera.InputEnabled = true;
-            }
+            if (InterfaceSystem.Instance != null)
+                InterfaceSystem.Instance.SetState(InterfaceState.Gameplay);
 
             if (tileSelector != null && _currentTile != null)
                 tileSelector.OnTileSelected += OnTileSelected;
@@ -207,7 +202,7 @@ namespace CarbonWorld.Features.Production
                 _root.schedule.Execute(() => _canvasView.MarkConnectionsDirty()).ExecuteLater(50);
             }
         }
-        
+
         // Ensure we clean up listeners on destroy
         private void OnDestroy()
         {
