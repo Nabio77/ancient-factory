@@ -25,7 +25,7 @@ namespace CarbonWorld.Features.Tiles
             if (_tileData == null || _worldMap == null) return;
 
             var draw = Draw.ingame;
-            
+
             foreach (var tile in _tileData.GetAllTiles())
             {
                 // Draw arrows to Graph Tiles (Production/Transport)
@@ -37,19 +37,19 @@ namespace CarbonWorld.Features.Tiles
                         {
                             var start = _worldMap.CellToWorld(node.sourceTilePosition);
                             var end = _worldMap.CellToWorld(tile.CellPosition);
-                            
+
                             // Color based on source
                             Color color = Color.black;
                             if (node.sourceTileType == TileType.Resource) color = new Color(0.2f, 0.6f, 1f, 1f); // Blue-ish
                             else if (node.sourceTileType == TileType.Production) color = new Color(0.2f, 0.8f, 0.2f, 1f); // Green-ish
                             else if (node.sourceTileType == TileType.Food) color = new Color(0.8f, 0.6f, 0.2f, 1f); // Orange-ish
                             else if (node.sourceTileType == TileType.Transport) color = new Color(0.2f, 0.8f, 0.2f, 1f); // Also Green-ish
-                            
+
                             DrawConnectionArrow(draw, start, end, color);
                         }
                     }
                 }
-                
+
                 // Draw arrows to Settlements
                 if (tile is SettlementTile settlement)
                 {
@@ -87,7 +87,7 @@ namespace CarbonWorld.Features.Tiles
             var dir = (end - start).normalized;
             var dist = Vector3.Distance(start, end);
             var margin = 0.35f;
-            
+
             if (dist > margin * 2)
             {
                 draw.Arrow(start + dir * margin, end - dir * margin, color);
@@ -126,6 +126,13 @@ namespace CarbonWorld.Features.Tiles
             else if (tile is TransportTile transportTile)
             {
                 UpdateTransportTile(tileData, transportTile);
+            }
+            else if (tile is PowerTile powerTile)
+            {
+                powerTile.UpdateIO(tileData);
+                // Ensure graph events are fired so UI updates
+                powerTile.Graph.NotifyGraphUpdated();
+                EventBus.Publish(new GraphUpdated { Position = tile.CellPosition });
             }
         }
 
@@ -318,7 +325,7 @@ namespace CarbonWorld.Features.Tiles
         {
             if (tile is ResourceTile resourceTile)
             {
-                var output = resourceTile.GetOutput();
+                var output = resourceTile.PeekOutput();
                 if (output.IsValid)
                 {
                     return new List<TileOutput> { new TileOutput(output, tile.CellPosition) };

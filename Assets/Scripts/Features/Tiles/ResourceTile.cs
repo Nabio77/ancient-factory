@@ -8,7 +8,7 @@ namespace CarbonWorld.Features.Tiles
     {
         public ItemDefinition ResourceItem { get; set; }
         public ResourceQuality Quality { get; set; }
-        
+
         public int CurrentAmount { get; private set; }
         public int MaxAmount { get; private set; }
 
@@ -46,10 +46,21 @@ namespace CarbonWorld.Features.Tiles
             int outputAmount = GetOutputPerTick();
             // Clamp output to remaining amount
             int actualOutput = Mathf.Min(outputAmount, CurrentAmount);
-            
+
             CurrentAmount -= actualOutput;
-            
+
             return new ItemStack(ResourceItem, actualOutput);
+        }
+
+        public ItemStack PeekOutput()
+        {
+            if (IsDepleted || ResourceItem == null) return ItemStack.Empty;
+            int outputAmount = GetOutputPerTick();
+            // We pretend we can always output at least 1 tick worth for visualization
+            // even if almost empty, as long as not fully depleted.
+            if (CurrentAmount <= 0) return ItemStack.Empty;
+
+            return new ItemStack(ResourceItem, outputAmount);
         }
     }
 }

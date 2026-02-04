@@ -1,0 +1,60 @@
+/* Notification Queue Container */
+.notification-queue {
+    position: absolute;
+    left: 20px;
+    bottom: 150px; /* Elevated slightly to avoid corner overplay */
+    width: 350px;
+    flex-direction: column-reverse; /* Newest notifications appear at the bottom */
+    align-items: flex-start;
+}
+
+/* Base Toast Style */
+.notification-toast {
+    width: 100%;
+    background-color: rgba(30, 30, 35, 0.95);
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 12px 16px;
+    overflow: hidden;
+    opacity: 1;
+    transition-property: opacity, translate;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+    translate: 0 0;
+}
+
+/* Animation State */
+.notification-toast--hidden {
+    opacity: 0;
+    translate: -50px 0;
+}
+
+/* Typography */
+.notification-title {
+    color: rgb(240, 240, 240);
+    -unity-font-style: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.notification-message {
+    color: rgb(200, 200, 200);
+    font-size: 14px;
+    white-space: normal;
+}
+
+/* Dynamic Border Colors (User Requested) */
+.notification-type-Info {
+    border-left-width: 4px;
+    border-left-color: rgb(0, 166, 237); /* Blue */
+}
+
+.notification-type-Warning {
+    border-left-width: 4px;
+    border-left-color: rgb(255, 180, 0); /* Orange */
+}
+
+.notification-type-Error {
+    border-left-width: 4px;
+    border-left-color: rgb(255, 68, 68); /* Red */
+}

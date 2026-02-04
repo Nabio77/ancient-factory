@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="NotificationStyles.uss" />
+    <ui:VisualElement name="notification-queue" class="notification-queue" picking-mode="Ignore">
+        <!-- Editor Preview: This will be cleared at runtime -->
+        <ui:VisualElement class="notification-toast notification-type-Warning">
+            <ui:Label text="Preview Notification" class="notification-title" />
+            <ui:Label text="This is how a warning notification looks." class="notification-message" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

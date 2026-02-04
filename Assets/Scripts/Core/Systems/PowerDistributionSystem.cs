@@ -132,16 +132,48 @@ namespace CarbonWorld.Core.Systems
                 }
             }
 
-            // Phase 3: Update IsPowered on all production tiles
+            // Phase 3: Update IsPowered on all production tiles and detect power loss
+            int lostPowerCount = 0;
+            Vector3Int? lastLostPos = null;
+
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
                 if (tile is ProductionTile productionTile)
                 {
-                    productionTile.IsPowered = _poweredPositions.Contains(tile.CellPosition);
+                    bool wasPowered = productionTile.IsPowered;
+                    bool isNowPowered = _poweredPositions.Contains(tile.CellPosition);
+                    productionTile.IsPowered = isNowPowered;
+
+                    if (wasPowered && !isNowPowered)
+                    {
+                        lostPowerCount++;
+                        lastLostPos = tile.CellPosition;
+                    }
                 }
                 else if (tile is FoodTile foodTile)
                 {
-                    foodTile.IsPowered = _poweredPositions.Contains(tile.CellPosition);
+                    bool wasPowered = foodTile.IsPowered;
+                    bool isNowPowered = _poweredPositions.Contains(tile.CellPosition);
+                    foodTile.IsPowered = isNowPowered;
+
+                    if (wasPowered && !isNowPowered)
+                    {
+                        lostPowerCount++;
+                        lastLostPos = tile.CellPosition;
+                    }
+                }
+            }
+
+            // Trigger Notification
+            if (lostPowerCount > 0 && NotificationSystem.Instance != null && Application.isPlaying)
+            {
+                if (lostPowerCount == 1 && lastLostPos.HasValue)
+                {
+                    NotificationSystem.Instance.ShowNotification("Power Lost", $"Facility at {lastLostPos.Value} lost power!", NotificationType.Warning);
+                }
+                else
+                {
+                    NotificationSystem.Instance.ShowNotification("Power Grid Unstable", $"{lostPowerCount} facilities lost power!", NotificationType.Warning);
                 }
             }
         }

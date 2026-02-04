@@ -36,7 +36,7 @@ namespace CarbonWorld.Features.Tiles
                 // Power tiles only accept inputs from ResourceTiles, not ProductionTiles
                 if (neighbor is ResourceTile resourceTile)
                 {
-                    var output = resourceTile.GetOutput();
+                    var output = resourceTile.PeekOutput();
                     if (output.IsValid)
                     {
                         AddInputNode(neighbor.CellPosition, neighbor.Type, output, inputIndex++);

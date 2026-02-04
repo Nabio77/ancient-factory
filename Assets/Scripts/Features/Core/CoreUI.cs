@@ -7,6 +7,7 @@ using CarbonWorld.Features.Tiles;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Core.Events;
 using CarbonWorld.Features.WorldMap;
+using CarbonWorld.Features.Production;
 
 namespace CarbonWorld.UI
 {
@@ -19,6 +20,9 @@ namespace CarbonWorld.UI
         [SerializeField, Required]
         private UIDocument document;
 
+        [SerializeField]
+        private ProductionGraphEditor graphEditor;
+
         [Title("UI Settings")]
         [SerializeField]
         private VisualTreeAsset listItemTemplate;
@@ -28,16 +32,51 @@ namespace CarbonWorld.UI
         private VisualElement _historyContainer;
         private CoreTile _coreTile;
 
+        void Awake()
+        {
+            if (document == null) return;
+
+            _root = document.rootVisualElement.Q<VisualElement>("root");
+            // Ensure visible by default, unless editor manages it
+            if (_root != null)
+            {
+                _root.style.display = DisplayStyle.Flex;
+                _pointLabel = _root.Q<Label>("point-label");
+                _historyContainer = _root.Q<VisualElement>("history-list");
+            }
+        }
+
+        void OnEnable()
+        {
+            if (graphEditor != null)
+            {
+                graphEditor.OnEditorOpened += Hide;
+                graphEditor.OnEditorClosed += Show;
+            }
+        }
+
+        void OnDisable()
+        {
+            if (graphEditor != null)
+            {
+                graphEditor.OnEditorOpened -= Hide;
+                graphEditor.OnEditorClosed -= Show;
+            }
+        }
+
         void Start()
         {
-            _root = document.rootVisualElement.Q<VisualElement>("root");
-            // Ensure visible by default
-            _root.style.display = DisplayStyle.Flex;
-
-            _pointLabel = _root.Q<Label>("point-label");
-            _historyContainer = _root.Q<VisualElement>("history-list");
-            
             FindCoreTile();
+        }
+
+        private void Show()
+        {
+            if (_root != null) _root.style.display = DisplayStyle.Flex;
+        }
+
+        private void Hide()
+        {
+            if (_root != null) _root.style.display = DisplayStyle.None;
         }
 
         void Update()
@@ -60,8 +99,8 @@ namespace CarbonWorld.UI
                 _coreTile = _worldMap.TileData.GetAllTiles().OfType<CoreTile>().FirstOrDefault();
                 if (_coreTile != null)
                 {
-                     UpdateUI();
-                     UpdateHistoryList();
+                    UpdateUI();
+                    UpdateHistoryList();
                 }
             }
         }
@@ -69,12 +108,15 @@ namespace CarbonWorld.UI
         private void UpdateUI()
         {
             if (_coreTile == null) return;
+            // Skip update if hidden to save performance
+            if (_root != null && _root.style.display == DisplayStyle.None) return;
+
             if (_pointLabel != null)
             {
                 _pointLabel.text = $"{_coreTile.AccumulatedPoints:N0} PTS";
             }
-            
-            UpdateHistoryList(); 
+
+            UpdateHistoryList();
         }
 
         private void UpdateHistoryList()
@@ -101,7 +143,7 @@ namespace CarbonWorld.UI
                     entry = new Label($"{item.ItemName}: {count}");
                     entry.AddToClassList("history-item");
                 }
-                
+
                 // Populate data if template structure matches
                 var icon = entry.Q("icon");
                 if (icon != null) icon.style.backgroundImage = new StyleBackground(item.Icon);
