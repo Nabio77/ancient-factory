@@ -2,9 +2,9 @@
   <Project Path="SingularityGroup.HotReload.Editor.csproj" />
   <Project Path="VHierarchy.csproj" />
   <Project Path="ALINE.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.csproj" />
   <Project Path="VFolders.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="ALINEEditor.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />

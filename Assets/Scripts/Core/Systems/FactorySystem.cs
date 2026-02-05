@@ -10,9 +10,9 @@ using CarbonWorld.Features.Inventories;
 
 namespace CarbonWorld.Core.Systems
 {
-    public class ProductionSystem : MonoBehaviour
+    public class FactorySystem : MonoBehaviour
     {
-        public static ProductionSystem Instance { get; private set; }
+        public static FactorySystem Instance { get; private set; }
 
         [Title("References")]
         [SerializeField, Required]
@@ -45,22 +45,25 @@ namespace CarbonWorld.Core.Systems
             if (_tickTimer >= tickInterval)
             {
                 _tickTimer = 0f;
-                ProcessProductionTick();
+                ProcessFactoryTick();
             }
         }
 
         [Button("Process Tick")]
-        public void ProcessProductionTick()
+        public void ProcessFactoryTick()
         {
+            // Phase 0: Process power tile fuel consumption
+            ProcessPowerTiles();
+
             // Phase 1: Collect inputs from adjacent tiles
             CollectInputs();
 
-            // Phase 2: Process production for each tile
+            // Phase 2: Process production for each factory tile
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (tile is ProductionTile || tile is FoodTile)
+                if (tile is IFactoryTile and not PowerTile)
                 {
-                    ProcessProductionTile(tile);
+                    ProcessFactoryTile(tile);
                 }
                 else if (tile is ResourceTile resourceTile)
                 {
@@ -70,6 +73,60 @@ namespace CarbonWorld.Core.Systems
 
             // Phase 3: Distribute outputs to settlements
             DistributeToSettlements();
+
+            // Phase 4: Recalculate power grid
+            PowerSystem.Instance?.RecalculatePower();
+        }
+
+        private void ProcessPowerTiles()
+        {
+            foreach (var tile in worldMap.TileData.GetAllTiles())
+            {
+                if (tile is PowerTile powerTile)
+                {
+                    // Collect fuel inputs for power tile
+                    CollectInputsForTile(powerTile);
+
+                    // Process each generator blueprint
+                    foreach (var node in powerTile.Graph.nodes)
+                    {
+                        if (node.blueprint == null || !node.blueprint.IsPowerGenerator)
+                            continue;
+
+                        // Solar (no inputs) is always active
+                        if (node.blueprint.Inputs.Count == 0)
+                        {
+                            powerTile.SetGeneratorActive(node.id, true);
+                            continue;
+                        }
+
+                        // Check if we have fuel in buffer
+                        bool hasFuel = true;
+                        foreach (var input in node.blueprint.Inputs)
+                        {
+                            if (!powerTile.InputBuffer.Has(input.Item, input.Amount))
+                            {
+                                hasFuel = false;
+                                break;
+                            }
+                        }
+
+                        if (hasFuel)
+                        {
+                            // Consume fuel
+                            foreach (var input in node.blueprint.Inputs)
+                            {
+                                powerTile.InputBuffer.Remove(input.Item, input.Amount);
+                            }
+                            powerTile.SetGeneratorActive(node.id, true);
+                        }
+                        else
+                        {
+                            powerTile.SetGeneratorActive(node.id, false);
+                        }
+                    }
+                }
+            }
         }
 
         [Button("Debug: Show All Production Status")]
@@ -137,7 +194,7 @@ namespace CarbonWorld.Core.Systems
         {
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (tile is ProductionTile || tile is FoodTile)
+                if (tile is IFactoryTile and not PowerTile)
                 {
                     CollectInputsForTile(tile);
                 }
@@ -146,19 +203,19 @@ namespace CarbonWorld.Core.Systems
 
         private void CollectInputsForTile(BaseTile tile)
         {
-            if (tile is not IGraphTile graphTile) return;
+            if (tile is not IFactoryTile factoryTile) return;
 
-            Inventory inputBuffer = tile is ProductionTile p ? p.InputBuffer : (tile is FoodTile f ? f.InputBuffer : null);
+            var inputBuffer = factoryTile.InputBuffer;
             if (inputBuffer == null) return;
 
             // For each input IO node that has a valid item
-            foreach (var ioNode in graphTile.Graph.ioNodes)
+            foreach (var ioNode in factoryTile.Graph.ioNodes)
             {
                 if (ioNode.type != TileIOType.Input || !ioNode.availableItem.IsValid)
                     continue;
 
                 // Check if this input is connected to any blueprint node
-                var isConnected = graphTile.Graph.connections.Any(c => c.fromNodeId == ioNode.id);
+                var isConnected = factoryTile.Graph.connections.Any(c => c.fromNodeId == ioNode.id);
                 if (!isConnected)
                     continue;
 
@@ -223,22 +280,20 @@ namespace CarbonWorld.Core.Systems
 
 
 
-        private void ProcessProductionTile(BaseTile tile)
+        private void ProcessFactoryTile(BaseTile tile)
         {
-            if (tile is not IGraphTile graphTile) return;
+            if (tile is not IFactoryTile factoryTile) return;
 
-            bool isPowered = tile is ProductionTile p ? p.IsPowered : (tile is FoodTile f && f.IsPowered);
-
-            if (!isPowered)
+            if (!factoryTile.IsPowered)
                 return;
 
             // Process each blueprint node
-            foreach (var node in graphTile.Graph.nodes)
+            foreach (var node in factoryTile.Graph.nodes)
             {
                 if (node.blueprint == null || !node.blueprint.IsProducer)
                     continue;
 
-                ProcessBlueprintNode(tile, node);
+                ProcessBlueprintNode(tile, factoryTile, node);
             }
         }
 
@@ -259,12 +314,9 @@ namespace CarbonWorld.Core.Systems
             }
         }
 
-        private void ProcessBlueprintNode(BaseTile tile, BlueprintNode node)
+        private void ProcessBlueprintNode(BaseTile tile, IFactoryTile factoryTile, BlueprintNode node)
         {
-            BlueprintProductionState state = null;
-            if (tile is ProductionTile p) state = p.GetProductionState(node.id);
-            else if (tile is FoodTile f) state = f.GetProductionState(node.id);
-
+            var state = factoryTile.GetProductionState(node.id);
             if (state == null) return;
             var blueprint = node.blueprint;
 
@@ -286,12 +338,13 @@ namespace CarbonWorld.Core.Systems
 
         private void TryStartProduction(BaseTile tile, BlueprintNode node, BlueprintProductionState state)
         {
+            if (tile is not IFactoryTile factoryTile) return;
             var blueprint = node.blueprint;
 
-            if (!AreInputsSatisfied(tile, node))
+            if (!AreInputsSatisfied(factoryTile, node))
                 return;
 
-            Inventory inputBuffer = tile is ProductionTile p ? p.InputBuffer : (tile is FoodTile f ? f.InputBuffer : null);
+            var inputBuffer = factoryTile.InputBuffer;
             if (inputBuffer == null) return;
 
             // Consume inputs from InputBuffer
@@ -307,16 +360,15 @@ namespace CarbonWorld.Core.Systems
             state.PendingOutput = blueprint.Output;
         }
 
-        private bool AreInputsSatisfied(BaseTile tile, BlueprintNode node)
+        private bool AreInputsSatisfied(IFactoryTile factoryTile, BlueprintNode node)
         {
-            if (tile is not IGraphTile graphTile) return false;
-            Inventory inputBuffer = tile is ProductionTile p ? p.InputBuffer : (tile is FoodTile f ? f.InputBuffer : null);
+            var inputBuffer = factoryTile.InputBuffer;
             if (inputBuffer == null) return false;
 
             var blueprint = node.blueprint;
 
             // Find connections TO this node
-            var incomingConnections = graphTile.Graph.connections
+            var incomingConnections = factoryTile.Graph.connections
                 .Where(c => c.toNodeId == node.id)
                 .ToList();
 
@@ -327,7 +379,7 @@ namespace CarbonWorld.Core.Systems
                 foreach (var conn in incomingConnections)
                 {
                     // Check if connection is from an IO node
-                    var ioNode = graphTile.Graph.GetIONode(conn.fromNodeId);
+                    var ioNode = factoryTile.Graph.GetIONode(conn.fromNodeId);
                     if (ioNode != null)
                     {
                         if (ioNode.availableItem.Item == requiredInput.Item)
@@ -341,7 +393,7 @@ namespace CarbonWorld.Core.Systems
                     }
                     else
                     {
-                        var sourceNode = graphTile.Graph.GetNode(conn.fromNodeId);
+                        var sourceNode = factoryTile.Graph.GetNode(conn.fromNodeId);
                         if (sourceNode != null)
                         {
                             if (sourceNode.blueprint.Output.Item == requiredInput.Item)
@@ -388,19 +440,19 @@ namespace CarbonWorld.Core.Systems
 
         private void TryTransferOutput(BaseTile tile, BlueprintNode node, BlueprintProductionState state)
         {
-            if (tile is not IGraphTile graphTile) return;
-            Inventory outputBuffer = tile is ProductionTile p ? p.OutputBuffer : (tile is FoodTile f ? f.OutputBuffer : null);
+            if (tile is not IFactoryTile factoryTile) return;
+            var outputBuffer = factoryTile.OutputBuffer;
             if (outputBuffer == null) return;
 
             // Check for connection to either Output or Core
             // I will update the query to find ANY valid connection (Output, Core, or another Machine)
 
-            var connection = graphTile.Graph.connections
+            var connection = factoryTile.Graph.connections
                 .FirstOrDefault(c => c.fromNodeId == node.id);
 
             if (connection != null && state.PendingOutput.IsValid)
             {
-                var ioNode = graphTile.Graph.GetIONode(connection.toNodeId);
+                var ioNode = factoryTile.Graph.GetIONode(connection.toNodeId);
 
                 if (ioNode != null)
                 {
@@ -421,7 +473,7 @@ namespace CarbonWorld.Core.Systems
                         }
                         else
                         {
-                            Debug.LogWarning("[ProductionSystem] CoreTile not found!");
+                            Debug.LogWarning("[FactorySystem] CoreTile not found!");
                         }
 
                         state.PendingOutput = ItemStack.Empty;
@@ -430,10 +482,10 @@ namespace CarbonWorld.Core.Systems
                 }
                 else
                 {
-                    var targetNode = graphTile.Graph.GetNode(connection.toNodeId);
+                    var targetNode = factoryTile.Graph.GetNode(connection.toNodeId);
                     if (targetNode != null)
                     {
-                        Inventory targetInputBuffer = tile is ProductionTile prod ? prod.InputBuffer : (tile is FoodTile food ? food.InputBuffer : null);
+                        var targetInputBuffer = factoryTile.InputBuffer;
                         if (targetInputBuffer != null)
                         {
                             targetInputBuffer.Add(state.PendingOutput.Item, state.PendingOutput.Amount);
@@ -466,13 +518,9 @@ namespace CarbonWorld.Core.Systems
 
             foreach (var neighbor in neighbors)
             {
-                if (neighbor is ProductionTile sourceProd)
+                if (neighbor is IFactoryTile factory and not PowerTile)
                 {
-                    TransferItemsToSettlement(sourceProd.OutputBuffer, settlement);
-                }
-                else if (neighbor is FoodTile sourceFood)
-                {
-                    TransferItemsToSettlement(sourceFood.OutputBuffer, settlement);
+                    TransferItemsToSettlement(factory.OutputBuffer, settlement);
                 }
                 else if (neighbor is TransportTile sourceTrans)
                 {
@@ -533,17 +581,13 @@ namespace CarbonWorld.Core.Systems
 
                 int toTransfer = 0;
 
-                Inventory outputBuffer = null;
-                if (sourceTile is ProductionTile p) outputBuffer = p.OutputBuffer;
-                else if (sourceTile is FoodTile f) outputBuffer = f.OutputBuffer;
-
-                if (outputBuffer != null)
+                if (sourceTile is IFactoryTile factory)
                 {
-                    int available = outputBuffer.Get(item);
+                    int available = factory.OutputBuffer.Get(item);
                     toTransfer = Mathf.Min(needed, Mathf.Min(node.availableItem.Amount, available));
                     if (toTransfer > 0)
                     {
-                        outputBuffer.Remove(item, toTransfer);
+                        factory.OutputBuffer.Remove(item, toTransfer);
                     }
                 }
                 else

@@ -6,16 +6,16 @@ using CarbonWorld.Core.Systems;
 using CarbonWorld.Features.WorldMap;
 using CarbonWorld.Core.Types;
 
-namespace CarbonWorld.Features.Production
+namespace CarbonWorld.Features.Factory
 {
-    public class ProductionPaletteView
+    public class FactoryPaletteView
     {
         private readonly VisualElement _root;
         private readonly ScrollView _palettePanel;
         private readonly VisualElement _tabsContainer;
         private readonly BlueprintDatabase _database;
         private readonly VisualTreeAsset _cardTemplate;
-        private readonly ProductionCanvasView _canvasView;
+        private readonly FactoryCanvasView _canvasView;
 
         // Palette Drag State
         private bool _isDraggingFromPalette;
@@ -28,12 +28,12 @@ namespace CarbonWorld.Features.Production
 
         public bool IsDragging => _isDraggingFromPalette;
 
-        public ProductionPaletteView(
+        public FactoryPaletteView(
             VisualElement root,
             ScrollView palettePanel,
             BlueprintDatabase database,
             VisualTreeAsset cardTemplate,
-            ProductionCanvasView canvasView)
+            FactoryCanvasView canvasView)
         {
             _root = root;
             _palettePanel = palettePanel;

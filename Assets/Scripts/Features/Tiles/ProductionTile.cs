@@ -8,7 +8,7 @@ using CarbonWorld.Features.Inventories;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public class ProductionTile : BaseTile, IGraphTile
+    public class ProductionTile : BaseTile, IFactoryTile
     {
         public BlueprintGraph Graph { get; } = new();
         public bool IsPowered { get; set; }

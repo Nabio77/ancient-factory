@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
 using CarbonWorld.Core.Systems;
-using CarbonWorld.Features.Production;
+using CarbonWorld.Features.Factory;
 
 namespace CarbonWorld.Features.Carbon
 {
@@ -16,7 +16,7 @@ namespace CarbonWorld.Features.Carbon
         private CarbonSystem carbonSystem;
 
         [SerializeField]
-        private ProductionGraphEditor graphEditor;
+        private FactoryGraphEditor graphEditor;
 
         private VisualElement _root;
         private Label _totalCarbonLabel;

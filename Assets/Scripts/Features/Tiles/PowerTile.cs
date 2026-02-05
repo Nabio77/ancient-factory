@@ -5,14 +5,24 @@ using UnityEngine;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Core.Types;
 using CarbonWorld.Features.Grid;
+using CarbonWorld.Features.Inventories;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public class PowerTile : BaseTile, IGraphTile
+    public class PowerTile : BaseTile, IFactoryTile
     {
         public BlueprintGraph Graph { get; } = new();
         public bool HasOutput => false;
         public Func<BlueprintDefinition, bool> BlueprintFilter => b => b.IsPowerGenerator;
+
+        // IFactoryTile implementation - power tiles consume fuel
+        public bool IsPowered { get; set; } = true; // Power tiles are always "powered" (self-powered)
+        public Inventory InputBuffer { get; } = new();
+        public Inventory OutputBuffer { get; } = new(); // Not used, but required by interface
+
+        // Production state tracking per generator node
+        private readonly Dictionary<string, BlueprintProductionState> _productionStates = new();
+        private readonly Dictionary<string, bool> _generatorActive = new();
 
         public int TotalPowerOutput { get; private set; }
         public int TotalPowerConsumption { get; private set; }
@@ -23,23 +33,61 @@ namespace CarbonWorld.Features.Tiles
         {
         }
 
+        public BlueprintProductionState GetProductionState(string nodeId)
+        {
+            if (!_productionStates.TryGetValue(nodeId, out var state))
+            {
+                state = new BlueprintProductionState(nodeId);
+                _productionStates[nodeId] = state;
+            }
+            return state;
+        }
+
+        public IEnumerable<BlueprintProductionState> GetAllProductionStates()
+        {
+            return _productionStates.Values;
+        }
+
+        public List<ItemStack> GetPotentialOutputs()
+        {
+            // Power tiles don't output items
+            return new List<ItemStack>();
+        }
+
         public void UpdateIO(TileDataGrid tileData)
         {
-            var oldIoNodes = Graph.ioNodes.ToList();
-            Graph.ioNodes.Clear();
+            var existingInputs = Graph.ioNodes.Where(n => n.type == TileIOType.Input).ToList();
+            var newInputs = new List<TileIONode>();
 
             var neighbors = tileData.GetNeighbors(CellPosition);
             int inputIndex = 0;
 
             foreach (var neighbor in neighbors)
             {
-                // Power tiles only accept inputs from ResourceTiles, not ProductionTiles
+                // Power tiles only accept inputs from ResourceTiles and TransportTiles
                 if (neighbor is ResourceTile resourceTile)
                 {
                     var output = resourceTile.PeekOutput();
                     if (output.IsValid)
                     {
-                        AddInputNode(neighbor.CellPosition, neighbor.Type, output, inputIndex++);
+                        var existingNode = existingInputs.Find(n =>
+                            n.sourceTilePosition == neighbor.CellPosition &&
+                            n.availableItem.Item == output.Item);
+
+                        if (existingNode != null)
+                        {
+                            // Update existing node, preserve ID
+                            existingNode.availableItem = output;
+                            existingNode.index = inputIndex;
+                            newInputs.Add(existingNode);
+                        }
+                        else
+                        {
+                            // Create new node
+                            var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output, inputIndex);
+                            newInputs.Add(newNode);
+                        }
+                        inputIndex++;
                     }
                 }
                 else if (neighbor is TransportTile transportTile)
@@ -47,32 +95,49 @@ namespace CarbonWorld.Features.Tiles
                     var outputs = transportTile.GetOutputs();
                     foreach (var output in outputs)
                     {
-                        AddInputNode(neighbor.CellPosition, neighbor.Type, output, inputIndex++);
+                        var existingNode = existingInputs.Find(n =>
+                            n.sourceTilePosition == neighbor.CellPosition &&
+                            n.availableItem.Item == output.Item);
+
+                        if (existingNode != null)
+                        {
+                            existingNode.availableItem = output;
+                            existingNode.index = inputIndex;
+                            newInputs.Add(existingNode);
+                        }
+                        else
+                        {
+                            var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output, inputIndex);
+                            newInputs.Add(newNode);
+                        }
+                        inputIndex++;
                     }
                 }
             }
 
-            // Preserve IDs for existing nodes to maintain connections
-            foreach (var newNode in Graph.ioNodes.Where(n => n.type == TileIOType.Input))
+            // Replace input nodes with new set (preserving IDs where possible)
+            Graph.ioNodes.RemoveAll(n => n.type == TileIOType.Input);
+            foreach (var node in newInputs)
             {
-                var match = oldIoNodes.Find(old =>
-                    old.type == TileIOType.Input &&
-                    old.sourceTilePosition == newNode.sourceTilePosition &&
-                    old.availableItem.Item == newNode.availableItem.Item);
-
-                if (match != null)
+                if (!Graph.ioNodes.Contains(node))
                 {
-                    newNode.id = match.id;
+                    Graph.ioNodes.Add(node);
                 }
             }
-
-            // No output node for power tiles - power is distributed via radius, not item flow
         }
 
-        private void AddInputNode(Vector3Int sourcePos, TileType type, ItemStack item, int index)
+        /// <summary>
+        /// Sets whether a generator node is actively producing power.
+        /// Called by FactorySystem after processing fuel consumption.
+        /// </summary>
+        public void SetGeneratorActive(string nodeId, bool active)
         {
-            var node = new TileIONode(TileIOType.Input, sourcePos, type, item, index);
-            Graph.ioNodes.Add(node);
+            _generatorActive[nodeId] = active;
+        }
+
+        public bool IsGeneratorActive(string nodeId)
+        {
+            return _generatorActive.TryGetValue(nodeId, out var active) && active;
         }
 
         public void CalculatePowerOutput()
@@ -85,9 +150,11 @@ namespace CarbonWorld.Features.Tiles
                 if (node.blueprint == null || !node.blueprint.IsPowerGenerator)
                     continue;
 
-                bool hasRequiredInputs = CheckBlueprintInputsSatisfied(node);
+                // Solar (no inputs) is always active
+                // Fuel-based generators are active only if FactorySystem processed fuel
+                bool isActive = node.blueprint.Inputs.Count == 0 || IsGeneratorActive(node.id);
 
-                if (hasRequiredInputs)
+                if (isActive)
                 {
                     TotalPowerOutput += node.blueprint.PowerOutput;
                     TotalPowerConsumption += node.blueprint.PowerConsumption;
@@ -105,32 +172,6 @@ namespace CarbonWorld.Features.Tiles
             if (power < 150) return 2;
             if (power < 300) return 3;
             return 4;
-        }
-
-        private bool CheckBlueprintInputsSatisfied(BlueprintNode node)
-        {
-            // If blueprint has no inputs (like Solar), always satisfied
-            if (node.blueprint.Inputs.Count == 0)
-                return true;
-
-            // Check if all required inputs have connections from IO nodes
-            var incomingConnections = Graph.connections
-                .Where(c => c.toNodeId == node.id)
-                .ToList();
-
-            foreach (var requiredInput in node.blueprint.Inputs)
-            {
-                bool found = incomingConnections.Any(conn =>
-                {
-                    var ioNode = Graph.ioNodes.FirstOrDefault(io => io.id == conn.fromNodeId);
-                    return ioNode != null && ioNode.availableItem.Item == requiredInput.Item;
-                });
-
-                if (!found)
-                    return false;
-            }
-
-            return true;
         }
 
         public List<Vector3Int> GetPoweredPositions()

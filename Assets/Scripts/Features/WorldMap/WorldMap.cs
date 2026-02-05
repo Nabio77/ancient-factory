@@ -27,7 +27,7 @@ namespace CarbonWorld.Features.WorldMap
         [Title("Systems")]
         [SerializeField]
         private TileGraphSystem graphSystem;
-        
+
         [SerializeField]
         private WorldMapVisualizer visualizer;
 
@@ -50,7 +50,7 @@ namespace CarbonWorld.Features.WorldMap
                     graphSystem = gameObject.AddComponent<TileGraphSystem>();
                 }
             }
-            
+
             if (visualizer == null)
             {
                 visualizer = GetComponent<WorldMapVisualizer>();
@@ -61,9 +61,9 @@ namespace CarbonWorld.Features.WorldMap
             }
 
             // Ensure other core systems exist in the scene
-            EnsureSystem<ProductionSystem>();
+            EnsureSystem<FactorySystem>();
             EnsureSystem<ItemFlowSystem>();
-            EnsureSystem<PowerDistributionSystem>();
+            EnsureSystem<PowerSystem>();
             EnsureSystem<SettlementSystem>();
 
             graphSystem.Initialize(_tileData, this);
@@ -115,7 +115,7 @@ namespace CarbonWorld.Features.WorldMap
                     }
                     _tileData.Add(data.Position, tileData);
                 }
-                
+
                 // Refresh visuals from data
                 visualizer.RefreshAll(_tileData);
 
@@ -132,7 +132,7 @@ namespace CarbonWorld.Features.WorldMap
         private void DrawPowerIndicators()
         {
             if (_tileData == null) return;
-            var powerSystem = PowerDistributionSystem.Instance;
+            var powerSystem = PowerSystem.Instance;
             if (powerSystem == null) return;
 
             var draw = Draw.ingame;
@@ -203,50 +203,50 @@ namespace CarbonWorld.Features.WorldMap
         private void ApplyAssignments(Dictionary<Vector3Int, TileAssignment> assignments)
         {
             _savedTiles.Clear();
-            
+
             foreach (var (coord, assignment) in assignments)
             {
-                 BaseTile tileData;
-                 switch (assignment.Type)
-                 {
-                     case TileType.Core:
-                         tileData = new CoreTile(coord, TileType.Core);
-                         break;
-                     case TileType.Resource:
-                         tileData = new ResourceTile(coord, assignment.Item, assignment.Quality, assignment.Amount);
-                         break;
-                     case TileType.Settlement:
-                         tileData = new SettlementTile(coord);
-                         break;
-                     case TileType.Power:
-                         tileData = new PowerTile(coord);
-                         break;
-                     case TileType.Nature:
-                         tileData = new NatureTile(coord);
-                         break;
-                     case TileType.Transport:
-                         tileData = new TransportTile(coord);
-                         break;
-                     case TileType.Food:
-                         tileData = new FoodTile(coord);
-                         break;
-                     case TileType.Production:
-                     default:
-                         tileData = new ProductionTile(coord);
-                         break;
-                 }
+                BaseTile tileData;
+                switch (assignment.Type)
+                {
+                    case TileType.Core:
+                        tileData = new CoreTile(coord, TileType.Core);
+                        break;
+                    case TileType.Resource:
+                        tileData = new ResourceTile(coord, assignment.Item, assignment.Quality, assignment.Amount);
+                        break;
+                    case TileType.Settlement:
+                        tileData = new SettlementTile(coord);
+                        break;
+                    case TileType.Power:
+                        tileData = new PowerTile(coord);
+                        break;
+                    case TileType.Nature:
+                        tileData = new NatureTile(coord);
+                        break;
+                    case TileType.Transport:
+                        tileData = new TransportTile(coord);
+                        break;
+                    case TileType.Food:
+                        tileData = new FoodTile(coord);
+                        break;
+                    case TileType.Production:
+                    default:
+                        tileData = new ProductionTile(coord);
+                        break;
+                }
 
-                 _savedTiles.Add(new TileSaveData
-                 {
-                     Position = coord,
-                     Type = assignment.Type,
-                     Item = assignment.Item,
-                     Quality = assignment.Quality,
-                     Amount = assignment.Amount
-                 });
+                _savedTiles.Add(new TileSaveData
+                {
+                    Position = coord,
+                    Type = assignment.Type,
+                    Item = assignment.Item,
+                    Quality = assignment.Quality,
+                    Amount = assignment.Amount
+                });
 
-                 _tileData.Add(coord, tileData);
-                 visualizer.SetTile(coord, assignment.Type, assignment.Item);
+                _tileData.Add(coord, tileData);
+                visualizer.SetTile(coord, assignment.Type, assignment.Item);
             }
         }
 
@@ -357,7 +357,7 @@ namespace CarbonWorld.Features.WorldMap
 
             _tileData.Add(position, tileData);
             visualizer.SetTile(position, type, null);
-            
+
             _savedTiles.Add(new TileSaveData
             {
                 Position = position,
@@ -375,13 +375,13 @@ namespace CarbonWorld.Features.WorldMap
         // but implementation calls visualizer.
         public void UpdateTileVisual(Vector3Int position)
         {
-             var tile = _tileData.GetTile(position);
-             if (tile == null) return;
-             
-             ItemDefinition item = null;
-             if (tile is ResourceTile rt) item = rt.ResourceItem;
-             
-             visualizer.SetTile(position, tile.Type, item);
+            var tile = _tileData.GetTile(position);
+            if (tile == null) return;
+
+            ItemDefinition item = null;
+            if (tile is ResourceTile rt) item = rt.ResourceItem;
+
+            visualizer.SetTile(position, tile.Type, item);
         }
 
         public List<Vector3Int> GetValidPlacementPositions()
@@ -412,7 +412,7 @@ namespace CarbonWorld.Features.WorldMap
 
         public Vector3 CellToWorld(Vector3Int cellPos) => visualizer.CellToWorld(cellPos);
         public Vector3Int WorldToCell(Vector3 worldPos) => visualizer.WorldToCell(worldPos);
-        
+
         public TileBase GetTileAsset(TileType type) => visualizer.GetVisualTile(type, null);
         #endregion
 

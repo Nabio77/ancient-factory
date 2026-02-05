@@ -5,13 +5,13 @@ using UnityEngine.UIElements;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Features.Tiles;
 
-namespace CarbonWorld.Features.Production
+namespace CarbonWorld.Features.Factory
 {
-    public class ProductionIOView
+    public class FactoryIOView
     {
         private readonly WorldMap.WorldMap _worldMap;
         private readonly VisualTreeAsset _tileIOCardTemplate;
-        private readonly ProductionCanvasView _canvasView;
+        private readonly FactoryCanvasView _canvasView;
         
         private VisualElement _inputZone;
         private VisualElement _outputZone;
@@ -20,7 +20,7 @@ namespace CarbonWorld.Features.Production
         private Dictionary<string, VisualElement> _ioCardElements = new();
         private Dictionary<string, VisualElement> _ioCardPorts = new();
 
-        public ProductionIOView(WorldMap.WorldMap worldMap, VisualTreeAsset tileIOCardTemplate, ProductionCanvasView canvasView)
+        public FactoryIOView(WorldMap.WorldMap worldMap, VisualTreeAsset tileIOCardTemplate, FactoryCanvasView canvasView)
         {
             _worldMap = worldMap;
             _tileIOCardTemplate = tileIOCardTemplate;

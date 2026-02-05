@@ -7,9 +7,9 @@ using CarbonWorld.Features.Tiles;
 using CarbonWorld.Features.WorldMap;
 using CarbonWorld.Core.Systems;
 
-namespace CarbonWorld.Features.Production
+namespace CarbonWorld.Features.Factory
 {
-    public class ProductionGraphEditor : MonoBehaviour
+    public class FactoryGraphEditor : MonoBehaviour
     {
         public event Action OnEditorOpened;
         public event Action OnEditorClosed;
@@ -20,9 +20,6 @@ namespace CarbonWorld.Features.Production
 
         [SerializeField, Required]
         private TileSelector tileSelector;
-
-        [SerializeField, Required]
-        private WorldMapCamera worldMapCamera;
 
         [SerializeField, Required]
         private BlueprintDatabase database;
@@ -41,10 +38,10 @@ namespace CarbonWorld.Features.Production
         private ScrollView _palettePanel;
         private Button _closeButton;
 
-        private ProductionCanvasView _canvasView;
-        private ProductionGraphInput _input;
-        private ProductionIOView _ioView;
-        private ProductionPaletteView _paletteView;
+        private FactoryCanvasView _canvasView;
+        private FactoryGraphInput _input;
+        private FactoryIOView _ioView;
+        private FactoryPaletteView _paletteView;
 
         private IGraphTile _currentGraphTile;
         private BaseTile _currentTile;
@@ -73,19 +70,19 @@ namespace CarbonWorld.Features.Production
         private void InitializeSubSystems()
         {
             // 1. View
-            _canvasView = new ProductionCanvasView(_canvas, cardTemplate);
+            _canvasView = new FactoryCanvasView(_canvas, cardTemplate);
 
             // 2. Interaction
-            _input = new ProductionGraphInput(_canvasView, _canvas);
+            _input = new FactoryGraphInput(_canvasView, _canvas);
             _input.OnGraphChanged += OnGraphChanged;
             _canvasView.Input = _input;
 
             // 3. IO Manager
-            _ioView = new ProductionIOView(worldMap, tileIOCardTemplate, _canvasView);
+            _ioView = new FactoryIOView(worldMap, tileIOCardTemplate, _canvasView);
             _canvasView.IOView = _ioView;
 
             // 4. Palette
-            _paletteView = new ProductionPaletteView(_root, _palettePanel, database, cardTemplate, _canvasView);
+            _paletteView = new FactoryPaletteView(_root, _palettePanel, database, cardTemplate, _canvasView);
         }
 
         private void OnGraphChanged()
@@ -138,7 +135,7 @@ namespace CarbonWorld.Features.Production
                 tileSelector.OnTileSelected -= OnTileSelected;
 
             if (InterfaceSystem.Instance != null)
-                InterfaceSystem.Instance.SetState(InterfaceState.ProductionEditor);
+                InterfaceSystem.Instance.SetState(InterfaceState.FactoryEditor);
 
             _currentGraphTile = graphTile;
             _currentGraphTile.Graph.OnGraphUpdated += OnExternalGraphUpdate;

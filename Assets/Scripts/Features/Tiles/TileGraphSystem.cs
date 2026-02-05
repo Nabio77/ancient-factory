@@ -57,9 +57,9 @@ namespace CarbonWorld.Features.Tiles
                     foreach (var neighbor in neighbors)
                     {
                         bool canSupply = false;
-                        if (neighbor is ProductionTile prod)
+                        if (neighbor is IFactoryTile factory)
                         {
-                            canSupply = prod.GetPotentialOutputs().Any(o => settlement.Demands.Any(d => d.Item == o.Item));
+                            canSupply = factory.GetPotentialOutputs().Any(o => settlement.Demands.Any(d => d.Item == o.Item));
                         }
                         else if (neighbor is TransportTile trans)
                         {
@@ -119,7 +119,7 @@ namespace CarbonWorld.Features.Tiles
 
         public void UpdateTile(TileDataGrid tileData, BaseTile tile)
         {
-            if (tile is ProductionTile || tile is FoodTile)
+            if (tile is IFactoryTile and not PowerTile)
             {
                 UpdateGraphTile(tileData, tile);
             }
@@ -226,7 +226,7 @@ namespace CarbonWorld.Features.Tiles
             }
 
             // 3. Calculate potential output for UI visualization only
-            // Actual output is managed by ProductionSystem via OutputBuffer
+            // Actual output is managed by FactorySystem via OutputBuffer
             var potentialOutput = GetGraphPotentialOutput(tile);
             if (outputNode.availableItem != potentialOutput)
             {
@@ -332,12 +332,9 @@ namespace CarbonWorld.Features.Tiles
                 }
                 return new List<TileOutput>();
             }
-            else if (tile is ProductionTile || tile is FoodTile)
+            else if (tile is IFactoryTile factoryTile)
             {
-                List<ItemStack> potentialOutputs = null;
-                if (tile is ProductionTile p) potentialOutputs = p.GetPotentialOutputs();
-                else if (tile is FoodTile f) potentialOutputs = f.GetPotentialOutputs();
-
+                var potentialOutputs = factoryTile.GetPotentialOutputs();
                 if (potentialOutputs != null)
                 {
                     return potentialOutputs
@@ -356,11 +353,12 @@ namespace CarbonWorld.Features.Tiles
 
         private ItemStack GetGraphPotentialOutput(BaseTile tile)
         {
-            List<ItemStack> outputs = null;
-            if (tile is ProductionTile p) outputs = p.GetPotentialOutputs();
-            else if (tile is FoodTile f) outputs = f.GetPotentialOutputs();
-
-            return outputs != null && outputs.Count > 0 ? outputs[0] : ItemStack.Empty;
+            if (tile is IFactoryTile factoryTile)
+            {
+                var outputs = factoryTile.GetPotentialOutputs();
+                return outputs != null && outputs.Count > 0 ? outputs[0] : ItemStack.Empty;
+            }
+            return ItemStack.Empty;
         }
     }
 }

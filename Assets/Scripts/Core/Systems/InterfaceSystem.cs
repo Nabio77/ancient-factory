@@ -8,7 +8,7 @@ namespace CarbonWorld.Core.Systems
     public enum InterfaceState
     {
         Gameplay,
-        ProductionEditor,
+        FactoryEditor,
         TechTree,
         Menu
     }

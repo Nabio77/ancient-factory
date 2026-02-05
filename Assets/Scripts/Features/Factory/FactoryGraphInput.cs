@@ -3,11 +3,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using CarbonWorld.Core.Data;
 
-namespace CarbonWorld.Features.Production
+namespace CarbonWorld.Features.Factory
 {
-    public class ProductionGraphInput
+    public class FactoryGraphInput
     {
-        private readonly ProductionCanvasView _canvasView;
+        private readonly FactoryCanvasView _canvasView;
         private readonly VisualElement _canvas;
 
         // Zoom & Pan Constants
@@ -38,7 +38,7 @@ namespace CarbonWorld.Features.Production
 
         public event Action OnGraphChanged;
 
-        public ProductionGraphInput(ProductionCanvasView canvasView, VisualElement canvas)
+        public FactoryGraphInput(FactoryCanvasView canvasView, VisualElement canvas)
         {
             _canvasView = canvasView;
             _canvas = canvas;

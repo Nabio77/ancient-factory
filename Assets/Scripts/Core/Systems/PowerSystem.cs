@@ -7,9 +7,9 @@ using CarbonWorld.Core.Types;
 
 namespace CarbonWorld.Core.Systems
 {
-    public class PowerDistributionSystem : MonoBehaviour
+    public class PowerSystem : MonoBehaviour
     {
-        public static PowerDistributionSystem Instance { get; private set; }
+        public static PowerSystem Instance { get; private set; }
 
         [Title("References")]
         [SerializeField, Required]
@@ -93,9 +93,10 @@ namespace CarbonWorld.Core.Systems
 
         private void Update()
         {
-            // Continuously recalculate to catch graph changes in power tiles
+            // Power is now recalculated by FactorySystem after processing
+            // Keep minimal polling for map changes
             _recalculateTimer += Time.deltaTime;
-            if (_recalculateTimer >= recalculateInterval || _needsRecalculation)
+            if (_needsRecalculation && _recalculateTimer >= recalculateInterval)
             {
                 _recalculateTimer = 0f;
                 _needsRecalculation = false;
@@ -109,13 +110,12 @@ namespace CarbonWorld.Core.Systems
         {
             _poweredPositions.Clear();
 
-            // Phase 1: Update IO nodes and calculate power output for all power tiles
+            // Phase 1: Calculate power output for all power tiles
+            // (IO nodes are already updated by TileGraphSystem, fuel consumption by FactorySystem)
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
                 if (tile is PowerTile powerTile)
                 {
-                    // Update IO nodes first (needed for fuel input checks)
-                    powerTile.UpdateIO(worldMap.TileData);
                     powerTile.CalculatePowerOutput();
                 }
             }
@@ -132,29 +132,17 @@ namespace CarbonWorld.Core.Systems
                 }
             }
 
-            // Phase 3: Update IsPowered on all production tiles and detect power loss
+            // Phase 3: Update IsPowered on all factory tiles and detect power loss
             int lostPowerCount = 0;
             Vector3Int? lastLostPos = null;
 
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (tile is ProductionTile productionTile)
+                if (tile is IFactoryTile factoryTile and not PowerTile)
                 {
-                    bool wasPowered = productionTile.IsPowered;
+                    bool wasPowered = factoryTile.IsPowered;
                     bool isNowPowered = _poweredPositions.Contains(tile.CellPosition);
-                    productionTile.IsPowered = isNowPowered;
-
-                    if (wasPowered && !isNowPowered)
-                    {
-                        lostPowerCount++;
-                        lastLostPos = tile.CellPosition;
-                    }
-                }
-                else if (tile is FoodTile foodTile)
-                {
-                    bool wasPowered = foodTile.IsPowered;
-                    bool isNowPowered = _poweredPositions.Contains(tile.CellPosition);
-                    foodTile.IsPowered = isNowPowered;
+                    factoryTile.IsPowered = isNowPowered;
 
                     if (wasPowered && !isNowPowered)
                     {

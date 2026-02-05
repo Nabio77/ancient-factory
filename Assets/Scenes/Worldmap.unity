@@ -1504,7 +1504,7 @@ GameObject:
   - component: {fileID: 610185977}
   - component: {fileID: 610185976}
   m_Layer: 5
-  m_Name: ProductionUI
+  m_Name: FactoryGraphEditor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1534,12 +1534,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 610185974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db1dc7785f6ba4fdca3df40ddbaaa116, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a40f1726af344c099de297e7a66bd6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.UI.BlueprintEditor.BlueprintEditorUI
   uiDocument: {fileID: 610185977}
   tileSelector: {fileID: 1590152905}
-  worldMapCamera: {fileID: 330585548}
   database: {fileID: 11400000, guid: 583ea1c0c1c6e4f3c9caddc33a51b4f8, type: 2}
   cardTemplate: {fileID: 9197481963319205126, guid: c4026eea92e0c4c6593dc592feb191f5, type: 3}
   tileIOCardTemplate: {fileID: 9197481963319205126, guid: 75c27ac8916bb429e957e451d25811df, type: 3}
@@ -1558,7 +1557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: 28d646fdc98164fa490d0d71600f695c, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 3f2956dc197e24fcf8edfacb5db9d5bb, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 9a2e867ca14be41399a56edbaf637446, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -1598,6 +1597,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.PowerDistributionSystem
   worldMap: {fileID: 998030626}
   recalculateInterval: 0.5
+  _recalculateTimer: 0
+  _needsRecalculation: 1
 --- !u!4 &743360586
 Transform:
   m_ObjectHideFlags: 0
@@ -2553,7 +2554,7 @@ GameObject:
   - component: {fileID: 1869028454}
   - component: {fileID: 1869028453}
   m_Layer: 0
-  m_Name: WorldMapVisulizer
+  m_Name: WorldMapVisualizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

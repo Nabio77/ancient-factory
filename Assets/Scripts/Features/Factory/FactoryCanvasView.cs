@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using CarbonWorld.Core.Data;
 
-namespace CarbonWorld.Features.Production
+namespace CarbonWorld.Features.Factory
 {
-    public class ProductionCanvasView
+    public class FactoryCanvasView
     {
         private readonly VisualElement _canvas;
         private readonly VisualElement _canvasContent;
@@ -33,10 +33,10 @@ namespace CarbonWorld.Features.Production
         public float Zoom => _zoom;
         public Vector2 Pan => _pan;
 
-        public ProductionGraphInput Input { get; set; }
-        public ProductionIOView IOView { get; set; }
+        public FactoryGraphInput Input { get; set; }
+        public FactoryIOView IOView { get; set; }
 
-        public ProductionCanvasView(VisualElement canvas, VisualTreeAsset cardTemplate)
+        public FactoryCanvasView(VisualElement canvas, VisualTreeAsset cardTemplate)
         {
             _canvas = canvas;
             _cardTemplate = cardTemplate;

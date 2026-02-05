@@ -7,7 +7,7 @@ using CarbonWorld.Features.Tiles;
 using CarbonWorld.Core.Data;
 using CarbonWorld.Core.Events;
 using CarbonWorld.Features.WorldMap;
-using CarbonWorld.Features.Production;
+using CarbonWorld.Features.Factory;
 
 namespace CarbonWorld.UI
 {
@@ -21,7 +21,7 @@ namespace CarbonWorld.UI
         private UIDocument document;
 
         [SerializeField]
-        private ProductionGraphEditor graphEditor;
+        private FactoryGraphEditor graphEditor;
 
         [Title("UI Settings")]
         [SerializeField]

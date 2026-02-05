@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
 using CarbonWorld.Features.Tiles;
 using CarbonWorld.Core.Types;
-using CarbonWorld.Features.Production;
+using CarbonWorld.Features.Factory;
 
 namespace CarbonWorld.Features.WorldMap
 {
@@ -20,7 +20,7 @@ namespace CarbonWorld.Features.WorldMap
         private WorldMap worldMap;
 
         [SerializeField]
-        private ProductionGraphEditor graphEditor;
+        private FactoryGraphEditor graphEditor;
 
         private VisualElement _root;
         private Button _btnPower;
@@ -35,15 +35,15 @@ namespace CarbonWorld.Features.WorldMap
         void Awake()
         {
             _root = uiDocument.rootVisualElement;
-            
+
             var container = _root.Q<VisualElement>("build-menu-container");
             if (container != null)
             {
-                container.RegisterCallback<MouseEnterEvent>(evt => 
+                container.RegisterCallback<MouseEnterEvent>(evt =>
                 {
                     if (tileSelector != null) tileSelector.IsInputBlocked = true;
                 });
-                container.RegisterCallback<MouseLeaveEvent>(evt => 
+                container.RegisterCallback<MouseLeaveEvent>(evt =>
                 {
                     if (tileSelector != null) tileSelector.IsInputBlocked = false;
                 });
@@ -147,17 +147,17 @@ namespace CarbonWorld.Features.WorldMap
 
         private void UpdateButtons()
         {
-             SetButtonState(_btnPower, TileType.Power);
-             SetButtonState(_btnNature, TileType.Nature);
-             SetButtonState(_btnTransport, TileType.Transport);
-             SetButtonState(_btnProduction, TileType.Production);
-             SetButtonState(_btnFood, TileType.Food);
+            SetButtonState(_btnPower, TileType.Power);
+            SetButtonState(_btnNature, TileType.Nature);
+            SetButtonState(_btnTransport, TileType.Transport);
+            SetButtonState(_btnProduction, TileType.Production);
+            SetButtonState(_btnFood, TileType.Food);
         }
 
         private void SetButtonState(Button btn, TileType type)
         {
             if (btn == null) return;
-            
+
             bool isActive = _activeBrush == type;
             if (isActive)
             {
@@ -195,9 +195,9 @@ namespace CarbonWorld.Features.WorldMap
 
         private bool IsMutable(TileType type)
         {
-            return type == TileType.Production || 
-                   type == TileType.Power || 
-                   type == TileType.Nature || 
+            return type == TileType.Production ||
+                   type == TileType.Power ||
+                   type == TileType.Nature ||
                    type == TileType.Transport ||
                    type == TileType.Food;
         }
