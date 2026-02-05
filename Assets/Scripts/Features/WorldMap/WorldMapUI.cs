@@ -175,9 +175,9 @@ namespace CarbonWorld.Features.WorldMap
                 _resourceInfo?.AddToClassList("hidden");
             }
 
-            if (tile is ProductionTile productionTile)
+            if (tile is FactoryTile factoryTile)
             {
-                ShowProductionInfo(productionTile);
+                ShowProductionInfo(factoryTile);
             }
             else
             {
@@ -298,7 +298,7 @@ namespace CarbonWorld.Features.WorldMap
             _powerInfo.RemoveFromClassList("hidden");
         }
 
-        private void ShowProductionInfo(ProductionTile tile)
+        private void ShowProductionInfo(FactoryTile tile)
         {
             // Ensure IO nodes are up to date
             if (worldMap != null && worldMap.GraphSystem != null)
@@ -313,12 +313,6 @@ namespace CarbonWorld.Features.WorldMap
             var inputs = tile.Graph.ioNodes
                 .Where(n => n.type == TileIOType.Input && n.availableItem.IsValid)
                 .Select(n => $"{n.availableItem.Item.ItemName} x{n.availableItem.Amount}")
-                .ToList();
-
-            // Show input buffer contents
-            var inputBufferItems = tile.InputBuffer.GetAll()
-                .Where(s => s.IsValid)
-                .Select(s => $"[Buffer] {s.Item.ItemName} x{s.Amount}")
                 .ToList();
 
             // Show potential outputs (from graph) and actual outputs (from buffer)
@@ -340,8 +334,7 @@ namespace CarbonWorld.Features.WorldMap
             var inputText = new System.Text.StringBuilder();
             inputText.AppendLine($"Power: {powerStatus}");
             if (inputs.Any()) inputText.AppendLine(string.Join("\n", inputs));
-            if (inputBufferItems.Any()) inputText.AppendLine(string.Join("\n", inputBufferItems));
-            if (!inputs.Any() && !inputBufferItems.Any()) inputText.AppendLine("No inputs");
+            if (!inputs.Any()) inputText.AppendLine("No inputs");
 
             var outputText = new System.Text.StringBuilder();
             if (potentialOutputs.Any()) outputText.AppendLine(string.Join("\n", potentialOutputs));

@@ -11,7 +11,6 @@ namespace CarbonWorld.Features.Tiles
     public interface IFactoryTile : IGraphTile
     {
         bool IsPowered { get; set; }
-        Inventory InputBuffer { get; }
         Inventory OutputBuffer { get; }
         BlueprintProductionState GetProductionState(string nodeId);
         IEnumerable<BlueprintProductionState> GetAllProductionStates();

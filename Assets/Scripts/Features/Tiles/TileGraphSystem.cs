@@ -139,52 +139,12 @@ namespace CarbonWorld.Features.Tiles
         private void UpdateGraphTile(TileDataGrid tileData, BaseTile tile)
         {
             if (tile is not IGraphTile graphTile) return;
+
+            // Gather inputs using shared logic
+            var newInputs = GatherInputs(tileData, tile);
+
             var graph = graphTile.Graph;
             bool changed = false;
-
-            // 1. Update Inputs (with deduplication by original source)
-            var newInputs = new List<TileIONode>();
-            var neighbors = tileData.GetNeighbors(tile.CellPosition);
-            var seenOriginalSources = new HashSet<Vector3Int>();
-            int inputIndex = 0;
-
-            foreach (var neighbor in neighbors)
-            {
-                var outputs = GetOutputsWithSource(neighbor);
-                foreach (var output in outputs)
-                {
-                    // Skip if we've already seen this original source (prevents doubling via transport)
-                    if (!seenOriginalSources.Add(output.OriginalSource))
-                        continue;
-
-                    // Find existing or create new
-                    var existingNode = graph.ioNodes.Find(n =>
-                        n.type == TileIOType.Input &&
-                        n.originalSourcePosition == output.OriginalSource);
-
-                    if (existingNode != null)
-                    {
-                        // Update existing
-                        if (existingNode.availableItem != output.Item)
-                        {
-                            existingNode.availableItem = output.Item;
-                            changed = true;
-                        }
-                        existingNode.sourceTilePosition = neighbor.CellPosition;
-                        existingNode.sourceTileType = neighbor.Type;
-                        existingNode.index = inputIndex;
-                        newInputs.Add(existingNode);
-                    }
-                    else
-                    {
-                        // Create new
-                        var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output.Item, inputIndex, output.OriginalSource);
-                        newInputs.Add(newNode);
-                        changed = true;
-                    }
-                    inputIndex++;
-                }
-            }
 
             // 2. Update Output Node
             var outputNode = graph.ioNodes.Find(n => n.type == TileIOType.Output);
@@ -204,25 +164,10 @@ namespace CarbonWorld.Features.Tiles
                 changed = true;
             }
 
-            // Remove stale inputs
-            // We keep the output node, and replace the list of inputs with the valid ones we found/created
-            var nodesToRemove = graph.ioNodes.Where(n => n.type == TileIOType.Input && !newInputs.Contains(n)).ToList();
-            if (nodesToRemove.Count > 0)
+            // Apply inputs and check for changes
+            if (ApplyInputNodes(graph, newInputs))
             {
-                foreach (var node in nodesToRemove)
-                {
-                    graph.ioNodes.Remove(node);
-                }
                 changed = true;
-            }
-
-            // Add new inputs that weren't in the list
-            foreach (var node in newInputs)
-            {
-                if (!graph.ioNodes.Contains(node))
-                {
-                    graph.ioNodes.Add(node);
-                }
             }
 
             // 3. Calculate potential output for UI visualization only
@@ -241,64 +186,13 @@ namespace CarbonWorld.Features.Tiles
             }
         }
 
-
-
         private void UpdateTransportTile(TileDataGrid tileData, TransportTile tile)
         {
+            // Gather inputs using shared logic
+            var newInputs = GatherInputs(tileData, tile);
+
             var graph = tile.Graph;
-            bool changed = false;
-
-            var newInputs = new List<TileIONode>();
-            var neighbors = tileData.GetNeighbors(tile.CellPosition);
-            var seenOriginalSources = new HashSet<Vector3Int>();
-            int inputIndex = 0;
-
-            foreach (var neighbor in neighbors)
-            {
-                var outputs = GetOutputsWithSource(neighbor);
-                foreach (var output in outputs)
-                {
-                    // Skip if we've already seen this original source (prevents doubling in chains)
-                    if (!seenOriginalSources.Add(output.OriginalSource))
-                        continue;
-
-                    var existingNode = graph.ioNodes.Find(n =>
-                        n.type == TileIOType.Input &&
-                        n.originalSourcePosition == output.OriginalSource);
-
-                    if (existingNode != null)
-                    {
-                        if (existingNode.availableItem != output.Item)
-                        {
-                            existingNode.availableItem = output.Item;
-                            changed = true;
-                        }
-                        existingNode.sourceTilePosition = neighbor.CellPosition;
-                        existingNode.sourceTileType = neighbor.Type;
-                        existingNode.index = inputIndex;
-                        newInputs.Add(existingNode);
-                    }
-                    else
-                    {
-                        var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output.Item, inputIndex, output.OriginalSource);
-                        newInputs.Add(newNode);
-                        changed = true;
-                    }
-                    inputIndex++;
-                }
-            }
-
-            var nodesToRemove = graph.ioNodes.Where(n => n.type == TileIOType.Input && !newInputs.Contains(n)).ToList();
-            if (nodesToRemove.Count > 0)
-            {
-                foreach (var node in nodesToRemove) graph.ioNodes.Remove(node);
-                changed = true;
-            }
-
-            foreach (var node in newInputs)
-            {
-                if (!graph.ioNodes.Contains(node)) graph.ioNodes.Add(node);
-            }
+            bool changed = ApplyInputNodes(graph, newInputs);
 
             // Sync Inventory for icon display
             using (new InventoryBatch(tile.Inventory, this, "TransportGraphUpdate"))
@@ -319,6 +213,80 @@ namespace CarbonWorld.Features.Tiles
                 graph.NotifyGraphUpdated();
                 EventBus.Publish(new GraphUpdated { Position = tile.CellPosition });
             }
+        }
+
+        private List<TileIONode> GatherInputs(TileDataGrid tileData, BaseTile tile)
+        {
+            var graph = (tile as IGraphTile)?.Graph;
+            var newInputs = new List<TileIONode>();
+            var neighbors = tileData.GetNeighbors(tile.CellPosition);
+            var seenOriginalSources = new HashSet<Vector3Int>();
+            int inputIndex = 0;
+
+            foreach (var neighbor in neighbors)
+            {
+                var outputs = GetOutputsWithSource(neighbor);
+                foreach (var output in outputs)
+                {
+                    // Skip if we've already seen this original source (prevents doubling via transport)
+                    if (!seenOriginalSources.Add(output.OriginalSource))
+                        continue;
+
+                    // Find existing or create new
+                    var existingNode = graph?.ioNodes.Find(n =>
+                        n.type == TileIOType.Input &&
+                        n.originalSourcePosition == output.OriginalSource);
+
+                    if (existingNode != null)
+                    {
+                        // Clone existing node but update properties
+                        // Use a clone or update structure if treating as value type, but TileIONode is a class
+                        // We are building a list of nodes that SHOULD exist. 
+                        // If we reuse the object, we update it in place.
+                        existingNode.availableItem = output.Item;
+                        existingNode.sourceTilePosition = neighbor.CellPosition;
+                        existingNode.sourceTileType = neighbor.Type;
+                        existingNode.index = inputIndex;
+                        newInputs.Add(existingNode);
+                    }
+                    else
+                    {
+                        // Create new
+                        var newNode = new TileIONode(TileIOType.Input, neighbor.CellPosition, neighbor.Type, output.Item, inputIndex, output.OriginalSource);
+                        newInputs.Add(newNode);
+                    }
+                    inputIndex++;
+                }
+            }
+            return newInputs;
+        }
+
+        private bool ApplyInputNodes(BlueprintGraph graph, List<TileIONode> newInputs)
+        {
+            bool changed = false;
+
+            // Remove stale inputs
+            var nodesToRemove = graph.ioNodes.Where(n => n.type == TileIOType.Input && !newInputs.Contains(n)).ToList();
+            if (nodesToRemove.Count > 0)
+            {
+                foreach (var node in nodesToRemove)
+                {
+                    graph.ioNodes.Remove(node);
+                }
+                changed = true;
+            }
+
+            // Add new inputs that weren't in the list
+            foreach (var node in newInputs)
+            {
+                if (!graph.ioNodes.Contains(node))
+                {
+                    graph.ioNodes.Add(node);
+                    changed = true;
+                }
+            }
+
+            return changed;
         }
 
         private List<TileOutput> GetOutputsWithSource(BaseTile tile)

@@ -8,23 +8,35 @@ using CarbonWorld.Features.Inventories;
 
 namespace CarbonWorld.Features.Tiles
 {
-    public class FoodTile : BaseTile, IFactoryTile
+    public enum FactoryCategory
     {
+        Production,
+        Food
+    }
+
+    public class FactoryTile : BaseTile, IFactoryTile
+    {
+        public FactoryCategory Category { get; }
         public BlueprintGraph Graph { get; } = new();
         public bool IsPowered { get; set; }
         public bool HasOutput => true;
-        public Func<BlueprintDefinition, bool> BlueprintFilter => b => b.Type == BlueprintType.FoodProcessor || b.IsLogistics;
+
+        public Func<BlueprintDefinition, bool> BlueprintFilter => Category switch
+        {
+            FactoryCategory.Food => b => b.Type == BlueprintType.FoodProcessor || b.IsLogistics,
+            _ => b => b.IsProducer || b.IsLogistics
+        };
 
         // Production state tracking per blueprint node
         private readonly Dictionary<string, BlueprintProductionState> _productionStates = new();
 
-        // Separate buffers for production flow
-        public Inventory InputBuffer { get; } = new();
+        // Output buffer for produced items
         public Inventory OutputBuffer { get; } = new();
 
-        public FoodTile(Vector3Int cellPosition)
-            : base(cellPosition, TileType.Food)
+        public FactoryTile(Vector3Int cellPosition, FactoryCategory category = FactoryCategory.Production)
+            : base(cellPosition, category == FactoryCategory.Food ? TileType.Food : TileType.Production)
         {
+            Category = category;
         }
 
         public BlueprintProductionState GetProductionState(string nodeId)

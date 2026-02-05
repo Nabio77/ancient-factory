@@ -62,7 +62,6 @@ namespace CarbonWorld.Features.WorldMap
 
             // Ensure other core systems exist in the scene
             EnsureSystem<FactorySystem>();
-            EnsureSystem<ItemFlowSystem>();
             EnsureSystem<PowerSystem>();
             EnsureSystem<SettlementSystem>();
 
@@ -106,11 +105,11 @@ namespace CarbonWorld.Features.WorldMap
                             tileData = new HeatwaveTile(data.Position, 0);
                             break;
                         case TileType.Food:
-                            tileData = new FoodTile(data.Position);
+                            tileData = new FactoryTile(data.Position, FactoryCategory.Food);
                             break;
                         case TileType.Production:
                         default:
-                            tileData = new ProductionTile(data.Position);
+                            tileData = new FactoryTile(data.Position, FactoryCategory.Production);
                             break;
                     }
                     _tileData.Add(data.Position, tileData);
@@ -228,11 +227,11 @@ namespace CarbonWorld.Features.WorldMap
                         tileData = new TransportTile(coord);
                         break;
                     case TileType.Food:
-                        tileData = new FoodTile(coord);
+                        tileData = new FactoryTile(coord, FactoryCategory.Food);
                         break;
                     case TileType.Production:
                     default:
-                        tileData = new ProductionTile(coord);
+                        tileData = new FactoryTile(coord, FactoryCategory.Production);
                         break;
                 }
 
@@ -268,10 +267,10 @@ namespace CarbonWorld.Features.WorldMap
                     newTileData = new TransportTile(position);
                     break;
                 case TileType.Production:
-                    newTileData = new ProductionTile(position);
+                    newTileData = new FactoryTile(position, FactoryCategory.Production);
                     break;
                 case TileType.Food:
-                    newTileData = new FoodTile(position);
+                    newTileData = new FactoryTile(position, FactoryCategory.Food);
                     break;
                 default:
                     Debug.LogWarning($"ReplaceTile: Unsupported type {newType}");
@@ -336,7 +335,7 @@ namespace CarbonWorld.Features.WorldMap
             switch (type)
             {
                 case TileType.Production:
-                    tileData = new ProductionTile(position);
+                    tileData = new FactoryTile(position, FactoryCategory.Production);
                     break;
                 case TileType.Power:
                     tileData = new PowerTile(position);
@@ -348,7 +347,7 @@ namespace CarbonWorld.Features.WorldMap
                     tileData = new TransportTile(position);
                     break;
                 case TileType.Food:
-                    tileData = new FoodTile(position);
+                    tileData = new FactoryTile(position, FactoryCategory.Food);
                     break;
                 default:
                     Debug.LogWarning($"AddTile: Cannot place tile of type {type}");

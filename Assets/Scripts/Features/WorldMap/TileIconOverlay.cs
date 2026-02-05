@@ -153,10 +153,10 @@ namespace CarbonWorld.Features.WorldMap
                 return resourceTile.ResourceItem.Icon;
             }
 
-            // For production tiles, show the output item icon
-            if (tile is ProductionTile productionTile)
+            // For factory tiles, show the output item icon
+            if (tile is FactoryTile factoryTile)
             {
-                var outputNode = productionTile.Graph.ioNodes
+                var outputNode = factoryTile.Graph.ioNodes
                     .FirstOrDefault(n => n.type == TileIOType.Output && n.availableItem.IsValid);
                 if (outputNode != null)
                 {

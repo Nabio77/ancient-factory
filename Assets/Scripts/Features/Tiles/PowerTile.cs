@@ -17,7 +17,6 @@ namespace CarbonWorld.Features.Tiles
 
         // IFactoryTile implementation - power tiles consume fuel
         public bool IsPowered { get; set; } = true; // Power tiles are always "powered" (self-powered)
-        public Inventory InputBuffer { get; } = new();
         public Inventory OutputBuffer { get; } = new(); // Not used, but required by interface
 
         // Production state tracking per generator node

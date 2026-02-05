@@ -21,11 +21,6 @@ namespace CarbonWorld.Features.Tiles
             Quality = quality;
             MaxAmount = amount;
             CurrentAmount = amount;
-
-            if (ResourceItem != null)
-            {
-                Inventory.Add(ResourceItem, 1);
-            }
         }
 
         public int GetOutputPerTick()

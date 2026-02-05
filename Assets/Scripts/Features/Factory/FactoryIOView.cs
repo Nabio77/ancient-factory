@@ -12,10 +12,10 @@ namespace CarbonWorld.Features.Factory
         private readonly WorldMap.WorldMap _worldMap;
         private readonly VisualTreeAsset _tileIOCardTemplate;
         private readonly FactoryCanvasView _canvasView;
-        
+
         private VisualElement _inputZone;
         private VisualElement _outputZone;
-        
+
         // Maps to track elements
         private Dictionary<string, VisualElement> _ioCardElements = new();
         private Dictionary<string, VisualElement> _ioCardPorts = new();
@@ -107,10 +107,26 @@ namespace CarbonWorld.Features.Factory
             var itemLabel = card.Q<Label>("io-card-item");
             var amountLabel = card.Q<Label>("io-card-amount");
 
-            if (ioNode.availableItem.IsValid)
+            // For output nodes, find what blueprint is connected to this output
+            ItemStack displayItem = ioNode.availableItem;
+            if (!isInput && !displayItem.IsValid)
             {
-                itemLabel.text = ioNode.availableItem.Item.ItemName;
-                amountLabel.text = $"{ioNode.availableItem.Amount}/tick";
+                var connection = _canvasView.CurrentGraph.connections
+                    .FirstOrDefault(c => c.toNodeId == ioNode.id);
+                if (connection != null)
+                {
+                    var sourceNode = _canvasView.CurrentGraph.GetNode(connection.fromNodeId);
+                    if (sourceNode?.blueprint != null && sourceNode.blueprint.Output.IsValid)
+                    {
+                        displayItem = sourceNode.blueprint.Output;
+                    }
+                }
+            }
+
+            if (displayItem.IsValid)
+            {
+                itemLabel.text = displayItem.Item.ItemName;
+                amountLabel.text = $"{displayItem.Amount}/tick";
             }
             else
             {
@@ -119,9 +135,9 @@ namespace CarbonWorld.Features.Factory
             }
 
             var icon = card.Q<VisualElement>("io-card-icon");
-            if (ioNode.availableItem.IsValid && ioNode.availableItem.Item.Icon != null)
+            if (displayItem.IsValid && displayItem.Item.Icon != null)
             {
-                icon.style.backgroundImage = new StyleBackground(ioNode.availableItem.Item.Icon);
+                icon.style.backgroundImage = new StyleBackground(displayItem.Item.Icon);
             }
 
             var port = new VisualElement();

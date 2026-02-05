@@ -43,7 +43,7 @@ namespace CarbonWorld.Core.Systems
         private string _currentClimateState = "Safe";
 
         private float _tickTimer;
-        private System.Random _rng = new();
+        private readonly System.Random _rng = new();
 
         // Events
         public event Action<int, int, int> OnCarbonUpdated; // total, emitted, absorbed
@@ -117,9 +117,9 @@ namespace CarbonWorld.Core.Systems
 
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (tile is ProductionTile productionTile && productionTile.IsPowered)
+                if (tile is FactoryTile factoryTile && factoryTile.IsPowered)
                 {
-                    foreach (var node in productionTile.Graph.nodes)
+                    foreach (var node in factoryTile.Graph.nodes)
                     {
                         if (node.blueprint != null)
                         {
@@ -307,7 +307,7 @@ namespace CarbonWorld.Core.Systems
                     break;
 
                 case ClimateEffect.RefugeeCamp:
-                    int refugeeCount = SettlementSystem.Instance?.TotalPopulation / 10 ?? 50;
+                    int refugeeCount = SettlementSystem.Instance != null ? SettlementSystem.Instance.TotalPopulation / 10 : 50;
                     disasterTile = new RefugeeCampTile(originalTile.CellPosition, _currentTick, refugeeCount);
                     break;
 
