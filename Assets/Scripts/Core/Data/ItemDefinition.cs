@@ -1,7 +1,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [CreateAssetMenu(fileName = "Item_", menuName = "Carbon World/Item Definition")]
     public class ItemDefinition : ScriptableObject

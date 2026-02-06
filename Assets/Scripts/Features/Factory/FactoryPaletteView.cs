@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Systems;
-using CarbonWorld.Features.WorldMap;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Systems;
+using AncientFactory.Features.WorldMap;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Features.Factory
+namespace AncientFactory.Features.Factory
 {
     public class FactoryPaletteView
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CarbonWorld.Core.Systems
+namespace AncientFactory.Core.Systems
 {
     public class TileEventSystem : MonoBehaviour
     {

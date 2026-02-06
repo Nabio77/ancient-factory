@@ -3,12 +3,12 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Systems;
-using CarbonWorld.Features.Grid;
-using CarbonWorld.Features.Tiles;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Systems;
+using AncientFactory.Features.Grid;
+using AncientFactory.Features.Tiles;
 
-namespace CarbonWorld.Features.WorldMap
+namespace AncientFactory.Features.WorldMap
 {
     public class WorldMapUI : MonoBehaviour
     {

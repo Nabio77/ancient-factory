@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Core.Systems
+namespace AncientFactory.Core.Systems
 {
     public class NotificationSystem : MonoBehaviour
     {

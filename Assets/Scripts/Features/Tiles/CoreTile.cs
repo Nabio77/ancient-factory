@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-using CarbonWorld.Core.Types;
-using CarbonWorld.Core.Data;
+using AncientFactory.Core.Types;
+using AncientFactory.Core.Data;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     public class CoreTile : BaseTile
     {

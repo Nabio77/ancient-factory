@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [CreateAssetMenu(fileName = "TechTreeGraph", menuName = "Carbon World/Tech Tree Graph")]
     public class TechTreeGraph : ScriptableObject

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     public struct TileOutput
     {

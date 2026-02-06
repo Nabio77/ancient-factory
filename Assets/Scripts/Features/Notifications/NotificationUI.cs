@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Systems;
-using CarbonWorld.Core.Data;
+using AncientFactory.Core.Systems;
+using AncientFactory.Core.Data;
 
-namespace CarbonWorld.Features.Notifications
+namespace AncientFactory.Features.Notifications
 {
     public class NotificationUI : MonoBehaviour
     {

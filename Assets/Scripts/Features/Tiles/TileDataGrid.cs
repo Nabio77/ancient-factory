@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using CarbonWorld.Features.Grid;
+using AncientFactory.Features.Grid;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     public class TileDataGrid
     {

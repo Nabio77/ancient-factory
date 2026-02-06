@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [CreateAssetMenu(fileName = "BlueprintDatabase", menuName = "Carbon World/Blueprint Database")]
     public class BlueprintDatabase : ScriptableObject

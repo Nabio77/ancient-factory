@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
 using UnityEditor;
 using UnityEngine;
 
-namespace CarbonWorld.Editor
+namespace AncientFactory.Editor
 {
     public class GameDataGenerator : EditorWindow
     {

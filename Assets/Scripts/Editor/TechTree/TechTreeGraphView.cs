@@ -5,9 +5,9 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CarbonWorld.Core.Data;
+using AncientFactory.Core.Data;
 
-namespace CarbonWorld.Editor.TechTree
+namespace AncientFactory.Editor.TechTree
 {
     public class TechTreeGraphView : GraphView
     {

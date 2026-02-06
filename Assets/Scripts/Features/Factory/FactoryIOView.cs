@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Features.Tiles;
+using AncientFactory.Core.Data;
+using AncientFactory.Features.Tiles;
 
-namespace CarbonWorld.Features.Factory
+namespace AncientFactory.Features.Factory
 {
     public class FactoryIOView
     {

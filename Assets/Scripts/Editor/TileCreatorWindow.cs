@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 
-namespace CarbonWorld.Editor
+namespace AncientFactory.Editor
 {
     public class TileCreatorWindow : EditorWindow
     {

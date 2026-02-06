@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Features.WorldMap
+namespace AncientFactory.Features.WorldMap
 {
     [CreateAssetMenu(fileName = "WorldGenProfile", menuName = "Carbon World/World Gen Profile")]
     public class WorldGenProfile : ScriptableObject

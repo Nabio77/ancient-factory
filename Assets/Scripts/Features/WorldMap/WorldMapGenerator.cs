@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using CarbonWorld.Features.Grid;
-using CarbonWorld.Features.Tiles;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
+using AncientFactory.Features.Grid;
+using AncientFactory.Features.Tiles;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Features.WorldMap
+namespace AncientFactory.Features.WorldMap
 {
     public class WorldMapGenerator
     {

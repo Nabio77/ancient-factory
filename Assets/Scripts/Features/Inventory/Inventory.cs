@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using CarbonWorld.Core.Data;
+using AncientFactory.Core.Data;
 
-namespace CarbonWorld.Features.Inventories
+namespace AncientFactory.Features.Inventories
 {
     public readonly struct InventoryBatch : IDisposable
     {

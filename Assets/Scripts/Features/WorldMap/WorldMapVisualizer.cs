@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
-using CarbonWorld.Features.Tiles;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
+using AncientFactory.Features.Tiles;
 
-namespace CarbonWorld.Features.WorldMap
+namespace AncientFactory.Features.WorldMap
 {
     public class WorldMapVisualizer : MonoBehaviour
     {

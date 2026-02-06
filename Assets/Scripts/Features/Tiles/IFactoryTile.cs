@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Features.Inventories;
+using AncientFactory.Core.Data;
+using AncientFactory.Features.Inventories;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     /// <summary>
     /// Interface for tiles that can process blueprints (factories).

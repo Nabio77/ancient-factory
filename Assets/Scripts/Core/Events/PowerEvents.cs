@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CarbonWorld.Core.Events
+namespace AncientFactory.Core.Events
 {
     public struct PowerStateChanged : IEvent
     {

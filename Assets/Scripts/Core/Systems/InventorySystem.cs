@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Features.Inventories;
+using AncientFactory.Core.Data;
+using AncientFactory.Features.Inventories;
 
-namespace CarbonWorld.Core.Systems
+namespace AncientFactory.Core.Systems
 {
     public class InventorySystem : MonoBehaviour
     {

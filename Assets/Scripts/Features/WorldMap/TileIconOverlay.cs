@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Features.Tiles;
-using CarbonWorld.Features.Inventories;
+using AncientFactory.Core.Data;
+using AncientFactory.Features.Tiles;
+using AncientFactory.Features.Inventories;
 
-namespace CarbonWorld.Features.WorldMap
+namespace AncientFactory.Features.WorldMap
 {
     public class TileIconOverlay : MonoBehaviour
     {

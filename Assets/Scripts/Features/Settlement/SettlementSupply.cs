@@ -1,11 +1,11 @@
 using System.Linq;
 using UnityEngine;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Features.Tiles;
-using CarbonWorld.Features.Inventories;
-using CarbonWorld.Features.WorldMap;
+using AncientFactory.Core.Data;
+using AncientFactory.Features.Tiles;
+using AncientFactory.Features.Inventories;
+using AncientFactory.Features.WorldMap;
 
-namespace CarbonWorld.Features.Settlement
+namespace AncientFactory.Features.Settlement
 {
     public class SettlementSupply
     {

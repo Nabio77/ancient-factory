@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CarbonWorld.Core.Data;
+using AncientFactory.Core.Data;
 
-namespace CarbonWorld.Features.Factory
+namespace AncientFactory.Features.Factory
 {
     public class FactoryGraphInput
     {

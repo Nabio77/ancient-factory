@@ -1,7 +1,7 @@
 using System;
-using CarbonWorld.Core.Data;
+using AncientFactory.Core.Data;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     public interface IGraphTile
     {

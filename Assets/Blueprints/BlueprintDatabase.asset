@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d850a6bc68d94b3ea6c20de37b8764b, type: 3}
   m_Name: BlueprintDatabase
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.BlueprintDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDatabase
   blueprints:
   - {fileID: 11400000, guid: 8e8c20c53bb6c4816935bec7a0dea909, type: 2}
   - {fileID: 11400000, guid: 6596aa407c1854e06b9510c0660c2e71, type: 2}

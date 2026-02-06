@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
-using CarbonWorld.Features.Grid;
-using CarbonWorld.Features.Inventories;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
+using AncientFactory.Features.Grid;
+using AncientFactory.Features.Inventories;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     public class PowerTile : BaseTile, IFactoryTile
     {

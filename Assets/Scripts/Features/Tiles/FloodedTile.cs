@@ -1,7 +1,7 @@
 using UnityEngine;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     public class FloodedTile : DisasterTile
     {

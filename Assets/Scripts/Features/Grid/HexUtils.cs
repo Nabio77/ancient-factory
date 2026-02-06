@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CarbonWorld.Features.Grid
+namespace AncientFactory.Features.Grid
 {
     /// <summary>
     /// Utility functions for hexagonal tilemap operations.

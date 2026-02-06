@@ -3,9 +3,9 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements; // For ObjectField
-using CarbonWorld.Core.Data;
+using AncientFactory.Core.Data;
 
-namespace CarbonWorld.Editor.TechTree
+namespace AncientFactory.Editor.TechTree
 {
     public class TechTreeGraphWindow : EditorWindow
     {

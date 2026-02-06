@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a761d0695b53441c7b286442d197eff2, type: 3}
   m_Name: WorldGenProfile
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.WorldGenProfile
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.WorldGenProfile
   Rings: 5
   CoreRadius: 1
   SettlementTileCount: 3

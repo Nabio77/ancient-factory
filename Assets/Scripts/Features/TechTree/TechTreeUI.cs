@@ -3,10 +3,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Systems;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Systems;
 
-namespace CarbonWorld.Features.TechTree
+namespace AncientFactory.Features.TechTree
 {
     public class TechTreeUI : MonoBehaviour
     {
@@ -15,7 +15,7 @@ namespace CarbonWorld.Features.TechTree
         private UIDocument uiDocument;
 
         [SerializeField]
-        private CarbonWorld.Features.WorldMap.TileSelector tileSelector; // Added reference
+        private AncientFactory.Features.WorldMap.TileSelector tileSelector; // Added reference
 
         [Title("Connection Settings")]
         [SerializeField]
@@ -143,7 +143,7 @@ namespace CarbonWorld.Features.TechTree
         {
             if (tileSelector == null)
             {
-                tileSelector = FindFirstObjectByType<CarbonWorld.Features.WorldMap.TileSelector>();
+                tileSelector = FindFirstObjectByType<AncientFactory.Features.WorldMap.TileSelector>();
             }
 
             if (TechTreeSystem.Instance != null && TechTreeSystem.Instance.Graph != null)
@@ -178,9 +178,9 @@ namespace CarbonWorld.Features.TechTree
             }
         }
 
-        private void OnTileSelected(CarbonWorld.Features.Tiles.BaseTile tile)
+        private void OnTileSelected(AncientFactory.Features.Tiles.BaseTile tile)
         {
-            if (tile is CarbonWorld.Features.Tiles.CoreTile)
+            if (tile is AncientFactory.Features.Tiles.CoreTile)
             {
                 Show();
             }

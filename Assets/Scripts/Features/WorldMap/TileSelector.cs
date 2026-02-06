@@ -2,11 +2,11 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Sirenix.OdinInspector;
-using CarbonWorld.Features.Tiles;
-using CarbonWorld.Core.Types;
+using AncientFactory.Features.Tiles;
+using AncientFactory.Core.Types;
 using System.Collections.Generic;
 
-namespace CarbonWorld.Features.WorldMap
+namespace AncientFactory.Features.WorldMap
 {
     public class TileSelector : MonoBehaviour
     {

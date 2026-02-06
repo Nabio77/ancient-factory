@@ -1,16 +1,16 @@
-# Carbon World - Gemini Agent Context
+# Ancient Factory - Gemini Agent Context
 
 ## Project Overview
-Roguelike factory automation game where players build production chains across hexagonal tiles to fulfill demands from a central core while managing carbon emissions.
+Roguelike factory automation game where players build production chains across hexagonal tiles to fulfill demands from a central core while managing factory efficiency.
 - **Platform:** Unity 2022/6000+ (C# 9.0+)
 - **Render Pipeline:** Universal Render Pipeline (URP)
-- **Core Loop:** Fulfill T6 demands -> Grow Core -> Manage Carbon -> Meta-progression.
+- **Core Loop:** Fulfill T6 demands -> Grow Core -> Manage Production -> Meta-progression.
 
 ## Code Standards & Style
 - **Language:** C# 9.0+
 - **Formatting:** K&R style braces, 4 spaces indentation.
 - **Comments:** Minimal, explain *why* not *what*. Avoid "divider" comments.
-- **Namespaces:** Match folder structure (e.g., `CarbonWorld.Core.Systems`). Pluralize namespaces to avoid collisions.
+- **Namespaces:** Match folder structure (e.g., `AncientFactory.Core.Systems`). Pluralize namespaces to avoid collisions.
 - **Using Directives:** Place `using` statements **outside** (above) the `namespace` declaration.
 - **File Structure:** One class per file, filename matches class name.
 

@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d51b844ab1524a9680322780ab109e9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.InterfaceSystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.InterfaceSystem
   worldMapCamera: {fileID: 330585548}
   tileSelector: {fileID: 1590152905}
 --- !u!4 &61323577
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1bce13df369024e79baf5e346e829f81, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.TilePaletteUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.TilePaletteUI
   uiDocument: {fileID: 261974469}
   tileSelector: {fileID: 1590152905}
   worldMap: {fileID: 998030626}
@@ -931,7 +931,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c278d674c1e641128442ca40c9364bd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.NotificationSystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.NotificationSystem
 --- !u!4 &318722781
 Transform:
   m_ObjectHideFlags: 0
@@ -1096,7 +1096,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acacfb2f58dd14267a6149918f5b4706, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.WorldMapCamera
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.WorldMapCamera
   panSpeed: 10
   dragSpeed: 0.5
   smoothTime: 0.1
@@ -1170,7 +1170,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2018c2a159548495a8b669213d864ac0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.WorldMapUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.WorldMapUI
   uiDocument: {fileID: 361049208}
   tileSelector: {fileID: 1590152905}
   worldMap: {fileID: 998030626}
@@ -1202,7 +1202,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88ce8760b6b344238995b3971ef0fdcb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.SettlementSystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.SettlementSystem
   worldMap: {fileID: 998030626}
   itemDatabase: {fileID: 11400000, guid: 219ae6d08e4fe4db686a304d08d68861, type: 2}
   minDemands: 2
@@ -1272,7 +1272,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a3ba1ca8daeb43b6828f842df61f97c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.Notifications.NotificationUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.Notifications.NotificationUI
   uiDocument: {fileID: 395839632}
   notificationTemplate: {fileID: 9197481963319205126, guid: 22469a3aeb2d543179b3ef500b73412d, type: 3}
 --- !u!114 &395839632
@@ -1453,7 +1453,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a46915590804e2192ff4dfe82ce88f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.CarbonSystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.CarbonSystem
   worldMap: {fileID: 998030626}
   tickInterval: 1
   minDisasterSpacing: 2
@@ -1516,7 +1516,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a40f1726af344c099de297e7a66bd6c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.UI.BlueprintEditor.BlueprintEditorUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.UI.BlueprintEditor.BlueprintEditorUI
   uiDocument: {fileID: 610185977}
   tileSelector: {fileID: 1590152905}
   database: {fileID: 11400000, guid: 583ea1c0c1c6e4f3c9caddc33a51b4f8, type: 2}
@@ -1574,7 +1574,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93ba7b227b2624611940583bd5157fd6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.PowerDistributionSystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.PowerDistributionSystem
   worldMap: {fileID: 998030626}
   recalculateInterval: 0.5
 --- !u!4 &743360586
@@ -1685,7 +1685,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f58d1f33ac7a45e4b54a5c4499dd971, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.Carbon.CarbonUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.Carbon.CarbonUI
   uiDocument: {fileID: 836090404}
   carbonSystem: {fileID: 507291321}
   graphEditor: {fileID: 610185976}
@@ -1741,7 +1741,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0571bfc4487544ee69c5ef55d946f79e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.Tiles.TileGraphSystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.Tiles.TileGraphSystem
 --- !u!4 &971684620
 Transform:
   m_ObjectHideFlags: 0
@@ -1768,7 +1768,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c24f3c24d7354ff8a5570675df7f3a2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.TileIconOverlay
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.TileIconOverlay
   worldMap: {fileID: 998030626}
   iconScale: 0.13
   zOffset: 0
@@ -1817,7 +1817,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fd9fc99d51244f979b07c226d64563a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.WorldMap
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.WorldMap
   generationProfile: {fileID: 11400000, guid: a5b864557628c448f96d0e869954ce76, type: 2}
   _savedTiles:
   - Position: {x: 0, y: 0, z: 0}
@@ -2193,7 +2193,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edf7223728aed4da4b85076ab94aa8a3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.UI.CoreUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.UI.CoreUI
   _worldMap: {fileID: 998030626}
   document: {fileID: 1431736000}
   graphEditor: {fileID: 610185976}
@@ -2249,7 +2249,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c896afc33140649a48a11d869d52ca0a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.TechTreeSystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.TechTreeSystem
   worldMap: {fileID: 998030626}
   techTreeGraph: {fileID: 11400000, guid: 06ffdcaccb77b4edea11602086b35a69, type: 2}
 --- !u!4 &1479224408
@@ -2310,7 +2310,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34bae981c32134b2c9344aff12e304c6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.TileSelector
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.TileSelector
   worldMap: {fileID: 998030626}
   selectionOffset: {x: -0.5, y: -0.5}
 --- !u!1 &1666142048
@@ -2436,7 +2436,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b9c8d5bbb1464323a1b2f8076220ea5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.TechTree.TechTreeUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.TechTree.TechTreeUI
   uiDocument: {fileID: 1668750890}
   tileSelector: {fileID: 1590152905}
   connectionColor: {r: 0.4, g: 0.5, b: 0.6, a: 1}
@@ -2539,7 +2539,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6b51197ee0d64652baa1440048c179e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.FactorySystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.FactorySystem
   worldMap: {fileID: 998030626}
   tickInterval: 1
 --- !u!4 &1804117573
@@ -2585,7 +2585,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0d21582e201941cb87f5979b5211bf2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.WorldMap.WorldMapVisualizer
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.WorldMap.WorldMapVisualizer
   tilemap: {fileID: 311178366}
   highlightTilemap: {fileID: 1065146812}
   coreTile: {fileID: 11400000, guid: 278af164446a6454f9bbb71ce2747341, type: 2}
@@ -2647,7 +2647,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 722d0fdf63f7e452a889176c1b86bb46, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Systems.InventorySystem
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.InventorySystem
 --- !u!4 &1877084597
 Transform:
   m_ObjectHideFlags: 0
@@ -2707,7 +2707,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f789f89655102415eb995780b1b6f460, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Features.UI.SettlementUI
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.UI.SettlementUI
   uiDocument: {fileID: 2014334156}
   demandEntryTemplate: {fileID: 9197481963319205126, guid: 5d8179ea32cc84804ac82affd3e5e1ef, type: 3}
   tileSelector: {fileID: 1590152905}

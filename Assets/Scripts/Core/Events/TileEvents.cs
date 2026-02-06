@@ -1,7 +1,7 @@
-using CarbonWorld.Features.Inventories;
+using AncientFactory.Features.Inventories;
 using UnityEngine;
 
-namespace CarbonWorld.Core.Events
+namespace AncientFactory.Core.Events
 {
     public struct TileInventoryChanged : IEvent
     {

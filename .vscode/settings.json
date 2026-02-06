@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "carbon-world.slnx"
+    "dotnet.defaultSolution": "ancient-factory.slnx"
 }

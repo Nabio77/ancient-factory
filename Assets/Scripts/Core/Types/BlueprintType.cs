@@ -1,4 +1,4 @@
-namespace CarbonWorld.Core.Types
+namespace AncientFactory.Core.Types
 {
     public enum BlueprintType
     {

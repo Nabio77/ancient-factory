@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using CarbonWorld.Core.Types;
-using CarbonWorld.Features.Inventories;
+using AncientFactory.Core.Types;
+using AncientFactory.Features.Inventories;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [CreateAssetMenu(fileName = "Blueprint_", menuName = "Carbon World/Blueprint Definition")]
     public class BlueprintDefinition : ScriptableObject

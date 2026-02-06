@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
-using CarbonWorld.Features.WorldMap;
+using AncientFactory.Features.WorldMap;
 
-namespace CarbonWorld.Core.Systems
+namespace AncientFactory.Core.Systems
 {
     public enum InterfaceState
     {

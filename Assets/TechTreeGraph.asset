@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99f364eae990f44528ae6638b145da5a, type: 3}
   m_Name: TechTreeGraph
-  m_EditorClassIdentifier: Assembly-CSharp::CarbonWorld.Core.Data.TechTreeGraph
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.TechTreeGraph
   nodes:
   - guid: 012264c0-1e98-4792-acd0-0d475c1cb43a
     position: {x: 708, y: 436}

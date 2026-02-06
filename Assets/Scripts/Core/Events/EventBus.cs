@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CarbonWorld.Core.Events
+namespace AncientFactory.Core.Events
 {
     public interface IEvent { }
 

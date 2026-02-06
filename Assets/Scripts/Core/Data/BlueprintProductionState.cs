@@ -1,6 +1,6 @@
 using System;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     public enum ProductionStatus
     {

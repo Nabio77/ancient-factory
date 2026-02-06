@@ -1,7 +1,7 @@
 using System;
-using CarbonWorld.Core.Types;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [Serializable]
     public struct NotificationData

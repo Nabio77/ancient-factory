@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [Serializable]
     public class BlueprintGraph

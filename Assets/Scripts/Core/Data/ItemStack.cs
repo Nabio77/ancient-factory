@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [Serializable]
     public struct ItemStack : IEquatable<ItemStack>

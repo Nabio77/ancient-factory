@@ -1,4 +1,4 @@
-namespace CarbonWorld.Core.Events
+namespace AncientFactory.Core.Events
 {
     public struct TickCompleted : IEvent
     {

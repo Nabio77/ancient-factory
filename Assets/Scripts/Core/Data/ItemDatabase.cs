@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace CarbonWorld.Core.Data
+namespace AncientFactory.Core.Data
 {
     [CreateAssetMenu(fileName = "ItemDatabase", menuName = "Carbon World/Item Database")]
     public class ItemDatabase : ScriptableObject

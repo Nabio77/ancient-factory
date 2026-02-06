@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
-using CarbonWorld.Features.Grid;
-using CarbonWorld.Features.Tiles;
-using CarbonWorld.Core.Data;
-using CarbonWorld.Core.Types;
-using CarbonWorld.Core.Systems;
+using AncientFactory.Features.Grid;
+using AncientFactory.Features.Tiles;
+using AncientFactory.Core.Data;
+using AncientFactory.Core.Types;
+using AncientFactory.Core.Systems;
 using Drawing;
 
-namespace CarbonWorld.Features.WorldMap
+namespace AncientFactory.Features.WorldMap
 {
     public class WorldMap : MonoBehaviour
     {

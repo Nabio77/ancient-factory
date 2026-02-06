@@ -1,8 +1,8 @@
 using UnityEngine;
-using CarbonWorld.Features.Inventories;
-using CarbonWorld.Core.Types;
+using AncientFactory.Features.Inventories;
+using AncientFactory.Core.Types;
 
-namespace CarbonWorld.Features.Tiles
+namespace AncientFactory.Features.Tiles
 {
     public class BaseTile
     {
