@@ -13,78 +13,195 @@ MonoBehaviour:
   m_Name: TechTreeGraph
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.TechTreeGraph
   nodes:
-  - guid: 012264c0-1e98-4792-acd0-0d475c1cb43a
-    position: {x: 708, y: 436}
-    blueprint: {fileID: 11400000, guid: 0896453df10ad4fd98fb54dc8f7d50ce, type: 2}
+  - guid: 71648cdf-fbeb-43b7-b4f0-78430aaa5c84
+    position: {x: 400, y: 0}
+    blueprint: {fileID: 11400000, guid: 7c8088ae723b0486280e5a8666eab20f, type: 2}
     item: {fileID: 0}
     prerequisites:
-    - aa2a08c0-fb46-471e-a9e9-d330fba322fa
-  - guid: 4386f7fc-2f28-4e67-b573-86a2b949fcc2
-    position: {x: 708, y: 580}
-    blueprint: {fileID: 11400000, guid: 84540f40dd02a4cd59164a79dc7fc786, type: 2}
+    - ec492fc7-e934-4dac-b1da-ba71da503325
+  - guid: 2d2aac49-a2db-4354-a88f-e0513ef50c14
+    position: {x: 400, y: 250}
+    blueprint: {fileID: 11400000, guid: 214a1536a60ab409a98a21e53e98a8bd, type: 2}
     item: {fileID: 0}
     prerequisites:
-    - aa2a08c0-fb46-471e-a9e9-d330fba322fa
-  - guid: aa2a08c0-fb46-471e-a9e9-d330fba322fa
-    position: {x: 256, y: 503}
-    blueprint: {fileID: 0}
-    item: {fileID: 11400000, guid: cfc2daa22ee8a411ca9f564982f19a85, type: 2}
+    - d407622d-a2f1-47d5-8019-3878ecbd9f9a
+  - guid: 7fe64868-f29b-4d27-8068-a9a7566f1a50
+    position: {x: 400, y: 500}
+    blueprint: {fileID: 11400000, guid: effa3c6c9caaf439cb6a538347344043, type: 2}
+    item: {fileID: 0}
     prerequisites: []
-  - guid: 8e0ecf3b-31b3-4057-8178-bfaef0d997c1
-    position: {x: 970, y: 271}
-    blueprint: {fileID: 11400000, guid: 3bbf96363cf8641028f24c1b52017404, type: 2}
+  - guid: 08a077e2-89e7-4d1f-8020-4fc8965989e5
+    position: {x: 400, y: 750}
+    blueprint: {fileID: 11400000, guid: d1690ddf1250449a29a02487d413cd20, type: 2}
     item: {fileID: 0}
-    prerequisites:
-    - 12627ed5-07e9-41a8-b779-57d05421cd40
-  - guid: 12627ed5-07e9-41a8-b779-57d05421cd40
-    position: {x: 696, y: 271}
-    blueprint: {fileID: 11400000, guid: 302764926a12745cd8594e56bfb5bcac, type: 2}
-    item: {fileID: 0}
-    prerequisites:
-    - 69b42551-7fa0-44e3-85df-517338ae5516
-  - guid: 69b42551-7fa0-44e3-85df-517338ae5516
-    position: {x: 385, y: 271}
-    blueprint: {fileID: 11400000, guid: ce6efe78e1b384a66bdfd373b67479df, type: 2}
-    item: {fileID: 0}
-    prerequisites:
-    - 5baef042-a569-479e-95bd-3ffb6effb19a
-  - guid: 5baef042-a569-479e-95bd-3ffb6effb19a
-    position: {x: 115, y: 271}
-    blueprint: {fileID: 0}
-    item: {fileID: 11400000, guid: dcf52f536fe994f2b80e6ced5108cbdb, type: 2}
     prerequisites: []
-  - guid: f094ed83-334c-47db-98c8-0d57f996ef14
-    position: {x: 546, y: -78}
-    blueprint: {fileID: 11400000, guid: c71054ebcf0d846be8a1c848a02e5810, type: 2}
+  - guid: c54bfea3-6425-4570-b1b8-072a1e9de403
+    position: {x: 800, y: 0}
+    blueprint: {fileID: 11400000, guid: d458b271f19354224977888df3df0ef2, type: 2}
     item: {fileID: 0}
-    prerequisites:
-    - 984b183c-d7a8-4884-882b-1e038ecceb68
-    - 80191a6d-8212-421d-ab11-16d248eb1231
-  - guid: 80191a6d-8212-421d-ab11-16d248eb1231
-    position: {x: 115, y: 46}
-    blueprint: {fileID: 0}
-    item: {fileID: 11400000, guid: d676f706e834745238e93dcb72a95a2d, type: 2}
     prerequisites: []
-  - guid: 0a4a3343-04df-4373-9fd2-6dff317668a2
-    position: {x: 526, y: -282}
-    blueprint: {fileID: 11400000, guid: 37beef7c901ea4028a8a78a34402012f, type: 2}
+  - guid: 0ff923f2-0fa6-4dd7-8a71-ea4d705050f2
+    position: {x: 800, y: 250}
+    blueprint: {fileID: 11400000, guid: 0ed293bce1318499bab891a460251768, type: 2}
     item: {fileID: 0}
-    prerequisites:
-    - 984b183c-d7a8-4884-882b-1e038ecceb68
-  - guid: 984b183c-d7a8-4884-882b-1e038ecceb68
-    position: {x: 95, y: -282}
-    blueprint: {fileID: 0}
-    item: {fileID: 11400000, guid: 9051fdc7422794723a3b88e30181bd85, type: 2}
     prerequisites: []
-  - guid: 6bdf2107-d179-44da-9dca-49fbe76a2cec
-    position: {x: 881, y: -78}
-    blueprint: {fileID: 11400000, guid: a3c6852bab3b3404bbf497aee97aa012, type: 2}
+  - guid: 2626a246-a48a-4734-8033-99e5cd6c01d4
+    position: {x: 800, y: 500}
+    blueprint: {fileID: 11400000, guid: afcd3189ccec940f388b2ad40b3067d6, type: 2}
     item: {fileID: 0}
-    prerequisites:
-    - f094ed83-334c-47db-98c8-0d57f996ef14
-  - guid: a9a0538c-9b0d-4976-82c3-a0cc9d736f8d
-    position: {x: 917, y: -282}
-    blueprint: {fileID: 11400000, guid: bf3bf68ca3ad44b3b8b0d6115880d0fd, type: 2}
+    prerequisites: []
+  - guid: 7257843e-9496-4712-ae84-eb23f23f499d
+    position: {x: 800, y: 750}
+    blueprint: {fileID: 11400000, guid: 4af06409bc80643dca3b3624c2be6693, type: 2}
     item: {fileID: 0}
-    prerequisites:
-    - 0a4a3343-04df-4373-9fd2-6dff317668a2
+    prerequisites: []
+  - guid: 0e479d17-33f9-44f8-ac3a-6b3f6cf51ca1
+    position: {x: 800, y: 1000}
+    blueprint: {fileID: 11400000, guid: 78209be8edbbf4f43b96e7795bb610f0, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 3ab276e2-7c17-4996-a986-e121915806b0
+    position: {x: 800, y: 1250}
+    blueprint: {fileID: 11400000, guid: 65c689292f6e44bf187018b7e92382c3, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 4e44be2f-c050-434f-99a1-5425ec117cc7
+    position: {x: 800, y: 1500}
+    blueprint: {fileID: 11400000, guid: 9e7eaef92d5e7436c9a705012b22c265, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: d959dbf4-7a63-480a-8868-ab422b31a98d
+    position: {x: 800, y: 1750}
+    blueprint: {fileID: 11400000, guid: d2a932bff23b54006ac5e717dbacfc24, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 790a03d2-1f49-407a-8414-59369e6c4f77
+    position: {x: 800, y: 2000}
+    blueprint: {fileID: 11400000, guid: 645404ef04eb5439a8e8f2f49381f610, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 12870961-3abe-45fc-9e25-dda831287082
+    position: {x: 1200, y: 0}
+    blueprint: {fileID: 11400000, guid: 9aa98b6bcb7d64430b23beb2241b29b3, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: ca690822-44e1-4a14-a8c7-1b367d206c22
+    position: {x: 1200, y: 250}
+    blueprint: {fileID: 11400000, guid: c9dae06992274476ab16c602f22da31d, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 3ab604d2-6114-4540-9d2f-7039737c01b3
+    position: {x: 1200, y: 500}
+    blueprint: {fileID: 11400000, guid: abb1a610b510942368683c49f6f89e41, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 32109b18-ded4-4c44-976b-7296f624b1e6
+    position: {x: 1200, y: 750}
+    blueprint: {fileID: 11400000, guid: 91ccbda40f3a44687b321bba1af75a90, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: f169590b-a33d-420e-aadd-2e141f8f2fcf
+    position: {x: 1200, y: 1000}
+    blueprint: {fileID: 11400000, guid: 25a0b6bd9405f4d1f8a7a994a8b02051, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: a9612a9e-8469-4a8d-910d-732f9bc82140
+    position: {x: 1200, y: 1250}
+    blueprint: {fileID: 11400000, guid: 63e0ff7bd134e446694fc0cc2f36862a, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: dec95ba5-4a5f-442e-bf9b-e9734009a861
+    position: {x: 1200, y: 1500}
+    blueprint: {fileID: 11400000, guid: 7bd76e127bba94b83872741a0cf1b685, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 39c057e3-6ab4-4509-858d-e574c7fb5ef1
+    position: {x: 1600, y: 0}
+    blueprint: {fileID: 11400000, guid: 976706cd82c394edeae07c94674dc333, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: a156e783-321c-4193-870f-8eb60434fbb5
+    position: {x: 1600, y: 250}
+    blueprint: {fileID: 11400000, guid: 1bac72bc841be400f93ff78ba6501d52, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 0feb4cb4-b69d-45a3-b734-3dae0605614c
+    position: {x: 1600, y: 500}
+    blueprint: {fileID: 11400000, guid: 73d1945bda8dd419395e274f445dfbcc, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: e05f18f5-611b-4f78-bfe2-a55c92c4a7b1
+    position: {x: 1600, y: 750}
+    blueprint: {fileID: 11400000, guid: 797eb75a12327408a9bcbca828f13f6a, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: e08ca9ed-f6ba-4784-bc2f-5b9e4109e5f5
+    position: {x: 1600, y: 1000}
+    blueprint: {fileID: 11400000, guid: 2c80105eeca3c4af1bb903fdced87faa, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 2f69a0c7-1d75-44ed-bfab-ac924f958b34
+    position: {x: 1600, y: 1250}
+    blueprint: {fileID: 11400000, guid: 3e717fad1d6f94bc89d4f3ec58eaddbf, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: b7018768-7329-4483-9b7e-1d66ff1ed7c2
+    position: {x: 2000, y: 0}
+    blueprint: {fileID: 11400000, guid: e5c49a17e28364228a89794e7f2d55e4, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 575d0ee3-738f-407b-bc9f-1bec4cd56c8a
+    position: {x: 2000, y: 250}
+    blueprint: {fileID: 11400000, guid: c41920f08fff84612a511bb45efaae60, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: cb8f0957-d16b-4490-b1d4-d157e2a18981
+    position: {x: 2000, y: 500}
+    blueprint: {fileID: 11400000, guid: 83999ee7efca040bfb11cd073d88d0d0, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 4a3c2a8a-308c-4e16-b349-b4c0a9198bf4
+    position: {x: 2000, y: 750}
+    blueprint: {fileID: 11400000, guid: df6ee5381e11641ceae44dcecb528d6b, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 5a046308-f4c2-40fb-be0b-cb903709f144
+    position: {x: 2400, y: 0}
+    blueprint: {fileID: 11400000, guid: c8b9568c5b41d4a83a961d7d2aaf4ed1, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 9c777b15-ea61-45c5-966f-8df49630474c
+    position: {x: 2400, y: 250}
+    blueprint: {fileID: 11400000, guid: acee797f3494d49fc907705c94a83daa, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 069ccaad-2cb1-4b7e-9f5f-321c95c4e393
+    position: {x: 2400, y: 500}
+    blueprint: {fileID: 11400000, guid: b8081de3e724e4c33b0a31a224d36f5e, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: f5d6fec5-069f-4df7-a60f-13ac1fc3ef17
+    position: {x: 2400, y: 750}
+    blueprint: {fileID: 11400000, guid: f264ba5d43ba44a999f5518a950b77e5, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: 460e600d-c159-478b-9536-4c9eee09de0b
+    position: {x: 2400, y: 1000}
+    blueprint: {fileID: 11400000, guid: 97be1d612549b4a3186e2d9c372e1903, type: 2}
+    item: {fileID: 0}
+    prerequisites: []
+  - guid: ec492fc7-e934-4dac-b1da-ba71da503325
+    position: {x: 92, y: 0}
+    blueprint: {fileID: 0}
+    item: {fileID: 11400000, guid: 4f08ae124e7a343df9c3dc46fffe6198, type: 2}
+    prerequisites: []
+  - guid: d407622d-a2f1-47d5-8019-3878ecbd9f9a
+    position: {x: 105, y: 250}
+    blueprint: {fileID: 0}
+    item: {fileID: 11400000, guid: baf9bb6826bc14ca690d624d7d402d3d, type: 2}
+    prerequisites: []
+  - guid: b741c66c-558c-4064-b7bd-30ba9bb58b47
+    position: {x: 45, y: 500}
+    blueprint: {fileID: 0}
+    item: {fileID: 11400000, guid: 7161bca54c2584997a24c74bb40e9105, type: 2}
+    prerequisites: []

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0929d3f20898041ca886698bcb855fe7, type: 3}
+  m_Name: BP_OliveOil
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
+  blueprintName: Olive Oil
+  description: 
+  icon: {fileID: 0}
+  type: 7
+  inputCount: 1
+  outputCount: 1
+  inputs:
+  - item: {fileID: 11400000, guid: da25e21eb52f44b8fb784c7949f1e121, type: 2}
+    amount: 3
+  output:
+    item: {fileID: 11400000, guid: 75157649fc3844fd4916d3db219c4527, type: 2}
+    amount: 1
+  productionTime: 3
+  powerConsumption: 1
+  powerOutput: 0
+  carbonEmission: 2
+  isStarterCard: 0
+  unlockCost: 35

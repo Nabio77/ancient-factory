@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0929d3f20898041ca886698bcb855fe7, type: 3}
+  m_Name: BP_BronzeWeapons
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
+  blueprintName: Bronze Weapons
+  description: 
+  icon: {fileID: 0}
+  type: 3
+  inputCount: 2
+  outputCount: 1
+  inputs:
+  - item: {fileID: 11400000, guid: e1aa75e6eb1bd48e7a4afca45bb7ee49, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: c953bbbe481254c3d9e924a1b9f9136a, type: 2}
+    amount: 1
+  output:
+    item: {fileID: 11400000, guid: 01edcc55ad7b3486ca0f256a2c3f87b6, type: 2}
+    amount: 1
+  productionTime: 5
+  powerConsumption: 1
+  powerOutput: 0
+  carbonEmission: 6
+  isStarterCard: 0
+  unlockCost: 120

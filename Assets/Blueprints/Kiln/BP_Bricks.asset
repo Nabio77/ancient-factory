@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0929d3f20898041ca886698bcb855fe7, type: 3}
+  m_Name: BP_Bricks
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
+  blueprintName: Bricks
+  description: 
+  icon: {fileID: 0}
+  type: 1
+  inputCount: 1
+  outputCount: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 5c4a7d0677fe94ef489bbf13e3a28911, type: 2}
+    amount: 2
+  output:
+    item: {fileID: 11400000, guid: 3dac69d20fbb144c69ae6c0cb60276fe, type: 2}
+    amount: 1
+  productionTime: 2
+  powerConsumption: 1
+  powerOutput: 0
+  carbonEmission: 6
+  isStarterCard: 1
+  unlockCost: 0

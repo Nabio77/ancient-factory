@@ -21,7 +21,7 @@ MonoBehaviour:
   NormalAmounts: {x: 56, y: 135}
   PureAmounts: {x: 136, y: 250}
   ResourceRules:
-  - Item: {fileID: 11400000, guid: 9051fdc7422794723a3b88e30181bd85, type: 2}
+  - Item: {fileID: 11400000, guid: 4f08ae124e7a343df9c3dc46fffe6198, type: 2}
     CountMin: 1
     CountMax: 5
     MinDistanceFromCore: 4
@@ -35,7 +35,7 @@ MonoBehaviour:
     - Quality: 2
       Weight: 3
     LinkedRules: []
-  - Item: {fileID: 11400000, guid: d5750c8d9b7724cf9a51caeda5d177b0, type: 2}
+  - Item: {fileID: 11400000, guid: 7161bca54c2584997a24c74bb40e9105, type: 2}
     CountMin: 2
     CountMax: 4
     MinDistanceFromCore: 4
@@ -47,7 +47,7 @@ MonoBehaviour:
     - Quality: 0
       Weight: 10
     LinkedRules: []
-  - Item: {fileID: 11400000, guid: d676f706e834745238e93dcb72a95a2d, type: 2}
+  - Item: {fileID: 11400000, guid: 108bf56b8963e49339c9713b7c7dff9a, type: 2}
     CountMin: 4
     CountMax: 10
     MinDistanceFromCore: 4
@@ -63,10 +63,10 @@ MonoBehaviour:
     - Quality: 2
       Weight: 2
     LinkedRules:
-    - Item: {fileID: 11400000, guid: 9051fdc7422794723a3b88e30181bd85, type: 2}
+    - Item: {fileID: 11400000, guid: e85b0e0a688fc4b9f9cf2a18962c951a, type: 2}
       Chance: 65
       DistanceRange: {x: 1, y: 3}
-  - Item: {fileID: 11400000, guid: cfc2daa22ee8a411ca9f564982f19a85, type: 2}
+  - Item: {fileID: 11400000, guid: 5c4a7d0677fe94ef489bbf13e3a28911, type: 2}
     CountMin: 1
     CountMax: 5
     MinDistanceFromCore: 2
@@ -76,7 +76,7 @@ MonoBehaviour:
     ClusterRadius: 1
     QualitySettings: []
     LinkedRules: []
-  - Item: {fileID: 11400000, guid: dcf52f536fe994f2b80e6ced5108cbdb, type: 2}
+  - Item: {fileID: 11400000, guid: 2677c69c88614409ea0cfb4090e1f357, type: 2}
     CountMin: 1
     CountMax: 5
     MinDistanceFromCore: 2

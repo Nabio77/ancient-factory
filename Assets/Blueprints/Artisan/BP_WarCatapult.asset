@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0929d3f20898041ca886698bcb855fe7, type: 3}
+  m_Name: BP_WarCatapult
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
+  blueprintName: War Catapult
+  description: 
+  icon: {fileID: 0}
+  type: 3
+  inputCount: 3
+  outputCount: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 0c16176628d7a4309b035dfc4e46bc06, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 0a8190b06d70045b7ab3d355329e9319, type: 2}
+    amount: 4
+  - item: {fileID: 11400000, guid: 5639f222b0ba44a948bdccf5c3b853b2, type: 2}
+    amount: 4
+  output:
+    item: {fileID: 11400000, guid: 053670111d0184909a3e17a8c9f4b72b, type: 2}
+    amount: 1
+  productionTime: 15
+  powerConsumption: 1
+  powerOutput: 0
+  carbonEmission: 18
+  isStarterCard: 0
+  unlockCost: 600

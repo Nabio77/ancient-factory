@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0929d3f20898041ca886698bcb855fe7, type: 3}
+  m_Name: BP_TempleColumn
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
+  blueprintName: Temple Column
+  description: 
+  icon: {fileID: 0}
+  type: 3
+  inputCount: 2
+  outputCount: 1
+  inputs:
+  - item: {fileID: 11400000, guid: d8154433683e640089d3c407748af5cf, type: 2}
+    amount: 4
+  - item: {fileID: 11400000, guid: ed2cda844f1ae4512ab5ebb19064aa4c, type: 2}
+    amount: 2
+  output:
+    item: {fileID: 11400000, guid: 85264b886f9434a55a04905c0ba31a65, type: 2}
+    amount: 1
+  productionTime: 7
+  powerConsumption: 1
+  powerOutput: 0
+  carbonEmission: 8
+  isStarterCard: 0
+  unlockCost: 200
