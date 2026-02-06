@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BronzeTools
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Bronze Tools
-  description: 
+  description: Durable tools for farming and crafting.
   icon: {fileID: 0}
   tier: 3
   category: 3

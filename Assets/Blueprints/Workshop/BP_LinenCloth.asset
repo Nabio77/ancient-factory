@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_LinenCloth
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Linen Cloth
-  description: 
+  description: Weaves thread into fine cloth.
   icon: {fileID: 0}
   type: 2
   inputCount: 1

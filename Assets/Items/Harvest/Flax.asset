@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Flax
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Flax
-  description: 
+  description: Fibrous plant harvested from the fields. Spun into thread.
   icon: {fileID: 0}
   tier: 0
   category: 0

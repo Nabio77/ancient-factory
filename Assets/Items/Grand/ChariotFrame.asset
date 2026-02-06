@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChariotFrame
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Chariot Frame
-  description: 
+  description: The sturdy wooden chassis of a war chariot.
   icon: {fileID: 0}
   tier: 5
   category: 5

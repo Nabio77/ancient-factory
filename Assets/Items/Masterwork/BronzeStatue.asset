@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BronzeStatue
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Bronze Statue
-  description: 
+  description: A colossal figure cast in enduring bronze.
   icon: {fileID: 0}
   tier: 6
   category: 6

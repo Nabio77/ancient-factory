@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_IronWeapons
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Iron Weapons
-  description: 
+  description: Forges deadly iron weaponry.
   icon: {fileID: 0}
   type: 3
   inputCount: 2

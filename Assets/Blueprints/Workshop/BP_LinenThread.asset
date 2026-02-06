@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_LinenThread
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Linen Thread
-  description: 
+  description: Spins flax fibers into strong thread.
   icon: {fileID: 0}
   type: 2
   inputCount: 1

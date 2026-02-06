@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_IronIngot
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Iron Ingot
-  description: 
+  description: Requires high heat to smelt iron ore into strong ingots.
   icon: {fileID: 0}
   type: 0
   inputCount: 1

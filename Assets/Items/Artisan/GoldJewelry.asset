@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GoldJewelry
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Gold Jewelry
-  description: 
+  description: Ornate necklaces and rings worn by the elite.
   icon: {fileID: 0}
   tier: 3
   category: 3

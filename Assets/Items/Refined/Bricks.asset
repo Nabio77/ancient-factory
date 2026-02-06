@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bricks
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Bricks
-  description: 
+  description: Fired clay blocks. Uniform and stackable for construction.
   icon: {fileID: 0}
   tier: 1
   category: 1

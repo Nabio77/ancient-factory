@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Scroll
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Scroll
-  description: 
+  description: A roll of papyrus containing knowledge, laws, or inventory.
   icon: {fileID: 0}
   tier: 3
   category: 3

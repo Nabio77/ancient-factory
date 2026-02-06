@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Leather
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Leather
-  description: 
+  description: Tanned animal hide. Tough and flexible.
   icon: {fileID: 0}
   tier: 3
   category: 3

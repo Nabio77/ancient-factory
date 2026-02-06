@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_PapyrusSheet
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Papyrus Sheet
-  description: 
+  description: Processes reeds into writing material.
   icon: {fileID: 0}
   type: 2
   inputCount: 1

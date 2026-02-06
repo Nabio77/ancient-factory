@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_TinIngot
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Tin Ingot
-  description: 
+  description: Refines tin ore. Essential for bronze production.
   icon: {fileID: 0}
   type: 0
   inputCount: 1

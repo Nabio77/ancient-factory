@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TempleColumn
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Temple Column
-  description: 
+  description: A fluted column to hold up the roofs of the gods.
   icon: {fileID: 0}
   tier: 5
   category: 5

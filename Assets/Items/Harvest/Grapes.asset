@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Grapes
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Grapes
-  description: 
+  description: Sweet fruit grown in vineyards.
   icon: {fileID: 0}
   tier: 0
   category: 0

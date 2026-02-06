@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_Feast
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Feast
-  description: 
+  description: Prepares a magnificent feast.
   icon: {fileID: 0}
   type: 7
   inputCount: 3

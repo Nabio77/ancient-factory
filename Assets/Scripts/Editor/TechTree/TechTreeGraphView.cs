@@ -11,9 +11,8 @@ namespace AncientFactory.Editor.TechTree
 {
     public class TechTreeGraphView : GraphView
     {
-
-
         private TechTreeGraph _graph;
+        private Dictionary<string, TechTreeNodeView> _nodeCache = new();
 
         public TechTreeGraphView()
         {
@@ -32,6 +31,7 @@ namespace AncientFactory.Editor.TechTree
         public void PopulateView(TechTreeGraph graph)
         {
             _graph = graph;
+            _nodeCache.Clear();
 
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements);
@@ -48,23 +48,20 @@ namespace AncientFactory.Editor.TechTree
             // Create Edges
             foreach (var nodeData in _graph.Nodes)
             {
-                var inputNode = GetNodeView(nodeData.guid) as TechTreeNodeView;
-                if (inputNode == null) continue;
+                if (!_nodeCache.TryGetValue(nodeData.guid, out var inputNode)) continue;
 
                 foreach (var prereqGuid in nodeData.prerequisites)
                 {
-                    var outputNode = GetNodeView(prereqGuid) as TechTreeNodeView;
-                    if (outputNode == null) continue;
-
-                    // Connection: Prereq (Output) -> Node (Input)
-                    // Prereq is the "parent" because you need it first.
-                    // So flow is Prereq -> This Node.
+                    if (!_nodeCache.TryGetValue(prereqGuid, out var outputNode)) continue;
 
                     var outputPort = outputNode.outputContainer.Q<Port>();
                     var inputPort = inputNode.inputContainer.Q<Port>();
 
-                    var edge = outputPort.ConnectTo(inputPort);
-                    AddElement(edge);
+                    if (outputPort != null && inputPort != null)
+                    {
+                        var edge = outputPort.ConnectTo(inputPort);
+                        AddElement(edge);
+                    }
                 }
             }
         }
@@ -77,12 +74,7 @@ namespace AncientFactory.Editor.TechTree
                 {
                     if (elem is TechTreeNodeView nodeView)
                     {
-                        var nodeData = nodeView.NodeData;
-                        // Remove from graph data handles in save
-                    }
-                    else if (elem is Edge edge)
-                    {
-                        // Remove connection
+                        _nodeCache.Remove(nodeView.NodeData.guid);
                     }
                 }
             }
@@ -91,9 +83,15 @@ namespace AncientFactory.Editor.TechTree
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
-            return ports.ToList().Where(endPort =>
-                endPort.direction != startPort.direction &&
-                endPort.node != startPort.node).ToList();
+            var compatiblePorts = new List<Port>();
+            foreach (var port in ports)
+            {
+                if (port.direction != startPort.direction && port.node != startPort.node)
+                {
+                    compatiblePorts.Add(port);
+                }
+            }
+            return compatiblePorts;
         }
 
         public void CreateNode(BlueprintDefinition blueprint, Vector2 position)
@@ -106,6 +104,7 @@ namespace AncientFactory.Editor.TechTree
 
             CreateNodeView(nodeData);
         }
+
         public void CreateItemNode(ItemDefinition item, Vector2 position)
         {
             var nodeData = new TechTreeNodeData
@@ -140,17 +139,13 @@ namespace AncientFactory.Editor.TechTree
 
             node.SetPosition(new Rect(nodeData.position, Vector2.zero));
 
+            _nodeCache[nodeData.guid] = node;
             AddElement(node);
         }
 
         private Port GeneratePort(TechTreeNodeView node, Direction portDirection, Port.Capacity capacity = Port.Capacity.Single)
         {
-            return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(bool)); // Type doesn't matter for logic
-        }
-
-        private Node GetNodeView(string guid)
-        {
-            return nodes.ToList().Cast<TechTreeNodeView>().FirstOrDefault(n => n.NodeData.guid == guid);
+            return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(bool));
         }
 
         public void SaveGraph()
@@ -159,16 +154,11 @@ namespace AncientFactory.Editor.TechTree
 
             _graph.Clear();
 
-            var nodes = this.nodes.ToList().Cast<TechTreeNodeView>().ToList();
-            var edges = this.edges.ToList();
-
             // Save Nodes
-            foreach (var nodeView in nodes)
+            foreach (var nodeView in _nodeCache.Values)
             {
-                // Update position
                 nodeView.NodeData.position = nodeView.GetPosition().position;
                 nodeView.NodeData.prerequisites.Clear();
-
                 _graph.AddNode(nodeView.NodeData);
             }
 
@@ -180,10 +170,6 @@ namespace AncientFactory.Editor.TechTree
 
                 if (inputNode != null && outputNode != null)
                 {
-                    // Flow is Output -> Input
-                    // Prereq -> Dependent
-                    // So Dependent has Prereq in its list
-
                     inputNode.NodeData.prerequisites.Add(outputNode.NodeData.guid);
                 }
             }
@@ -200,7 +186,7 @@ namespace AncientFactory.Editor.TechTree
         public TechTreeNodeView(TechTreeNodeData data)
         {
             NodeData = data;
-            title = data.Name; // Use the Name property we added to TechTreeNodeData
+            title = data.Name;
             viewDataKey = data.guid;
 
             style.width = 200;

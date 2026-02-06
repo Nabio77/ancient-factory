@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: TinOre
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Tin Ore
-  description: 
+  description: Silvery metal ore found in riverbeds. alloyed with copper to make
+    bronze.
   icon: {fileID: 0}
   tier: 0
   category: 0

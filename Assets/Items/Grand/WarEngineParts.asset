@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WarEngineParts
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: War Engine Parts
-  description: 
+  description: Complex mechanical components for siege weaponry.
   icon: {fileID: 0}
   tier: 5
   category: 5

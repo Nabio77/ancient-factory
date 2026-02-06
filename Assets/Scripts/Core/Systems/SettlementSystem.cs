@@ -19,8 +19,6 @@ namespace AncientFactory.Core.Systems
         [SerializeField, Required]
         private WorldMap worldMap;
 
-        [SerializeField, Required]
-        private ItemDatabase itemDatabase;
 
         [Title("Demand Settings")]
         [SerializeField, MinValue(1), MaxValue(4)]
@@ -78,8 +76,6 @@ namespace AncientFactory.Core.Systems
             {
                 worldMap = FindFirstObjectByType<WorldMap>();
             }
-
-            LoadEligibleItems();
         }
 
         void OnEnable()
@@ -100,6 +96,8 @@ namespace AncientFactory.Core.Systems
 
         void Start()
         {
+            LoadEligibleItems();
+
             // Initialize settlements that may already exist
             InitializeExistingSettlements();
         }
@@ -116,22 +114,24 @@ namespace AncientFactory.Core.Systems
 
         private void LoadEligibleItems()
         {
-            if (itemDatabase == null)
+            if (DatabaseSystem.Instance == null)
             {
-                Debug.LogError("SettlementSystem: ItemDatabase reference is missing!");
+                Debug.LogError("SettlementSystem: DatabaseSystem instance is missing!");
                 return;
             }
+
+            var allItems = DatabaseSystem.Instance.GetAllItems();
 
             // Group items by tier (T1-T5)
             _itemsByTier.Clear();
             for (int tier = 1; tier <= 5; tier++)
             {
-                _itemsByTier[tier] = itemDatabase.Items
+                _itemsByTier[tier] = allItems
                     .Where(item => item.Tier == tier)
                     .ToList();
             }
 
-            _foodItems = itemDatabase.GetFoodItems().ToList();
+            _foodItems = allItems.Where(i => i.IsFood).ToList();
 
             int totalItems = _itemsByTier.Values.Sum(list => list.Count);
             if (totalItems == 0)
@@ -221,7 +221,7 @@ namespace AncientFactory.Core.Systems
                 availableItems.RemoveAt(index);
 
                 int quantity = GetQuantityForItem(item);
-                
+
                 // Add new demand if not present
                 if (!settlement.Demands.Any(d => d.Item == item))
                 {
@@ -278,7 +278,7 @@ namespace AncientFactory.Core.Systems
                 if (!demand.IsValid) continue;
 
                 int currentCount = inventory.Get(demand.Item);
-                
+
                 // Report progress
                 OnDemandProgress?.Invoke(settlement, demand.Item, currentCount, demand.Amount);
 
@@ -300,7 +300,7 @@ namespace AncientFactory.Core.Systems
 
             // 3. Grow Population
             settlement.Population += populationGrowthPerDemand;
-            
+
             // 4. Update Level/Stats
             settlement.Experience += 10;
             // Simplified leveling logic
@@ -315,7 +315,7 @@ namespace AncientFactory.Core.Systems
 
             // 6. Generate New Demand (loop)
             AddNewDemand(settlement);
-            
+
             // UI Update
             OnSettlementUpdated?.Invoke(settlement);
         }
@@ -324,15 +324,15 @@ namespace AncientFactory.Core.Systems
         {
             // Find a new item to demand
             // In a real system, might be harder based on level
-            
+
             int distance = HexUtils.Distance(_corePosition, settlement.CellPosition);
             var (minTier, maxTier) = GetTierRangeForDistance(distance);
-            
+
             // Get all possible items for this tier
             var eligibleItems = new List<ItemDefinition>();
             for (int tier = minTier; tier <= maxTier; tier++)
             {
-                 if (_itemsByTier.TryGetValue(tier, out var list)) eligibleItems.AddRange(list);
+                if (_itemsByTier.TryGetValue(tier, out var list)) eligibleItems.AddRange(list);
             }
 
             // Filter out items already demanded
@@ -341,9 +341,9 @@ namespace AncientFactory.Core.Systems
 
             if (eligibleItems.Count > 0)
             {
-                 var newItem = eligibleItems[UnityEngine.Random.Range(0, eligibleItems.Count)];
-                 int quantity = GetQuantityForItem(newItem);
-                 settlement.Demands.Add(new ItemStack(newItem, quantity));
+                var newItem = eligibleItems[UnityEngine.Random.Range(0, eligibleItems.Count)];
+                int quantity = GetQuantityForItem(newItem);
+                settlement.Demands.Add(new ItemStack(newItem, quantity));
             }
             else
             {

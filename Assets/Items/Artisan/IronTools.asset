@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronTools
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Iron Tools
-  description: 
+  description: Heavy-duty tools for mining and construction.
   icon: {fileID: 0}
   tier: 3
   category: 3

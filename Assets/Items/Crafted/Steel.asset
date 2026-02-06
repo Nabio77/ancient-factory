@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Steel
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Steel
-  description: 
+  description: Iron infused with carbon. Superior strength and edge retention.
   icon: {fileID: 0}
   tier: 2
   category: 2

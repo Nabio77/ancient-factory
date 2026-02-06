@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_BronzeArmor
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Bronze Armor
-  description: 
+  description: Beats bronze plates into protective armor.
   icon: {fileID: 0}
   type: 3
   inputCount: 2

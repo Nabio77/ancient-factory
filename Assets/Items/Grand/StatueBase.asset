@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StatueBase
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Statue Base
-  description: 
+  description: A massive stone pedestal to support a monument.
   icon: {fileID: 0}
   tier: 5
   category: 5

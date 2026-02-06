@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_GoldIngot
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Gold Ingot
-  description: 
+  description: Purifies gold ore into valuable bullion.
   icon: {fileID: 0}
   type: 0
   inputCount: 1

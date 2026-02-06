@@ -129,6 +129,16 @@ namespace AncientFactory.Core.Systems
             OnBlueprintUnlocked?.Invoke(node.blueprint);
             Debug.Log($"[TechTreeSystem] Unlocked: {node.blueprint.BlueprintName}");
 
+            // Show notification
+            if (NotificationSystem.Instance != null)
+            {
+                NotificationSystem.Instance.ShowNotification(
+                    "Blueprint Unlocked",
+                    $"{node.blueprint.BlueprintName} is now available!",
+                    AncientFactory.Core.Types.NotificationType.Info
+                );
+            }
+
             return true;
         }
     }

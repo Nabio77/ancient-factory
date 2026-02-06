@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_IronTools
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Iron Tools
-  description: 
+  description: Creates superior tools from iron.
   icon: {fileID: 0}
   type: 2
   inputCount: 2

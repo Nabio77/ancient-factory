@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Stone
-  description: 
+  description: Rough quarried stone. The foundation of all great structures.
   icon: {fileID: 0}
   tier: 0
   category: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sand
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Sand
-  description: 
+  description: Fine silica grains. Can be melted into glass.
   icon: {fileID: 0}
   tier: 0
   category: 0

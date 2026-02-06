@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_Bricks
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Bricks
-  description: 
+  description: Fires clay into hard, durable bricks.
   icon: {fileID: 0}
   type: 1
   inputCount: 1

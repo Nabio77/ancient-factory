@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OliveOil
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Olive Oil
-  description: 
+  description: Pressed oil. Used for cooking and lighting.
   icon: {fileID: 0}
   tier: 2
   category: 2

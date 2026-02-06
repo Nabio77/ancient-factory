@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pottery
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Pottery
-  description: 
+  description: Ceramic vessels for storing grain, water, and wine.
   icon: {fileID: 0}
   tier: 3
   category: 3

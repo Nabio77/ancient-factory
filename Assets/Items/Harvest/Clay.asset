@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Clay
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Clay
-  description: 
+  description: Malleable earth found near riverbanks. Fired into bricks or pottery.
   icon: {fileID: 0}
   tier: 0
   category: 0

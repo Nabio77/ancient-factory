@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CopperOre
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Copper Ore
-  description: 
+  description: Raw copper ore extracted from the earth. Essential for bronze production.
   icon: {fileID: 0}
   tier: 0
   category: 0

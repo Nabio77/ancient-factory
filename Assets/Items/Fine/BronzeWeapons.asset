@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BronzeWeapons
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Bronze Weapons
-  description: 
+  description: Swords and spears cast from bronze. Reliable in battle.
   icon: {fileID: 0}
   tier: 4
   category: 4

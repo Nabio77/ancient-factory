@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_Bread
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Bread
-  description: 
+  description: Bakes dough into nourishing bread.
   icon: {fileID: 0}
   type: 1
   inputCount: 1

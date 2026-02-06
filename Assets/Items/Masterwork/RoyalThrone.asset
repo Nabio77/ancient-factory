@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RoyalThrone
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Royal Throne
-  description: 
+  description: A seat of gold and fine cloth, fit for a pharaoh or emperor.
   icon: {fileID: 0}
   tier: 6
   category: 6

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronIngot
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Iron Ingot
-  description: 
+  description: Standard iron bar. Strong and durable.
   icon: {fileID: 0}
   tier: 1
   category: 1

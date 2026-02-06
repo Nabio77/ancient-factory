@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_StoneBlocks
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Stone Blocks
-  description: 
+  description: Assembles massive masonry blocks.
   icon: {fileID: 0}
   type: 2
   inputCount: 2

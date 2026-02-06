@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Meat
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Meat
-  description: 
+  description: Cut of fresh meat.
   icon: {fileID: 0}
   tier: 1
   category: 1

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cattle
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Cattle
-  description: 
+  description: Livestock raised for meat and leather.
   icon: {fileID: 0}
   tier: 0
   category: 0

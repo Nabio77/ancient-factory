@@ -21,8 +21,6 @@ namespace AncientFactory.Features.Factory
         [SerializeField, Required]
         private TileSelector tileSelector;
 
-        [SerializeField, Required]
-        private BlueprintDatabase database;
 
         [SerializeField, Required]
         private VisualTreeAsset cardTemplate;
@@ -82,7 +80,7 @@ namespace AncientFactory.Features.Factory
             _canvasView.IOView = _ioView;
 
             // 4. Palette
-            _paletteView = new FactoryPaletteView(_root, _palettePanel, database, cardTemplate, _canvasView);
+            _paletteView = new FactoryPaletteView(_root, _palettePanel, cardTemplate, _canvasView);
         }
 
         private void OnGraphChanged()

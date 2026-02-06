@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Planks
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Planks
-  description: 
+  description: Wood sawn into flat boards. Basic building material.
   icon: {fileID: 0}
   tier: 1
   category: 1

@@ -13,7 +13,6 @@ namespace AncientFactory.Features.Factory
         private readonly VisualElement _root;
         private readonly ScrollView _palettePanel;
         private readonly VisualElement _tabsContainer;
-        private readonly BlueprintDatabase _database;
         private readonly VisualTreeAsset _cardTemplate;
         private readonly FactoryCanvasView _canvasView;
 
@@ -31,14 +30,12 @@ namespace AncientFactory.Features.Factory
         public FactoryPaletteView(
             VisualElement root,
             ScrollView palettePanel,
-            BlueprintDatabase database,
             VisualTreeAsset cardTemplate,
             FactoryCanvasView canvasView)
         {
             _root = root;
             _palettePanel = palettePanel;
             _tabsContainer = root.Q<VisualElement>("palette-tabs-container");
-            _database = database;
             _cardTemplate = cardTemplate;
             _canvasView = canvasView;
 
@@ -64,7 +61,7 @@ namespace AncientFactory.Features.Factory
         private void BindTabs()
         {
             if (_tabsContainer == null) return;
-            
+
             _tabsContainer.Clear();
 
             // Add "All" Tab
@@ -82,7 +79,7 @@ namespace AncientFactory.Features.Factory
             var tab = new Label(text);
             tab.AddToClassList("palette-tab");
             if (isSelected) tab.AddToClassList("selected");
-            
+
             tab.RegisterCallback<MouseDownEvent>(evt => SelectTab(tab, filter));
             _tabsContainer.Add(tab);
         }
@@ -102,7 +99,13 @@ namespace AncientFactory.Features.Factory
             var content = _palettePanel.Q<VisualElement>("palette-content");
             content.Clear();
 
-            foreach (var blueprint in _database.Blueprints)
+            if (DatabaseSystem.Instance == null)
+            {
+                Debug.LogError("FactoryPaletteView: DatabaseSystem instance is missing!");
+                return;
+            }
+
+            foreach (var blueprint in DatabaseSystem.Instance.GetAllBlueprints())
             {
                 // Apply both context filter (game logic) and category filter (user UI)
                 if (!_contextFilter(blueprint) || !_categoryFilter(blueprint))
@@ -188,7 +191,7 @@ namespace AncientFactory.Features.Factory
                     // Convert to content coordinates (accounting for zoom/pan)
                     var canvasLocal = _canvasView.Canvas.WorldToLocal(evt.mousePosition);
                     var contentPos = _canvasView.ScreenToContent(canvasLocal);
-                    
+
                     var node = new BlueprintNode(_paletteDragBlueprint, contentPos - new Vector2(110, 50));
                     _canvasView.CurrentGraph.nodes.Add(node);
                     _canvasView.CreateNodeUI(node);

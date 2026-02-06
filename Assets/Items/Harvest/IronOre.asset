@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronOre
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Iron Ore
-  description: 
+  description: Heavy, dark ore. Requires intense heat to smelt into usable iron.
   icon: {fileID: 0}
   tier: 0
   category: 0

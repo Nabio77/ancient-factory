@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Sirenix.OdinInspector;
+
 
 namespace AncientFactory.Core.Data
 {
     [CreateAssetMenu(fileName = "TechTreeGraph", menuName = "Carbon World/Tech Tree Graph")]
     public class TechTreeGraph : ScriptableObject
     {
-        [SerializeField, ListDrawerSettings(ShowFoldout = false)]
+        [SerializeField, HideInInspector]
         private List<TechTreeNodeData> nodes = new();
 
         public IReadOnlyList<TechTreeNodeData> Nodes => nodes;
@@ -32,10 +32,10 @@ namespace AncientFactory.Core.Data
         public string guid;
         public Vector2 position;
 
-        [SerializeField, ShowIf("@item == null"), InlineEditor]
+        [SerializeField]
         public BlueprintDefinition blueprint;
 
-        [SerializeField, ShowIf("@blueprint == null"), InlineEditor]
+        [SerializeField]
         public ItemDefinition item;
 
         public List<string> prerequisites = new();

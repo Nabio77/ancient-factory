@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Papyrus
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Papyrus
-  description: 
+  description: Tall reeds from the marshlands. Pressed into writing material.
   icon: {fileID: 0}
   tier: 0
   category: 0

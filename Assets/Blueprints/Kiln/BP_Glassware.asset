@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_Glassware
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Glassware
-  description: 
+  description: Shapes molten glass into intricate vessels.
   icon: {fileID: 0}
   type: 1
   inputCount: 1

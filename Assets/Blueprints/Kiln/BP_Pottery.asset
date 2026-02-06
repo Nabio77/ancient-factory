@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_Pottery
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Pottery
-  description: 
+  description: Creates fine ceramics for storage and trade.
   icon: {fileID: 0}
   type: 1
   inputCount: 2

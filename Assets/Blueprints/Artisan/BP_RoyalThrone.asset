@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_RoyalThrone
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Royal Throne
-  description: 
+  description: Crafts a throne suitable for a god-king.
   icon: {fileID: 0}
   type: 3
   inputCount: 3

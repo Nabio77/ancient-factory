@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_CutStone
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Cut Stone
-  description: 
+  description: Shapes raw stone into building blocks.
   icon: {fileID: 0}
   type: 2
   inputCount: 1

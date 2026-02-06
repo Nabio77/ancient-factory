@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StoneBlocks
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Stone Blocks
-  description: 
+  description: Large, perfectly fitted stones for monumental architecture.
   icon: {fileID: 0}
   tier: 3
   category: 3

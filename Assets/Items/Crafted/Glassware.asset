@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Glassware
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Glassware
-  description: 
+  description: Bottles, vases, and vessels blown from molten glass.
   icon: {fileID: 0}
   tier: 2
   category: 2

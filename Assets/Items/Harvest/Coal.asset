@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Coal
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Coal
-  description: 
+  description: Combustible sedimentary rock. Burns hot enough to smelt steel.
   icon: {fileID: 0}
   tier: 0
   category: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GoldOre
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Gold Ore
-  description: 
+  description: Precious yellow metal. Used for jewelry and ornamentation.
   icon: {fileID: 0}
   tier: 0
   category: 0

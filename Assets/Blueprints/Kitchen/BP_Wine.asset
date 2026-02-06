@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_Wine
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Wine
-  description: 
+  description: Presses and ferments grapes into wine.
   icon: {fileID: 0}
   type: 7
   inputCount: 1

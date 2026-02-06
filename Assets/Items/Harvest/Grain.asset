@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Grain
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Grain
-  description: 
+  description: Staple crop. The basis of all civilization.
   icon: {fileID: 0}
   tier: 0
   category: 0

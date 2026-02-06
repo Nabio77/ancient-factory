@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: Wood
-  description: 
+  description: Timber felled from local forests. Used for fuel and basic construction.
   icon: {fileID: 0}
   tier: 0
   category: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WarCatapult
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.ItemDefinition
   itemName: War Catapult
-  description: 
+  description: A devastating siege engine capable of hurling massive stones.
   icon: {fileID: 0}
   tier: 6
   category: 6

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_ChariotFrame
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Chariot Frame
-  description: 
+  description: Builds the chassis for a chariot.
   icon: {fileID: 0}
   type: 3
   inputCount: 3

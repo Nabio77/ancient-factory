@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BP_Steel
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Data.BlueprintDefinition
   blueprintName: Steel
-  description: 
+  description: Advanced metallurgy combining iron and carbon for superior hardness.
   icon: {fileID: 0}
   type: 0
   inputCount: 2
