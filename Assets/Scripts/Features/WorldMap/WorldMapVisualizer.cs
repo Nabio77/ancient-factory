@@ -32,7 +32,7 @@ namespace AncientFactory.Features.WorldMap
         private TileBase settlementTile;
 
         [SerializeField, Required]
-        private TileBase powerTile;
+        private TileBase housingTile;
 
         [SerializeField]
         private TileBase transportTile;
@@ -69,9 +69,6 @@ namespace AncientFactory.Features.WorldMap
         [SerializeField]
         private TileBase selectedHighlightTile;
 
-        [SerializeField]
-        private TileBase powerRangeHighlightTile;
-
         [Title("Overrides")]
         [SerializeField]
         private List<ResourceVisualOverride> resourceVisualOverrides = new();
@@ -80,7 +77,6 @@ namespace AncientFactory.Features.WorldMap
         public Tilemap HighlightTilemap => highlightTilemap;
         public TileBase HoverHighlightTile => hoverHighlightTile;
         public TileBase SelectedHighlightTile => selectedHighlightTile;
-        public TileBase PowerRangeHighlightTile => powerRangeHighlightTile;
 
         private void Awake()
         {
@@ -140,7 +136,7 @@ namespace AncientFactory.Features.WorldMap
                 TileType.Resource => resourceTile,
                 TileType.Production => productionTile,
                 TileType.Settlement => settlementTile,
-                TileType.Power => powerTile,
+                TileType.Housing => housingTile,
                 TileType.Nature => natureTile,
                 TileType.Transport => transportTile,
                 TileType.Food => foodTile,

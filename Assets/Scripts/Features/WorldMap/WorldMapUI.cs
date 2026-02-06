@@ -37,10 +37,10 @@ namespace AncientFactory.Features.WorldMap
         private Label _productionInputs;
         private Label _productionOutputs;
 
-        private VisualElement _powerInfo;
-        private Label _powerOutput;
-        private Label _powerUsed;
-        private Label _powerRadius;
+        private VisualElement _housingInfo;
+        private Label _housingResidents;
+        private Label _housingConnection;
+        private Label _housingCommute;
 
         private VisualElement _transportInfo;
         private Label _transportOutputs;
@@ -67,10 +67,10 @@ namespace AncientFactory.Features.WorldMap
             _productionInputs = root.Q<Label>("production-inputs");
             _productionOutputs = root.Q<Label>("production-outputs");
 
-            _powerInfo = root.Q<VisualElement>("power-info");
-            _powerOutput = root.Q<Label>("power-output");
-            _powerUsed = root.Q<Label>("power-used");
-            _powerRadius = root.Q<Label>("power-radius");
+            _housingInfo = root.Q<VisualElement>("housing-info");
+            _housingResidents = root.Q<Label>("housing-residents");
+            _housingConnection = root.Q<Label>("housing-connection");
+            _housingCommute = root.Q<Label>("housing-commute");
 
             _transportInfo = root.Q<VisualElement>("transport-info");
             _transportOutputs = root.Q<Label>("transport-outputs");
@@ -184,13 +184,13 @@ namespace AncientFactory.Features.WorldMap
                 _productionInfo?.AddToClassList("hidden");
             }
 
-            if (tile is PowerTile powerTile)
+            if (tile is HousingTile housingTile)
             {
-                ShowPowerInfo(powerTile);
+                ShowHousingInfo(housingTile);
             }
             else
             {
-                _powerInfo?.AddToClassList("hidden");
+                _housingInfo?.AddToClassList("hidden");
             }
 
             if (tile is TransportTile transportTile)
@@ -286,16 +286,13 @@ namespace AncientFactory.Features.WorldMap
             _settlementInfo.RemoveFromClassList("hidden");
         }
 
-        private void ShowPowerInfo(PowerTile tile)
+        private void ShowHousingInfo(HousingTile tile)
         {
-            // Ensure calculation is up to date
-            tile.CalculatePowerOutput();
+            _housingResidents.text = tile.Residents.ToString();
+            _housingConnection.text = tile.IsConnectedToSettlement ? "Connected" : "Disconnected";
+            _housingCommute.text = $"{tile.CommuteRadius} tiles";
 
-            _powerOutput.text = tile.TotalPowerOutput.ToString();
-            _powerUsed.text = tile.TotalPowerConsumption.ToString();
-            _powerRadius.text = tile.EffectiveRadius.ToString();
-
-            _powerInfo.RemoveFromClassList("hidden");
+            _housingInfo.RemoveFromClassList("hidden");
         }
 
         private void ShowProductionInfo(FactoryTile tile)
@@ -306,8 +303,8 @@ namespace AncientFactory.Features.WorldMap
                 worldMap.GraphSystem.UpdateTile(worldMap.TileData, tile);
             }
 
-            // Show power status
-            var powerStatus = tile.IsPowered ? "POWERED" : "NO POWER";
+            // Show workforce status
+            var workforceStatus = tile.HasWorkers ? "HAS WORKFORCE" : "NO WORKERS";
 
             // Show available inputs from IO nodes
             var inputs = tile.Graph.ioNodes
@@ -332,7 +329,7 @@ namespace AncientFactory.Features.WorldMap
                 .ToList();
 
             var inputText = new System.Text.StringBuilder();
-            inputText.AppendLine($"Power: {powerStatus}");
+            inputText.AppendLine($"Workforce: {workforceStatus}");
             if (inputs.Any()) inputText.AppendLine(string.Join("\n", inputs));
             if (!inputs.Any()) inputText.AppendLine("No inputs");
 

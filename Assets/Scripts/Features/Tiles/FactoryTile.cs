@@ -18,7 +18,7 @@ namespace AncientFactory.Features.Tiles
     {
         public FactoryCategory Category { get; }
         public BlueprintGraph Graph { get; } = new();
-        public bool IsPowered { get; set; }
+        public bool HasWorkers { get; set; }
         public bool HasOutput => true;
 
         public Func<BlueprintDefinition, bool> BlueprintFilter => Category switch

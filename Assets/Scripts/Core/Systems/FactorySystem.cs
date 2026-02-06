@@ -59,47 +59,17 @@ namespace AncientFactory.Core.Systems
         [Button("Process Tick")]
         public void ProcessFactoryTick()
         {
-            ProcessPowerTiles();
+            // ProcessPowerTiles(); // Removed in favor of WorkforceSystem
             ProcessFactoryTiles();
             _settlementSupply.DistributeToAllSettlements();
-            if (PowerSystem.Instance != null) PowerSystem.Instance.RecalculatePower();
-        }
-
-        private void ProcessPowerTiles()
-        {
-            foreach (var powerTile in worldMap.TileData.PowerTiles)
-            {
-                foreach (var node in powerTile.Graph.nodes)
-                {
-                    if (node.blueprint == null || !node.blueprint.IsPowerGenerator)
-                        continue;
-
-                    // Solar (no inputs) is always active
-                    if (node.blueprint.Inputs.Count == 0)
-                    {
-                        powerTile.SetGeneratorActive(node.id, true);
-                        continue;
-                    }
-
-                    // Check and consume fuel
-                    if (_factoryInput.TryResolveInputs(powerTile, node, node.blueprint.Inputs, simulateOnly: true))
-                    {
-                        _factoryInput.TryResolveInputs(powerTile, node, node.blueprint.Inputs, simulateOnly: false);
-                        powerTile.SetGeneratorActive(node.id, true);
-                    }
-                    else
-                    {
-                        powerTile.SetGeneratorActive(node.id, false);
-                    }
-                }
-            }
+            // WorkforceSystem recalculates on its own schedule or map changes, 
+            // but we could force a sync if needed. For now, we assume it's reactive.
         }
 
         private void ProcessFactoryTiles()
         {
             foreach (var tile in worldMap.TileData.FactoryTiles)
             {
-                if (tile is PowerTile) continue;
                 ProcessFactoryTile(tile as BaseTile);
             }
         }
@@ -108,7 +78,8 @@ namespace AncientFactory.Core.Systems
         {
             if (tile is not IFactoryTile factoryTile) return;
 
-            if (!factoryTile.IsPowered)
+            // Updated from IsPowered -> HasWorkers
+            if (!factoryTile.HasWorkers)
                 return;
 
             foreach (var node in factoryTile.Graph.nodes)
@@ -125,13 +96,15 @@ namespace AncientFactory.Core.Systems
         {
             Debug.Log("=== PRODUCTION SYSTEM DEBUG ===");
 
-            foreach (var factoryTile in worldMap.TileData.FactoryTiles)
+            foreach (var tile in worldMap.TileData.FactoryTiles)
             {
-                var pos = (factoryTile as BaseTile).CellPosition;
-                string typeName = (factoryTile as FactoryTile)?.Category.ToString() ?? "Unknown";
+                if (tile is not FactoryTile factoryTile) continue;
+
+                var pos = factoryTile.CellPosition;
+                string typeName = factoryTile.Category.ToString();
 
                 Debug.Log($"FactoryTile ({typeName}) at {pos}:");
-                Debug.Log($"  - IsPowered: {factoryTile.IsPowered}");
+                Debug.Log($"  - HasWorkers: {factoryTile.HasWorkers}");
                 Debug.Log($"  - IO Nodes: {factoryTile.Graph.ioNodes.Count}");
                 Debug.Log($"  - Blueprint Nodes: {factoryTile.Graph.nodes.Count}");
                 Debug.Log($"  - Connections: {factoryTile.Graph.connections.Count}");

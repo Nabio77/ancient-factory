@@ -10,7 +10,7 @@ namespace AncientFactory.Features.Tiles
 
         // Optimized collections for system iteration
         public HashSet<IFactoryTile> FactoryTiles { get; } = new();
-        public HashSet<PowerTile> PowerTiles { get; } = new();
+        public HashSet<HousingTile> HousingTiles { get; } = new();
         public HashSet<SettlementTile> SettlementTiles { get; } = new();
 
         public void Add(Vector3Int pos, BaseTile tile)
@@ -18,7 +18,7 @@ namespace AncientFactory.Features.Tiles
             _tiles[pos] = tile;
 
             // Add to optimized collections
-            if (tile is PowerTile powerTile) PowerTiles.Add(powerTile); // PowerTile is also IFactoryTile, check first or add to both if desired
+            if (tile is HousingTile housingTile) HousingTiles.Add(housingTile);
             if (tile is IFactoryTile factoryTile) FactoryTiles.Add(factoryTile);
             if (tile is SettlementTile settlementTile) SettlementTiles.Add(settlementTile);
         }
@@ -27,7 +27,7 @@ namespace AncientFactory.Features.Tiles
         {
             if (_tiles.TryGetValue(pos, out var tile))
             {
-                if (tile is PowerTile powerTile) PowerTiles.Remove(powerTile);
+                if (tile is HousingTile housingTile) HousingTiles.Remove(housingTile);
                 if (tile is IFactoryTile factoryTile) FactoryTiles.Remove(factoryTile);
                 if (tile is SettlementTile settlementTile) SettlementTiles.Remove(settlementTile);
 
@@ -59,7 +59,7 @@ namespace AncientFactory.Features.Tiles
         {
             _tiles.Clear();
             FactoryTiles.Clear();
-            PowerTiles.Clear();
+            HousingTiles.Clear();
             SettlementTiles.Clear();
         }
 

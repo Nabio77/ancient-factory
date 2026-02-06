@@ -34,7 +34,7 @@
     --color-bp-processing: rgb(160, 80, 60);     /* Smelter, Furnace */
     --color-bp-manufacturing: rgb(60, 90, 160);  /* Constructor, Assembler */
     --color-bp-logistics: rgb(60, 140, 100);     /* Splitter, Merger - adjusted to Teal/Green */
-    --color-bp-power: rgb(255, 200, 50);         /* Power - Yellow */
+    --color-bp-prana: rgb(255, 200, 50);         /* Prana - Yellow */
 
     /* Dimensions */
     --border-radius-main: 12px;

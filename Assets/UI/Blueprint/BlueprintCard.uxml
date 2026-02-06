@@ -30,10 +30,7 @@
                         <ui:Label text="Time:" class="stat-label"/>
                         <ui:Label name="card-time" text="2.5s" class="stat-value"/>
                     </ui:VisualElement>
-                    <ui:VisualElement name="power-row" class="stat-row">
-                        <ui:Label text="Power:" class="stat-label"/>
-                        <ui:Label name="card-power" text="50W" class="stat-value"/>
-                    </ui:VisualElement>
+
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="outputs-container" class="port-container port-column">

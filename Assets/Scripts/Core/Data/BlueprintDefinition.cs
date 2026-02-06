@@ -40,18 +40,14 @@ namespace AncientFactory.Core.Data
         [SerializeField, ShowIf("IsProducer"), Tooltip("Time in seconds to complete one production cycle")]
         private float productionTime = 1f;
 
-        [SerializeField, ShowIf("IsProducer"), Tooltip("Power required per tick while producing")]
-        private int powerConsumption = 1;
-
-        [Title("Power Generation")]
-        [SerializeField, ShowIf("IsPowerGenerator"), Tooltip("Power produced per tick")]
-        private int powerOutput = 0;
+        [SerializeField, ShowIf("IsProducer"), Tooltip("Workers required to operate this facility")]
+        private int workforceRequirement = 1;
 
         [Title("Divine Displeasure")]
-        [SerializeField, ShowIf("@IsProducer || IsPowerGenerator"), Tooltip("Base displeasure generated per production cycle")]
+        [SerializeField, ShowIf("IsProducer"), Tooltip("Base displeasure generated per production cycle")]
         private int divineDispleasure = 0;
 
-        [SerializeField, ShowIf("@IsProducer || IsPowerGenerator"), Tooltip("Source of displeasure affects the multiplier")]
+        [SerializeField, ShowIf("IsProducer"), Tooltip("Source of displeasure affects the multiplier")]
         private DispleasureSource displeasureSource = DispleasureSource.Craftsmanship;
 
         [Title("Acquisition")]
@@ -75,14 +71,10 @@ namespace AncientFactory.Core.Data
         public IReadOnlyList<ItemStack> Inputs => inputs;
         public ItemStack Output => output;
         public float ProductionTime => productionTime;
-        public int PowerConsumption => powerConsumption;
+        public int WorkforceRequirement => workforceRequirement;
 
         public bool IsProducer => type == BlueprintType.Forge || type == BlueprintType.Kiln || type == BlueprintType.Workshop || type == BlueprintType.Artisan || type == BlueprintType.Kitchen;
         public bool IsLogistics => type == BlueprintType.Divider || type == BlueprintType.Combiner;
-        public bool IsPowerGenerator => type == BlueprintType.Prana;
-
-        // Power Generation Properties
-        public int PowerOutput => powerOutput;
 
         // Divine Displeasure Properties
         public int BaseDivineDispleasure => divineDispleasure;

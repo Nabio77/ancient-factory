@@ -308,24 +308,24 @@ namespace AncientFactory.Editor
             // === MASTERWORK BLUEPRINTS (Final Products) ===
             blueprints.Add(CreateBlueprint("Chariot", BlueprintType.Artisan, items["Chariot"], 12f,
                 new[] { (items["Chariot Frame"], 1), (items["Bronze"], 2), (items["Leather"], 2) }, isStarter: false, unlockCost: 500, displeasure: 15, source: DispleasureSource.Craftsmanship,
-                "Assembles a complete war chariot ready for battle."));
+                "Assembles a complete war chariot ready for battle.", workforce: 5));
 
             blueprints.Add(CreateBlueprint("Bronze Statue", BlueprintType.Artisan, items["Bronze Statue"], 12f,
                 new[] { (items["Statue Base"], 1), (items["Bronze"], 4) }, isStarter: false, unlockCost: 450, displeasure: 12, source: DispleasureSource.Craftsmanship,
-                "Casts and erects a monumental bronze statue."));
+                "Casts and erects a monumental bronze statue.", workforce: 4));
 
             blueprints.Add(CreateBlueprint("Temple Component", BlueprintType.Artisan, items["Temple Component"], 10f,
                 new[] { (items["Temple Column"], 2), (items["Mosaic"], 1) }, isStarter: false, unlockCost: 400, displeasure: 10, source: DispleasureSource.Craftsmanship,
-                "Constructs a section of a grand temple."));
+                "Constructs a section of a grand temple.", workforce: 3));
 
             // SlaveLabor: War catapult requires extreme labor
             blueprints.Add(CreateBlueprint("War Catapult", BlueprintType.Artisan, items["War Catapult"], 15f,
                 new[] { (items["War Engine Parts"], 1), (items["Rope"], 4), (items["Planks"], 4) }, isStarter: false, unlockCost: 600, displeasure: 18, source: DispleasureSource.SlaveLabor,
-                "Builds a terrifying catapult for crushing city walls."));
+                "Builds a terrifying catapult for crushing city walls.", workforce: 6));
 
             blueprints.Add(CreateBlueprint("Royal Throne", BlueprintType.Artisan, items["Royal Throne"], 15f,
                 new[] { (items["Furniture"], 2), (items["Gold Jewelry"], 2), (items["Linen Cloth"], 2) }, isStarter: false, unlockCost: 800, displeasure: 8, source: DispleasureSource.Craftsmanship,
-                "Crafts a throne suitable for a god-king."));
+                "Crafts a throne suitable for a god-king.", workforce: 4));
 
             // === KITCHEN BLUEPRINTS (Food Processing) ===
             blueprints.Add(CreateBlueprint("Flour", BlueprintType.Kitchen, items["Flour"], 2f,
@@ -355,7 +355,7 @@ namespace AncientFactory.Editor
             return blueprints;
         }
 
-        private static BlueprintDefinition CreateBlueprint(string name, BlueprintType type, ItemDefinition outputItem, float time, (ItemDefinition item, int amount)[] inputs, bool isStarter, int unlockCost, int displeasure, DispleasureSource source, string description)
+        private static BlueprintDefinition CreateBlueprint(string name, BlueprintType type, ItemDefinition outputItem, float time, (ItemDefinition item, int amount)[] inputs, bool isStarter, int unlockCost, int displeasure, DispleasureSource source, string description, int workforce = 1)
         {
             var bp = ScriptableObject.CreateInstance<BlueprintDefinition>();
             bp.name = $"BP_{name.Replace(" ", "")}";
@@ -369,6 +369,7 @@ namespace AncientFactory.Editor
             so.FindProperty("unlockCost").intValue = unlockCost;
             so.FindProperty("divineDispleasure").intValue = displeasure;
             so.FindProperty("displeasureSource").enumValueIndex = (int)source;
+            so.FindProperty("workforceRequirement").intValue = workforce;
 
             // Output
             var outputProp = so.FindProperty("output");

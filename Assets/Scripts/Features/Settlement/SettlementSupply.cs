@@ -30,7 +30,7 @@ namespace AncientFactory.Features.Settlement
 
             foreach (var neighbor in neighbors)
             {
-                if (neighbor is IFactoryTile factory and not PowerTile)
+                if (neighbor is IFactoryTile factory)
                 {
                     TransferItemsToSettlement(factory.OutputBuffer, settlement);
                 }

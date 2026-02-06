@@ -40,7 +40,7 @@ namespace AncientFactory.Features.WorldMap
         public event Action OnTileHoverEnded;
         public event Action<BaseTile> OnTileSelected;
         public event Action OnTileDeselected;
-        
+
         // Placement Mode
         public bool IsPlacementMode { get; set; }
         public TileType? PlacementTileType { get; set; }
@@ -77,12 +77,12 @@ namespace AncientFactory.Features.WorldMap
 
             var mouse = Mouse.current;
             if (mouse == null) return;
-            
+
             // ... (rest of method same)
 
             // Note: We might want to show a different hover cursor/highlight in placement mode later,
             // but for now, standard hover is fine.
-            
+
             if (_camera == null)
             {
                 _camera = Camera.main;
@@ -91,14 +91,14 @@ namespace AncientFactory.Features.WorldMap
 
             // Simple ScreenToWorldPoint with Offset
             Vector3 mouseScreenPos = mouse.position.ReadValue();
-            
+
             // Calculate distance from camera to map plane
             // Assuming orthographic camera aligned with Z axis
             float zDistance = worldMap.transform.position.z - _camera.transform.position.z;
             mouseScreenPos.z = Mathf.Abs(zDistance);
-            
+
             Vector3 worldPos = _camera.ScreenToWorldPoint(mouseScreenPos);
-            
+
             // Apply manual offset to correct for visual/logical mismatch
             worldPos += (Vector3)selectionOffset;
 
@@ -188,7 +188,7 @@ namespace AncientFactory.Features.WorldMap
                 worldMap.HighlightTilemap.SetTile(cellPos, worldMap.HoverHighlightTile);
             }
 
-            UpdatePowerHighlights();
+            UpdateRangeHighlights();
             OnTileHovered?.Invoke(tile);
         }
 
@@ -206,7 +206,7 @@ namespace AncientFactory.Features.WorldMap
                 _hoveredTile = null;
                 _hoveredCell = default;
 
-                UpdatePowerHighlights();
+                UpdateRangeHighlights();
                 OnTileHoverEnded?.Invoke();
             }
         }
@@ -227,6 +227,7 @@ namespace AncientFactory.Features.WorldMap
                     worldMap.Tilemap.SetTile(cellPos, previewTile);
                 }
             }
+            UpdateRangeHighlights();
         }
 
         private void ClearPlacementHover()
@@ -239,6 +240,7 @@ namespace AncientFactory.Features.WorldMap
                     worldMap.Tilemap.SetTile(_hoveredPlacementCell.Value, null);
                 }
                 _hoveredPlacementCell = null;
+                UpdateRangeHighlights();
             }
         }
 
@@ -263,7 +265,7 @@ namespace AncientFactory.Features.WorldMap
                 worldMap.HighlightTilemap.SetTile(cellPos, worldMap.SelectedHighlightTile);
             }
 
-            UpdatePowerHighlights();
+            UpdateRangeHighlights();
             OnTileSelected?.Invoke(tile);
         }
 
@@ -275,20 +277,19 @@ namespace AncientFactory.Features.WorldMap
                 worldMap.HighlightTilemap.SetTile(_selectedCell, null);
                 _selectedTile = null;
                 _selectedCell = default;
-                
-                UpdatePowerHighlights();
+
+                UpdateRangeHighlights();
                 OnTileDeselected?.Invoke();
             }
         }
 
-        private void UpdatePowerHighlights()
+        private void UpdateRangeHighlights()
         {
+            // Range highlights are updated for Workforce/Commute radius highlights.
+
             // 1. Clear existing radius highlights
             foreach (var pos in _activeHighlights)
             {
-                // Don't clear if it's the currently selected tile or hovered tile
-                // (Though strictly speaking, radius highlights shouldn't be on the tile itself usually, 
-                // but if they are, we must preserve the main highlights)
                 if (pos == _selectedCell && _selectedTile != null) continue;
                 if (pos == _hoveredCell && _hoveredTile != null) continue;
 
@@ -296,38 +297,50 @@ namespace AncientFactory.Features.WorldMap
             }
             _activeHighlights.Clear();
 
-            // 2. Determine source (Hover takes precedence for previewing)
-            PowerTile source = null;
-            if (_hoveredTile is PowerTile hoveredPower)
+            // 2. Determine target for highlighting
+            DrawRangeVisualization();
+        }
+
+        private void DrawRangeVisualization()
+        {
+            // Determine target
+            Vector3Int center = default;
+            int radius = 0;
+
+            // Priority 1: Placement Mode
+            if (IsPlacementMode && _hoveredPlacementCell.HasValue && PlacementTileType.HasValue)
             {
-                source = hoveredPower;
+                center = _hoveredPlacementCell.Value;
+                if (PlacementTileType.Value == TileType.Housing) radius = 1;
+                else if (PlacementTileType.Value == TileType.Settlement) radius = 2;
             }
-            else if (_selectedTile is PowerTile selectedPower)
+            // Priority 2: Selection/Hover
+            else
             {
-                source = selectedPower;
+                BaseTile targetTile = _selectedTile ?? _hoveredTile;
+                if (targetTile != null)
+                {
+                    center = targetTile.CellPosition;
+                    if (targetTile is HousingTile housing)
+                    {
+                        radius = housing.CommuteRadius;
+                    }
+                    else if (targetTile is SettlementTile)
+                    {
+                        radius = 2;
+                    }
+                }
             }
 
-            if (source == null) return;
-
-            // 3. Set new highlights
-            // Ensure calculations are up to date
-            source.CalculatePowerOutput();
-            var affectedPositions = source.GetPoweredPositions();
-
-            var highlightTile = worldMap.PowerRangeHighlightTile != null ? worldMap.PowerRangeHighlightTile : worldMap.HoverHighlightTile;
-
-            foreach (var pos in affectedPositions)
+            if (radius > 0)
             {
-                // Skip the source tile itself (already highlighted by hover/select)
-                if (pos == source.CellPosition) continue;
+                var positions = AncientFactory.Features.Grid.HexUtils.GetSpiral(center, radius);
 
-                // Skip if it conflicts with selection/hover (though usually we want to see the overlap, 
-                // but we can't blend tiles easily. Let's prioritize the main state.)
-                if (pos == _selectedCell && _selectedTile != null) continue;
-                if (pos == _hoveredCell && _hoveredTile != null) continue;
-
-                worldMap.HighlightTilemap.SetTile(pos, highlightTile);
-                _activeHighlights.Add(pos);
+                // Use centralized drawing logic
+                if (AncientFactory.Core.Systems.WorkforceSystem.Instance != null)
+                {
+                    AncientFactory.Core.Systems.WorkforceSystem.Instance.DrawWorkforceIndicators(positions);
+                }
             }
         }
     }

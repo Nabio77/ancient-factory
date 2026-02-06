@@ -4,9 +4,9 @@
     <ui:VisualElement name="build-menu-container" class="build-menu-container">
         <ui:Label text="TILE REPLACEMENT" class="build-menu-header" />
         <ui:VisualElement class="build-menu-buttons">
-            <ui:Button name="btn-power" class="build-menu-btn">
-                <ui:VisualElement class="build-menu-icon power-icon" />
-                <ui:Label text="POWER" />
+            <ui:Button name="btn-housing" class="build-menu-btn">
+                <ui:VisualElement class="build-menu-icon housing-icon" />
+                <ui:Label text="HOUSING" />
             </ui:Button>
             <ui:Button name="btn-nature" class="build-menu-btn">
                 <ui:VisualElement class="build-menu-icon nature-icon" />

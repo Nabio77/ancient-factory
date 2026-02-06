@@ -10,7 +10,7 @@ namespace AncientFactory.Features.Tiles
     /// </summary>
     public interface IFactoryTile : IGraphTile
     {
-        bool IsPowered { get; set; }
+        bool HasWorkers { get; set; }
         Inventory OutputBuffer { get; }
         BlueprintProductionState GetProductionState(string nodeId);
         IEnumerable<BlueprintProductionState> GetAllProductionStates();

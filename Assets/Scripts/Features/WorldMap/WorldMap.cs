@@ -62,7 +62,7 @@ namespace AncientFactory.Features.WorldMap
 
             // Ensure other core systems exist in the scene
             EnsureSystem<FactorySystem>();
-            EnsureSystem<PowerSystem>();
+            EnsureSystem<WorkforceSystem>();
             EnsureSystem<SettlementSystem>();
 
             graphSystem.Initialize(_tileData, this);
@@ -83,8 +83,8 @@ namespace AncientFactory.Features.WorldMap
                         case TileType.Settlement:
                             tileData = new SettlementTile(data.Position);
                             break;
-                        case TileType.Power:
-                            tileData = new PowerTile(data.Position);
+                        case TileType.Housing:
+                            tileData = new HousingTile(data.Position);
                             break;
                         case TileType.Nature:
                             tileData = new NatureTile(data.Position);
@@ -131,19 +131,19 @@ namespace AncientFactory.Features.WorldMap
 
         private void Update()
         {
-            DrawPowerIndicators();
+            DrawWorkforceIndicators();
         }
 
-        private void DrawPowerIndicators()
+        private void DrawWorkforceIndicators()
         {
             if (_tileData == null) return;
-            var powerSystem = PowerSystem.Instance;
-            if (powerSystem == null) return;
+            var workforceSystem = WorkforceSystem.Instance;
+            if (workforceSystem == null) return;
 
             var draw = Draw.ingame;
 
-            // 1. Draw borders around ALL powered positions (Reach)
-            using (draw.WithColor(Color.yellow))
+            // 1. Draw borders around ALL serviced positions (Commute Radius)
+            using (draw.WithColor(Color.cyan)) // Cyan for workforce
             {
                 // Pre-calculate hex points relative to center
                 const float radius = 0.55f;
@@ -154,7 +154,7 @@ namespace AncientFactory.Features.WorldMap
                     hexOffsets[i] = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius;
                 }
 
-                foreach (var pos in powerSystem.GetAllPoweredPositions())
+                foreach (var pos in workforceSystem.GetServicedPositions())
                 {
                     var center = visualizer.CellToWorld(pos);
                     var points = new Vector3[7];
@@ -163,16 +163,6 @@ namespace AncientFactory.Features.WorldMap
                         points[i] = center + hexOffsets[i];
                     }
                     draw.Polyline(points);
-                }
-            }
-
-            // 2. Draw labels on Source Tiles
-            foreach (var tile in _tileData.GetAllTiles())
-            {
-                if (tile is PowerTile powerTile && powerTile.TotalPowerOutput > 0)
-                {
-                    var center = visualizer.CellToWorld(tile.CellPosition);
-                    draw.Label2D(center, $"{powerTile.TotalPowerOutput}kW", 20f);
                 }
             }
         }
@@ -223,8 +213,8 @@ namespace AncientFactory.Features.WorldMap
                     case TileType.Settlement:
                         tileData = new SettlementTile(coord);
                         break;
-                    case TileType.Power:
-                        tileData = new PowerTile(coord);
+                    case TileType.Housing:
+                        tileData = new HousingTile(coord);
                         break;
                     case TileType.Nature:
                         tileData = new NatureTile(coord);
@@ -263,8 +253,8 @@ namespace AncientFactory.Features.WorldMap
             BaseTile newTileData;
             switch (newType)
             {
-                case TileType.Power:
-                    newTileData = new PowerTile(position);
+                case TileType.Housing:
+                    newTileData = new HousingTile(position);
                     break;
                 case TileType.Nature:
                     newTileData = new NatureTile(position);
@@ -346,8 +336,8 @@ namespace AncientFactory.Features.WorldMap
                 case TileType.Production:
                     tileData = new FactoryTile(position, FactoryCategory.Production);
                     break;
-                case TileType.Power:
-                    tileData = new PowerTile(position);
+                case TileType.Housing:
+                    tileData = new HousingTile(position);
                     break;
                 case TileType.Nature:
                     tileData = new NatureTile(position);
@@ -419,7 +409,7 @@ namespace AncientFactory.Features.WorldMap
         public Tilemap HighlightTilemap => visualizer.HighlightTilemap;
         public TileBase HoverHighlightTile => visualizer.HoverHighlightTile;
         public TileBase SelectedHighlightTile => visualizer.SelectedHighlightTile;
-        public TileBase PowerRangeHighlightTile => visualizer.PowerRangeHighlightTile;
+
 
         public Vector3 CellToWorld(Vector3Int cellPos) => visualizer.CellToWorld(cellPos);
         public Vector3Int WorldToCell(Vector3 worldPos) => visualizer.WorldToCell(worldPos);

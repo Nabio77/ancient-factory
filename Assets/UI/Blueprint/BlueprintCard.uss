@@ -36,9 +36,7 @@
     background-color: var(--color-bp-logistics);
 }
 
-.type-Power .card-header {
-    background-color: var(--color-bp-power);
-}
+
 
 .card-header #card-icon {
     width: 32px;

@@ -34,20 +34,20 @@
                 <ui:Label name="production-outputs" class="value" text="None" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="power-info" class="hidden">
+        <ui:VisualElement name="housing-info" class="hidden">
             <ui:VisualElement class="divider" />
-            <ui:Label text="Power Station" class="section-title" />
+            <ui:Label text="Housing" class="section-title" />
             <ui:VisualElement class="info-row">
-                <ui:Label text="Total Output" class="label" />
-                <ui:Label name="power-output" class="value" text="0" />
+                <ui:Label text="Residents" class="label" />
+                <ui:Label name="housing-residents" class="value" text="0" />
             </ui:VisualElement>
             <ui:VisualElement class="info-row">
-                <ui:Label text="Power Used" class="label" />
-                <ui:Label name="power-used" class="value" text="0" />
+                <ui:Label text="Connection" class="label" />
+                <ui:Label name="housing-connection" class="value" text="disconnected" />
             </ui:VisualElement>
             <ui:VisualElement class="info-row">
-                <ui:Label text="Radius" class="label" />
-                <ui:Label name="power-radius" class="value" text="0" />
+                <ui:Label text="Commute" class="label" />
+                <ui:Label name="housing-commute" class="value" text="0" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="settlement-info" class="hidden">

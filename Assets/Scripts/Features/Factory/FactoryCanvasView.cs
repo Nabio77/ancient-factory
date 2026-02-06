@@ -12,9 +12,9 @@ namespace AncientFactory.Features.Factory
         private readonly VisualElement _canvasContent;
         private readonly VisualElement _connectionsLayer;
         private readonly VisualTreeAsset _cardTemplate;
-        
+
         private BlueprintGraph _currentGraph;
-        
+
         // Settings
         private Color _connectionColor = new Color(0f, 0.67f, 1f);
         private float _lineWidth = 3f;
@@ -40,10 +40,10 @@ namespace AncientFactory.Features.Factory
         {
             _canvas = canvas;
             _cardTemplate = cardTemplate;
-            
+
             _canvasContent = _canvas.Q<VisualElement>("canvas-content");
             _connectionsLayer = _canvasContent.Q<VisualElement>("connections-layer");
-            
+
             _connectionsLayer.generateVisualContent += OnGenerateConnections;
         }
 
@@ -59,7 +59,7 @@ namespace AncientFactory.Features.Factory
             _nodeElements.Clear();
             _inputPorts.Clear();
             _outputPorts.Clear();
-            
+
             // Clear content but keep connections layer
             for (int i = _canvasContent.childCount - 1; i >= 0; i--)
             {
@@ -68,7 +68,7 @@ namespace AncientFactory.Features.Factory
                     _canvasContent.RemoveAt(i);
                 }
             }
-            
+
             ResetView();
         }
 
@@ -131,14 +131,12 @@ namespace AncientFactory.Features.Factory
 
                 card.Q<Label>("card-output").text = bp.Output.IsValid ? bp.Output.ToString() : "None";
                 card.Q<Label>("card-time").text = $"{bp.ProductionTime:0.#}s";
-                card.Q<Label>("card-power").text = $"{bp.PowerConsumption}W";
             }
             else
             {
                 inputsRow.style.display = DisplayStyle.None;
                 outputRow.style.display = DisplayStyle.None;
                 timeRow.style.display = DisplayStyle.None;
-                powerRow.style.display = DisplayStyle.None;
             }
 
             card.style.position = Position.Absolute;
@@ -199,11 +197,11 @@ namespace AncientFactory.Features.Factory
         {
             _pan = pan;
             _zoom = zoom;
-            
+
             _canvasContent.style.left = _pan.x;
             _canvasContent.style.top = _pan.y;
             _canvasContent.style.scale = new Scale(new Vector3(_zoom, _zoom, 1));
-            
+
             MarkConnectionsDirty();
         }
 
@@ -307,17 +305,17 @@ namespace AncientFactory.Features.Factory
         public bool TryDeleteConnectionAt(Vector2 point)
         {
             if (_currentGraph == null) return false;
-            
+
             const float hitDistance = 10f;
-            
+
             BlueprintConnection connToDelete = null;
 
             foreach (var conn in _currentGraph.connections)
             {
                 // Resolve positions similar to OnGenerateConnections
                 Vector2? start = null, end = null;
-                
-                 if (_currentGraph.IsIONode(conn.fromNodeId))
+
+                if (_currentGraph.IsIONode(conn.fromNodeId))
                 {
                     start = GetIOPortPosition(conn.fromNodeId);
                     end = GetPortPosition(conn.toNodeId, conn.toPortIndex, true);

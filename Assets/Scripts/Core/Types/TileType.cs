@@ -6,7 +6,7 @@ namespace AncientFactory.Core.Types
         Resource,
         Production,
         Settlement,
-        Power,
+        Housing,
         Nature,
         Transport,
         Food,

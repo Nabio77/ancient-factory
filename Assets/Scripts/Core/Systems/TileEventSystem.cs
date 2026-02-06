@@ -14,7 +14,7 @@ namespace AncientFactory.Core.Systems
         {
             InventoryChanged,
             GraphUpdated,
-            PowerChanged,
+            WorkforceChanged,
             Replaced
         }
 

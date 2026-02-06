@@ -119,20 +119,13 @@ namespace AncientFactory.Features.Tiles
 
         public void UpdateTile(TileDataGrid tileData, BaseTile tile)
         {
-            if (tile is IFactoryTile and not PowerTile)
+            if (tile is IFactoryTile)
             {
                 UpdateGraphTile(tileData, tile);
             }
             else if (tile is TransportTile transportTile)
             {
                 UpdateTransportTile(tileData, transportTile);
-            }
-            else if (tile is PowerTile powerTile)
-            {
-                powerTile.UpdateIO(tileData);
-                // Ensure graph events are fired so UI updates
-                powerTile.Graph.NotifyGraphUpdated();
-                EventBus.Publish(new GraphUpdated { Position = tile.CellPosition });
             }
         }
 

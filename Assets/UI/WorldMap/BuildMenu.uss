@@ -69,7 +69,7 @@
 }
 
 /* Removed debug colors from icons */
-.power-icon { }
+.housing-icon { }
 .nature-icon { }
 .transport-icon { }
 .production-icon { }

@@ -151,7 +151,7 @@ namespace AncientFactory.Core.Systems
 
             foreach (var tile in worldMap.TileData.GetAllTiles())
             {
-                if (tile is FactoryTile factoryTile && factoryTile.IsPowered)
+                if (tile is FactoryTile factoryTile && factoryTile.HasWorkers)
                 {
                     foreach (var node in factoryTile.Graph.nodes)
                     {
@@ -163,16 +163,6 @@ namespace AncientFactory.Core.Systems
                                 slaveLaborTotal += 1;
                             }
                             productionCount++;
-                        }
-                    }
-                }
-                else if (tile is PowerTile powerTile && powerTile.TotalPowerOutput > 0)
-                {
-                    foreach (var node in powerTile.Graph.nodes)
-                    {
-                        if (node.blueprint != null && node.blueprint.IsPowerGenerator)
-                        {
-                            total += node.blueprint.DivineDispleasure;
                         }
                     }
                 }

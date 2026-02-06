@@ -23,7 +23,7 @@ namespace AncientFactory.Features.WorldMap
         private FactoryGraphEditor graphEditor;
 
         private VisualElement _root;
-        private Button _btnPower;
+        private Button _btnHousing;
         private Button _btnNature;
         private Button _btnTransport;
         private Button _btnProduction;
@@ -49,13 +49,13 @@ namespace AncientFactory.Features.WorldMap
                 });
             }
 
-            _btnPower = _root.Q<Button>("btn-power");
+            _btnHousing = _root.Q<Button>("btn-housing");
             _btnNature = _root.Q<Button>("btn-nature");
             _btnTransport = _root.Q<Button>("btn-transport");
             _btnProduction = _root.Q<Button>("btn-production");
             _btnFood = _root.Q<Button>("btn-food");
 
-            if (_btnPower != null) _btnPower.clicked += () => ToggleBrush(TileType.Power);
+            if (_btnHousing != null) _btnHousing.clicked += () => ToggleBrush(TileType.Housing);
             if (_btnNature != null) _btnNature.clicked += () => ToggleBrush(TileType.Nature);
             if (_btnTransport != null) _btnTransport.clicked += () => ToggleBrush(TileType.Transport);
             if (_btnProduction != null) _btnProduction.clicked += () => ToggleBrush(TileType.Production);
@@ -147,7 +147,7 @@ namespace AncientFactory.Features.WorldMap
 
         private void UpdateButtons()
         {
-            SetButtonState(_btnPower, TileType.Power);
+            SetButtonState(_btnHousing, TileType.Housing);
             SetButtonState(_btnNature, TileType.Nature);
             SetButtonState(_btnTransport, TileType.Transport);
             SetButtonState(_btnProduction, TileType.Production);
@@ -196,7 +196,7 @@ namespace AncientFactory.Features.WorldMap
         private bool IsMutable(TileType type)
         {
             return type == TileType.Production ||
-                   type == TileType.Power ||
+                   type == TileType.Housing ||
                    type == TileType.Nature ||
                    type == TileType.Transport ||
                    type == TileType.Food;
