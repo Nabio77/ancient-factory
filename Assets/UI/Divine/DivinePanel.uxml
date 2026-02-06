@@ -1,0 +1,43 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="../Theme.uss"/>
+    <Style src="DivinePanel.uss" />
+    <ui:VisualElement name="divine-panel" class="panel">
+        <ui:Label text="Divine Favor" class="title" />
+        <ui:VisualElement class="divider" />
+
+        <ui:VisualElement name="displeasure-status" class="displeasure-status">
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Displeasure" class="label" />
+                <ui:Label name="total-displeasure" class="value highlight" text="0" />
+            </ui:VisualElement>
+            <ui:VisualElement class="progress-bar-container">
+                <ui:VisualElement name="displeasure-progress-fill" class="progress-bar-fill displeasure-fill" />
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Net/tick" class="label" />
+                <ui:Label name="net-displeasure" class="value" text="+0" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="divider" />
+
+        <ui:Label text="Breakdown" class="section-title" />
+        <ui:VisualElement name="displeasure-breakdown">
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Generated" class="label" />
+                <ui:Label name="displeasure-generated" class="value wrath" text="0" />
+            </ui:VisualElement>
+            <ui:VisualElement class="info-row">
+                <ui:Label text="Favor" class="label" />
+                <ui:Label name="favor-generated" class="value favor" text="0" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="divider" />
+
+        <ui:Label text="Divine State" class="section-title" />
+        <ui:VisualElement name="threshold-indicator" class="threshold-indicator blessed">
+            <ui:Label name="threshold-name" class="threshold-label" text="Blessed" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

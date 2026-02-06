@@ -1364,53 +1364,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &507291320
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 507291322}
-  - component: {fileID: 507291321}
-  m_Layer: 0
-  m_Name: CarbonSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &507291321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507291320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a46915590804e2192ff4dfe82ce88f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.CarbonSystem
-  worldMap: {fileID: 998030626}
-  tickInterval: 1
-  minDisasterSpacing: 2
---- !u!4 &507291322
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507291320}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &610185974
 GameObject:
   m_ObjectHideFlags: 0
@@ -1591,7 +1544,7 @@ GameObject:
   - component: {fileID: 836090404}
   - component: {fileID: 836090403}
   m_Layer: 5
-  m_Name: CarbonUI
+  m_Name: DevineUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1621,11 +1574,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 836090401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f58d1f33ac7a45e4b54a5c4499dd971, type: 3}
+  m_Script: {fileID: 11500000, guid: 224cc7b81d69f43aca8fe223604a789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Features.Carbon.CarbonUI
   uiDocument: {fileID: 836090404}
-  carbonSystem: {fileID: 507291321}
+  displeasureSystem: {fileID: 1247266173}
   graphEditor: {fileID: 610185976}
 --- !u!114 &836090404
 MonoBehaviour:
@@ -1641,7 +1594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: 28d646fdc98164fa490d0d71600f695c, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 4ceb7aafaa55d4795a023c8f8caef840, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 77dcaa10bc57040f18fb0810e3ad2dcb, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -2057,6 +2010,55 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1247266172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247266174}
+  - component: {fileID: 1247266173}
+  m_Layer: 0
+  m_Name: DivineSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1247266173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247266172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8afc1744f1dc4e42b539bc4202d48d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AncientFactory.Core.Systems.DivineDispleasureSystem
+  worldMap: {fileID: 998030626}
+  tickInterval: 1
+  minDisasterSpacing: 2
+  templeNeglectThreshold: 10
+  templeNeglectPenalty: 5
+--- !u!4 &1247266174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247266172}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1431735997
 GameObject:
   m_ObjectHideFlags: 0
@@ -2504,10 +2506,12 @@ MonoBehaviour:
   transportTile: {fileID: 11400000, guid: 13634d23a2520430cbbd365efe0bf713, type: 2}
   natureTile: {fileID: 11400000, guid: 37c1a60bc9fc5427eaa72a1052a686a0, type: 2}
   floodedTile: {fileID: 11400000, guid: 99b42d623413d4e4d89407c797045a78, type: 2}
-  deadZoneTile: {fileID: 11400000, guid: e2827486051644d41a37f72f25e4fe87, type: 2}
-  refugeeCampTile: {fileID: 11400000, guid: 99201411145504fda8f7445227bd98ef, type: 2}
-  heatwaveTile: {fileID: 11400000, guid: ac8a3502a3adc46458d09f66df1c180c, type: 2}
   foodTile: {fileID: 11400000, guid: 892ff79bd6efb44c588f230885c19bb3, type: 2}
+  templeTile: {fileID: 11400000, guid: 37323e45676f34fd39461c700a522258, type: 2}
+  plagueTile: {fileID: 11400000, guid: c0b9feb4d3ada4a46a1880687ab6113d, type: 2}
+  slaveRevoltTile: {fileID: 11400000, guid: 628dd6b5ba3714de3ae9958af516b832, type: 2}
+  cursedGroundTile: {fileID: 11400000, guid: e0206771911af42a2a62189bc18e96c1, type: 2}
+  desertExpansionTile: {fileID: 11400000, guid: 6bb7e1cfe4f1a4b47921f46fa027595f, type: 2}
   hoverHighlightTile: {fileID: 11400000, guid: f8b4b48c426064fb388cd3feff621cfc, type: 2}
   selectedHighlightTile: {fileID: 11400000, guid: 9125d4b13c4ed454d9b311009c649fd4, type: 2}
   powerRangeHighlightTile: {fileID: 11400000, guid: 6980d6bfa1ee14a30ab6666cc1d8db91, type: 2}
@@ -2803,7 +2807,6 @@ SceneRoots:
   - {fileID: 1877084597}
   - {fileID: 1777488289}
   - {fileID: 743360586}
-  - {fileID: 507291322}
   - {fileID: 971684620}
   - {fileID: 368832620}
   - {fileID: 1479224408}
@@ -2812,3 +2815,4 @@ SceneRoots:
   - {fileID: 61323577}
   - {fileID: 1804117573}
   - {fileID: 1927955530}
+  - {fileID: 1247266174}

@@ -1,0 +1,156 @@
+/* Divine Panel - extends theme utility classes */
+
+#divine-panel {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 260px;
+}
+
+.title {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
+    -unity-font-style: bold;
+    margin-bottom: var(--spacing-sm);
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--color-border-light);
+    margin-bottom: var(--spacing-sm);
+}
+
+.info-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.value {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+}
+
+.value.highlight {
+    color: var(--color-accent);
+    -unity-font-style: bold;
+}
+
+.section-title {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Progress Bars */
+.progress-bar-container {
+    height: 8px;
+    background-color: var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition-property: width;
+    transition-duration: 0.3s;
+}
+
+.displeasure-fill {
+    background-color: rgb(180, 80, 180);
+}
+
+/* Divine-specific value colors */
+.value.wrath {
+    color: rgb(200, 100, 180);
+}
+
+.value.favor {
+    color: rgb(255, 215, 100);
+}
+
+.value.positive {
+    color: var(--color-danger);
+}
+
+.value.negative {
+    color: var(--color-success);
+}
+
+/* Status sections */
+.displeasure-status {
+    margin-bottom: 4px;
+}
+
+.displeasure-breakdown {
+    margin-bottom: 4px;
+}
+
+/* Threshold Indicator */
+.threshold-indicator {
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-card);
+    -unity-text-align: middle-center;
+}
+
+.threshold-indicator.blessed {
+    background-color: rgba(255, 215, 100, 0.2);
+}
+
+.threshold-indicator.favored {
+    background-color: rgba(180, 200, 100, 0.15);
+}
+
+.threshold-indicator.tolerated {
+    background-color: rgba(150, 150, 150, 0.15);
+}
+
+.threshold-indicator.displeased {
+    background-color: rgba(200, 150, 100, 0.15);
+}
+
+.threshold-indicator.wrathful {
+    background-color: rgba(200, 100, 100, 0.2);
+}
+
+.threshold-indicator.forsaken {
+    background-color: rgba(100, 50, 100, 0.25);
+}
+
+.threshold-label {
+    font-size: var(--font-size-md);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.blessed .threshold-label {
+    color: rgb(255, 215, 100);
+}
+
+.favored .threshold-label {
+    color: rgb(180, 200, 100);
+}
+
+.tolerated .threshold-label {
+    color: rgb(180, 180, 180);
+}
+
+.displeased .threshold-label {
+    color: rgb(220, 160, 80);
+}
+
+.wrathful .threshold-label {
+    color: rgb(220, 80, 80);
+}
+
+.forsaken .threshold-label {
+    color: rgb(150, 50, 150);
+}

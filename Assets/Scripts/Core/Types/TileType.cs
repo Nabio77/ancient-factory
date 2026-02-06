@@ -9,10 +9,16 @@ namespace AncientFactory.Core.Types
         Power,
         Nature,
         Transport,
+        Food,
+
+        // Divine buildings
+        Temple,
+
+        // Divine punishments (disasters)
         Flooded,
-        DeadZone,
-        RefugeeCamp,
-        Heatwave,
-        Food
+        Plague,
+        SlaveRevolt,
+        CursedGround,
+        DesertExpansion
     }
 }

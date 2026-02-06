@@ -44,16 +44,23 @@ namespace AncientFactory.Features.WorldMap
         private TileBase floodedTile;
 
         [SerializeField]
-        private TileBase deadZoneTile;
-
-        [SerializeField]
-        private TileBase refugeeCampTile;
-
-        [SerializeField]
-        private TileBase heatwaveTile;
-
-        [SerializeField]
         private TileBase foodTile;
+
+        [Title("Divine Tiles")]
+        [SerializeField]
+        private TileBase templeTile;
+
+        [SerializeField]
+        private TileBase plagueTile;
+
+        [SerializeField]
+        private TileBase slaveRevoltTile;
+
+        [SerializeField]
+        private TileBase cursedGroundTile;
+
+        [SerializeField]
+        private TileBase desertExpansionTile;
 
         [Title("Highlights")]
         [SerializeField]
@@ -137,10 +144,12 @@ namespace AncientFactory.Features.WorldMap
                 TileType.Nature => natureTile,
                 TileType.Transport => transportTile,
                 TileType.Food => foodTile,
+                TileType.Temple => templeTile,
                 TileType.Flooded => floodedTile,
-                TileType.DeadZone => deadZoneTile,
-                TileType.RefugeeCamp => refugeeCampTile,
-                TileType.Heatwave => heatwaveTile,
+                TileType.Plague => plagueTile,
+                TileType.SlaveRevolt => slaveRevoltTile,
+                TileType.CursedGround => cursedGroundTile,
+                TileType.DesertExpansion => desertExpansionTile,
                 _ => productionTile
             };
         }

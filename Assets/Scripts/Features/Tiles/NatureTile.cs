@@ -5,18 +5,21 @@ namespace AncientFactory.Features.Tiles
 {
     public class NatureTile : BaseTile
     {
-        public int CarbonAbsorptionRate { get; set; }
+        public int DivineFavorGeneration { get; set; }
         public bool IsHealthy { get; set; } = true;
+        public bool IsSacredGrove { get; set; }
 
-        public NatureTile(Vector3Int cellPosition, int carbonAbsorptionRate = 5)
+        public NatureTile(Vector3Int cellPosition, int divineFavorGeneration = 5, bool isSacredGrove = false)
             : base(cellPosition, TileType.Nature)
         {
-            CarbonAbsorptionRate = carbonAbsorptionRate;
+            DivineFavorGeneration = divineFavorGeneration;
+            IsSacredGrove = isSacredGrove;
         }
 
-        public int GetCarbonAbsorption()
+        public int GetDivineFavor()
         {
-            return IsHealthy ? CarbonAbsorptionRate : 0;
+            if (!IsHealthy) return 0;
+            return IsSacredGrove ? DivineFavorGeneration * 2 : DivineFavorGeneration;
         }
     }
 }

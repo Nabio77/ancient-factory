@@ -167,187 +167,195 @@ namespace AncientFactory.Editor
             var blueprints = new List<BlueprintDefinition>();
 
             // === FORGE BLUEPRINTS (Ore → Ingots) ===
+            // SacredEarth: Mining/extraction from the earth angers earth gods
             blueprints.Add(CreateBlueprint("Copper Ingot", BlueprintType.Forge, items["Copper Ingot"], 2f,
-                new[] { (items["Copper Ore"], 2) }, isStarter: true, unlockCost: 0, carbon: 8,
+                new[] { (items["Copper Ore"], 2) }, isStarter: true, unlockCost: 0, displeasure: 8, source: DispleasureSource.SacredEarth,
                 "Smelts raw copper ore into usable ingots."));
 
             blueprints.Add(CreateBlueprint("Tin Ingot", BlueprintType.Forge, items["Tin Ingot"], 2f,
-                new[] { (items["Tin Ore"], 2) }, isStarter: true, unlockCost: 0, carbon: 8,
+                new[] { (items["Tin Ore"], 2) }, isStarter: true, unlockCost: 0, displeasure: 8, source: DispleasureSource.SacredEarth,
                 "Refines tin ore. Essential for bronze production."));
 
+            // SlaveLabor: Iron requires backbreaking labor
             blueprints.Add(CreateBlueprint("Iron Ingot", BlueprintType.Forge, items["Iron Ingot"], 3f,
-                new[] { (items["Iron Ore"], 2) }, isStarter: false, unlockCost: 20, carbon: 12,
+                new[] { (items["Iron Ore"], 2) }, isStarter: false, unlockCost: 20, displeasure: 12, source: DispleasureSource.SlaveLabor,
                 "Requires high heat to smelt iron ore into strong ingots."));
 
             blueprints.Add(CreateBlueprint("Gold Ingot", BlueprintType.Forge, items["Gold Ingot"], 4f,
-                new[] { (items["Gold Ore"], 2) }, isStarter: false, unlockCost: 50, carbon: 10,
+                new[] { (items["Gold Ore"], 2) }, isStarter: false, unlockCost: 50, displeasure: 10, source: DispleasureSource.SacredEarth,
                 "Purifies gold ore into valuable bullion."));
 
             blueprints.Add(CreateBlueprint("Bronze", BlueprintType.Forge, items["Bronze"], 3f,
-                new[] { (items["Copper Ingot"], 1), (items["Tin Ingot"], 1) }, isStarter: false, unlockCost: 30, carbon: 10,
+                new[] { (items["Copper Ingot"], 1), (items["Tin Ingot"], 1) }, isStarter: false, unlockCost: 30, displeasure: 10, source: DispleasureSource.Craftsmanship,
                 "Alloys copper and tin to create Bronze, the metal of the age."));
 
+            // SlaveLabor: Steel production is extremely demanding
             blueprints.Add(CreateBlueprint("Steel", BlueprintType.Forge, items["Steel"], 5f,
-                new[] { (items["Iron Ingot"], 2), (items["Coal"], 1) }, isStarter: false, unlockCost: 80, carbon: 18,
+                new[] { (items["Iron Ingot"], 2), (items["Coal"], 1) }, isStarter: false, unlockCost: 80, displeasure: 18, source: DispleasureSource.SlaveLabor,
                 "Advanced metallurgy combining iron and carbon for superior hardness."));
 
             // === KILN BLUEPRINTS (Heat Processing) ===
+            // SacredEarth: Clay extraction from the earth
             blueprints.Add(CreateBlueprint("Bricks", BlueprintType.Kiln, items["Bricks"], 2f,
-                new[] { (items["Clay"], 2) }, isStarter: true, unlockCost: 0, carbon: 6,
+                new[] { (items["Clay"], 2) }, isStarter: true, unlockCost: 0, displeasure: 6, source: DispleasureSource.SacredEarth,
                 "Fires clay into hard, durable bricks."));
 
             blueprints.Add(CreateBlueprint("Glass", BlueprintType.Kiln, items["Glass"], 3f,
-                new[] { (items["Sand"], 2) }, isStarter: false, unlockCost: 25, carbon: 8,
+                new[] { (items["Sand"], 2) }, isStarter: false, unlockCost: 25, displeasure: 8, source: DispleasureSource.Craftsmanship,
                 "Melts sand into clear glass."));
 
             blueprints.Add(CreateBlueprint("Glassware", BlueprintType.Kiln, items["Glassware"], 4f,
-                new[] { (items["Glass"], 2) }, isStarter: false, unlockCost: 60, carbon: 6,
+                new[] { (items["Glass"], 2) }, isStarter: false, unlockCost: 60, displeasure: 6, source: DispleasureSource.Craftsmanship,
                 "Shapes molten glass into intricate vessels."));
 
             blueprints.Add(CreateBlueprint("Pottery", BlueprintType.Kiln, items["Pottery"], 3f,
-                new[] { (items["Bricks"], 2), (items["Glassware"], 1) }, isStarter: false, unlockCost: 100, carbon: 8,
+                new[] { (items["Bricks"], 2), (items["Glassware"], 1) }, isStarter: false, unlockCost: 100, displeasure: 8, source: DispleasureSource.Craftsmanship,
                 "Creates fine ceramics for storage and trade."));
 
             blueprints.Add(CreateBlueprint("Bread", BlueprintType.Kiln, items["Bread"], 3f,
-                new[] { (items["Flour"], 2) }, isStarter: false, unlockCost: 30, carbon: 4,
+                new[] { (items["Flour"], 2) }, isStarter: false, unlockCost: 30, displeasure: 4, source: DispleasureSource.Craftsmanship,
                 "Bakes dough into nourishing bread."));
 
             // === WORKSHOP BLUEPRINTS (Basic Crafting) ===
+            // SacredEarth: Stone quarrying disturbs the earth
             blueprints.Add(CreateBlueprint("Cut Stone", BlueprintType.Workshop, items["Cut Stone"], 2f,
-                new[] { (items["Stone"], 2) }, isStarter: true, unlockCost: 0, carbon: 2,
+                new[] { (items["Stone"], 2) }, isStarter: true, unlockCost: 0, displeasure: 2, source: DispleasureSource.SacredEarth,
                 "Shapes raw stone into building blocks."));
 
             blueprints.Add(CreateBlueprint("Planks", BlueprintType.Workshop, items["Planks"], 2f,
-                new[] { (items["Wood"], 2) }, isStarter: true, unlockCost: 0, carbon: 2,
+                new[] { (items["Wood"], 2) }, isStarter: true, unlockCost: 0, displeasure: 2, source: DispleasureSource.Craftsmanship,
                 "Saws logs into versatile wooden planks."));
 
             blueprints.Add(CreateBlueprint("Linen Thread", BlueprintType.Workshop, items["Linen Thread"], 2f,
-                new[] { (items["Flax"], 2) }, isStarter: true, unlockCost: 0, carbon: 1,
+                new[] { (items["Flax"], 2) }, isStarter: true, unlockCost: 0, displeasure: 1, source: DispleasureSource.Craftsmanship,
                 "Spins flax fibers into strong thread."));
 
             blueprints.Add(CreateBlueprint("Papyrus Sheet", BlueprintType.Workshop, items["Papyrus Sheet"], 2f,
-                new[] { (items["Papyrus"], 2) }, isStarter: true, unlockCost: 0, carbon: 1,
+                new[] { (items["Papyrus"], 2) }, isStarter: true, unlockCost: 0, displeasure: 1, source: DispleasureSource.Craftsmanship,
                 "Processes reeds into writing material."));
 
             blueprints.Add(CreateBlueprint("Rope", BlueprintType.Workshop, items["Rope"], 2f,
-                new[] { (items["Flax"], 3) }, isStarter: false, unlockCost: 15, carbon: 1,
+                new[] { (items["Flax"], 3) }, isStarter: false, unlockCost: 15, displeasure: 1, source: DispleasureSource.Craftsmanship,
                 "Twists fibers into heavy-duty rope."));
 
             blueprints.Add(CreateBlueprint("Linen Cloth", BlueprintType.Workshop, items["Linen Cloth"], 3f,
-                new[] { (items["Linen Thread"], 2) }, isStarter: false, unlockCost: 25, carbon: 2,
+                new[] { (items["Linen Thread"], 2) }, isStarter: false, unlockCost: 25, displeasure: 2, source: DispleasureSource.Craftsmanship,
                 "Weaves thread into fine cloth."));
 
             blueprints.Add(CreateBlueprint("Cement", BlueprintType.Workshop, items["Cement"], 3f,
-                new[] { (items["Clay"], 1), (items["Stone"], 1), (items["Sand"], 1) }, isStarter: false, unlockCost: 40, carbon: 5,
+                new[] { (items["Clay"], 1), (items["Stone"], 1), (items["Sand"], 1) }, isStarter: false, unlockCost: 40, displeasure: 5, source: DispleasureSource.SacredEarth,
                 "Mixes ingredients to create a strong binding agent."));
 
             blueprints.Add(CreateBlueprint("Bronze Tools", BlueprintType.Workshop, items["Bronze Tools"], 4f,
-                new[] { (items["Bronze"], 2), (items["Planks"], 1) }, isStarter: false, unlockCost: 60, carbon: 4,
+                new[] { (items["Bronze"], 2), (items["Planks"], 1) }, isStarter: false, unlockCost: 60, displeasure: 4, source: DispleasureSource.Craftsmanship,
                 "Fashions bronze and wood into reliable tools."));
 
             blueprints.Add(CreateBlueprint("Iron Tools", BlueprintType.Workshop, items["Iron Tools"], 4f,
-                new[] { (items["Iron Ingot"], 2), (items["Planks"], 1) }, isStarter: false, unlockCost: 80, carbon: 5,
+                new[] { (items["Iron Ingot"], 2), (items["Planks"], 1) }, isStarter: false, unlockCost: 80, displeasure: 5, source: DispleasureSource.Craftsmanship,
                 "Creates superior tools from iron."));
 
+            // SlaveLabor: Heavy stone blocks require brutal labor
             blueprints.Add(CreateBlueprint("Stone Blocks", BlueprintType.Workshop, items["Stone Blocks"], 4f,
-                new[] { (items["Cut Stone"], 2), (items["Cement"], 1) }, isStarter: false, unlockCost: 100, carbon: 4,
+                new[] { (items["Cut Stone"], 2), (items["Cement"], 1) }, isStarter: false, unlockCost: 100, displeasure: 4, source: DispleasureSource.SlaveLabor,
                 "Assembles massive masonry blocks."));
 
             blueprints.Add(CreateBlueprint("Scroll", BlueprintType.Workshop, items["Scroll"], 3f,
-                new[] { (items["Papyrus Sheet"], 2), (items["Planks"], 1) }, isStarter: false, unlockCost: 50, carbon: 2,
+                new[] { (items["Papyrus Sheet"], 2), (items["Planks"], 1) }, isStarter: false, unlockCost: 50, displeasure: 2, source: DispleasureSource.Craftsmanship,
                 "Prepares finished scrolls for the library."));
 
             // === ARTISAN BLUEPRINTS (Complex Assembly) ===
             blueprints.Add(CreateBlueprint("Gold Jewelry", BlueprintType.Artisan, items["Gold Jewelry"], 5f,
-                new[] { (items["Gold Ingot"], 1), (items["Glassware"], 1) }, isStarter: false, unlockCost: 150, carbon: 3,
+                new[] { (items["Gold Ingot"], 1), (items["Glassware"], 1) }, isStarter: false, unlockCost: 150, displeasure: 3, source: DispleasureSource.Craftsmanship,
                 "Crafts exquisite jewelry for the nobility."));
 
             blueprints.Add(CreateBlueprint("Bronze Weapons", BlueprintType.Artisan, items["Bronze Weapons"], 5f,
-                new[] { (items["Bronze Tools"], 2), (items["Leather"], 1) }, isStarter: false, unlockCost: 120, carbon: 6,
+                new[] { (items["Bronze Tools"], 2), (items["Leather"], 1) }, isStarter: false, unlockCost: 120, displeasure: 6, source: DispleasureSource.Craftsmanship,
                 "Smiths weapons of war from bronze."));
 
             blueprints.Add(CreateBlueprint("Iron Weapons", BlueprintType.Artisan, items["Iron Weapons"], 6f,
-                new[] { (items["Iron Tools"], 2), (items["Leather"], 1) }, isStarter: false, unlockCost: 180, carbon: 8,
+                new[] { (items["Iron Tools"], 2), (items["Leather"], 1) }, isStarter: false, unlockCost: 180, displeasure: 8, source: DispleasureSource.Craftsmanship,
                 "Forges deadly iron weaponry."));
 
             blueprints.Add(CreateBlueprint("Bronze Armor", BlueprintType.Artisan, items["Bronze Armor"], 6f,
-                new[] { (items["Bronze"], 3), (items["Leather"], 2) }, isStarter: false, unlockCost: 160, carbon: 8,
+                new[] { (items["Bronze"], 3), (items["Leather"], 2) }, isStarter: false, unlockCost: 160, displeasure: 8, source: DispleasureSource.Craftsmanship,
                 "Beats bronze plates into protective armor."));
 
             blueprints.Add(CreateBlueprint("Furniture", BlueprintType.Artisan, items["Furniture"], 4f,
-                new[] { (items["Planks"], 2), (items["Linen Cloth"], 1) }, isStarter: false, unlockCost: 100, carbon: 3,
+                new[] { (items["Planks"], 2), (items["Linen Cloth"], 1) }, isStarter: false, unlockCost: 100, displeasure: 3, source: DispleasureSource.Craftsmanship,
                 "Assembles comfortable and stylish furniture."));
 
             blueprints.Add(CreateBlueprint("Mosaic", BlueprintType.Artisan, items["Mosaic"], 5f,
-                new[] { (items["Glass"], 2), (items["Stone"], 2) }, isStarter: false, unlockCost: 140, carbon: 4,
+                new[] { (items["Glass"], 2), (items["Stone"], 2) }, isStarter: false, unlockCost: 140, displeasure: 4, source: DispleasureSource.Craftsmanship,
                 "Lays tile and glass into beautiful artworks."));
 
             blueprints.Add(CreateBlueprint("Chariot Frame", BlueprintType.Artisan, items["Chariot Frame"], 8f,
-                new[] { (items["Planks"], 4), (items["Bronze"], 2), (items["Rope"], 2) }, isStarter: false, unlockCost: 250, carbon: 10,
+                new[] { (items["Planks"], 4), (items["Bronze"], 2), (items["Rope"], 2) }, isStarter: false, unlockCost: 250, displeasure: 10, source: DispleasureSource.Craftsmanship,
                 "Builds the chassis for a chariot."));
 
             blueprints.Add(CreateBlueprint("Statue Base", BlueprintType.Artisan, items["Statue Base"], 8f,
-                new[] { (items["Stone Blocks"], 4), (items["Bronze"], 2) }, isStarter: false, unlockCost: 220, carbon: 8,
+                new[] { (items["Stone Blocks"], 4), (items["Bronze"], 2) }, isStarter: false, unlockCost: 220, displeasure: 8, source: DispleasureSource.SlaveLabor,
                 "Prepares the foundation for a great statue."));
 
             blueprints.Add(CreateBlueprint("Temple Column", BlueprintType.Artisan, items["Temple Column"], 7f,
-                new[] { (items["Stone Blocks"], 4), (items["Cement"], 2) }, isStarter: false, unlockCost: 200, carbon: 8,
+                new[] { (items["Stone Blocks"], 4), (items["Cement"], 2) }, isStarter: false, unlockCost: 200, displeasure: 8, source: DispleasureSource.SlaveLabor,
                 "Carves and assembles a monolithic column."));
 
+            // SlaveLabor: War engines require massive forced labor
             blueprints.Add(CreateBlueprint("War Engine Parts", BlueprintType.Artisan, items["War Engine Parts"], 10f,
-                new[] { (items["Iron Tools"], 4), (items["Rope"], 4) }, isStarter: false, unlockCost: 300, carbon: 12,
+                new[] { (items["Iron Tools"], 4), (items["Rope"], 4) }, isStarter: false, unlockCost: 300, displeasure: 12, source: DispleasureSource.SlaveLabor,
                 "Fabricates complex mechanisms for siege engines."));
 
             // === MASTERWORK BLUEPRINTS (Final Products) ===
             blueprints.Add(CreateBlueprint("Chariot", BlueprintType.Artisan, items["Chariot"], 12f,
-                new[] { (items["Chariot Frame"], 1), (items["Bronze"], 2), (items["Leather"], 2) }, isStarter: false, unlockCost: 500, carbon: 15,
+                new[] { (items["Chariot Frame"], 1), (items["Bronze"], 2), (items["Leather"], 2) }, isStarter: false, unlockCost: 500, displeasure: 15, source: DispleasureSource.Craftsmanship,
                 "Assembles a complete war chariot ready for battle."));
 
             blueprints.Add(CreateBlueprint("Bronze Statue", BlueprintType.Artisan, items["Bronze Statue"], 12f,
-                new[] { (items["Statue Base"], 1), (items["Bronze"], 4) }, isStarter: false, unlockCost: 450, carbon: 12,
+                new[] { (items["Statue Base"], 1), (items["Bronze"], 4) }, isStarter: false, unlockCost: 450, displeasure: 12, source: DispleasureSource.Craftsmanship,
                 "Casts and erects a monumental bronze statue."));
 
             blueprints.Add(CreateBlueprint("Temple Component", BlueprintType.Artisan, items["Temple Component"], 10f,
-                new[] { (items["Temple Column"], 2), (items["Mosaic"], 1) }, isStarter: false, unlockCost: 400, carbon: 10,
+                new[] { (items["Temple Column"], 2), (items["Mosaic"], 1) }, isStarter: false, unlockCost: 400, displeasure: 10, source: DispleasureSource.Craftsmanship,
                 "Constructs a section of a grand temple."));
 
+            // SlaveLabor: War catapult requires extreme labor
             blueprints.Add(CreateBlueprint("War Catapult", BlueprintType.Artisan, items["War Catapult"], 15f,
-                new[] { (items["War Engine Parts"], 1), (items["Rope"], 4), (items["Planks"], 4) }, isStarter: false, unlockCost: 600, carbon: 18,
+                new[] { (items["War Engine Parts"], 1), (items["Rope"], 4), (items["Planks"], 4) }, isStarter: false, unlockCost: 600, displeasure: 18, source: DispleasureSource.SlaveLabor,
                 "Builds a terrifying catapult for crushing city walls."));
 
             blueprints.Add(CreateBlueprint("Royal Throne", BlueprintType.Artisan, items["Royal Throne"], 15f,
-                new[] { (items["Furniture"], 2), (items["Gold Jewelry"], 2), (items["Linen Cloth"], 2) }, isStarter: false, unlockCost: 800, carbon: 8,
+                new[] { (items["Furniture"], 2), (items["Gold Jewelry"], 2), (items["Linen Cloth"], 2) }, isStarter: false, unlockCost: 800, displeasure: 8, source: DispleasureSource.Craftsmanship,
                 "Crafts a throne suitable for a god-king."));
 
             // === KITCHEN BLUEPRINTS (Food Processing) ===
             blueprints.Add(CreateBlueprint("Flour", BlueprintType.Kitchen, items["Flour"], 2f,
-                new[] { (items["Grain"], 2) }, isStarter: true, unlockCost: 0, carbon: 1,
+                new[] { (items["Grain"], 2) }, isStarter: true, unlockCost: 0, displeasure: 1, source: DispleasureSource.Craftsmanship,
                 "Grinds grain into fine flour."));
 
             blueprints.Add(CreateBlueprint("Wine", BlueprintType.Kitchen, items["Wine"], 4f,
-                new[] { (items["Grapes"], 3) }, isStarter: false, unlockCost: 40, carbon: 2,
+                new[] { (items["Grapes"], 3) }, isStarter: false, unlockCost: 40, displeasure: 2, source: DispleasureSource.Craftsmanship,
                 "Presses and ferments grapes into wine."));
 
             blueprints.Add(CreateBlueprint("Olive Oil", BlueprintType.Kitchen, items["Olive Oil"], 3f,
-                new[] { (items["Olives"], 3) }, isStarter: false, unlockCost: 35, carbon: 2,
+                new[] { (items["Olives"], 3) }, isStarter: false, unlockCost: 35, displeasure: 2, source: DispleasureSource.Craftsmanship,
                 "Presses olives to extract valuable oil."));
 
             blueprints.Add(CreateBlueprint("Meat", BlueprintType.Kitchen, items["Meat"], 4f,
-                new[] { (items["Cattle"], 1) }, isStarter: false, unlockCost: 50, carbon: 3,
+                new[] { (items["Cattle"], 1) }, isStarter: false, unlockCost: 50, displeasure: 3, source: DispleasureSource.Craftsmanship,
                 "Prepares cuts of meat from livestock."));
 
             blueprints.Add(CreateBlueprint("Leather", BlueprintType.Kitchen, items["Leather"], 3f,
-                new[] { (items["Cattle"], 1) }, isStarter: false, unlockCost: 45, carbon: 3,
+                new[] { (items["Cattle"], 1) }, isStarter: false, unlockCost: 45, displeasure: 3, source: DispleasureSource.Craftsmanship,
                 "Tans hides into durable leather."));
 
             blueprints.Add(CreateBlueprint("Feast", BlueprintType.Kitchen, items["Feast"], 8f,
-                new[] { (items["Bread"], 1), (items["Wine"], 1), (items["Meat"], 1) }, isStarter: false, unlockCost: 150, carbon: 5,
+                new[] { (items["Bread"], 1), (items["Wine"], 1), (items["Meat"], 1) }, isStarter: false, unlockCost: 150, displeasure: 5, source: DispleasureSource.Craftsmanship,
                 "Prepares a magnificent feast."));
 
             return blueprints;
         }
 
-        private static BlueprintDefinition CreateBlueprint(string name, BlueprintType type, ItemDefinition outputItem, float time, (ItemDefinition item, int amount)[] inputs, bool isStarter, int unlockCost, int carbon, string description)
+        private static BlueprintDefinition CreateBlueprint(string name, BlueprintType type, ItemDefinition outputItem, float time, (ItemDefinition item, int amount)[] inputs, bool isStarter, int unlockCost, int displeasure, DispleasureSource source, string description)
         {
             var bp = ScriptableObject.CreateInstance<BlueprintDefinition>();
             bp.name = $"BP_{name.Replace(" ", "")}";
@@ -359,7 +367,8 @@ namespace AncientFactory.Editor
             so.FindProperty("productionTime").floatValue = time;
             so.FindProperty("isStarterCard").boolValue = isStarter;
             so.FindProperty("unlockCost").intValue = unlockCost;
-            so.FindProperty("carbonEmission").intValue = carbon;
+            so.FindProperty("divineDispleasure").intValue = displeasure;
+            so.FindProperty("displeasureSource").enumValueIndex = (int)source;
 
             // Output
             var outputProp = so.FindProperty("output");

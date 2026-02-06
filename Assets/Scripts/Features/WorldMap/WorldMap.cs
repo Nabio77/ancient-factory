@@ -95,17 +95,23 @@ namespace AncientFactory.Features.WorldMap
                         case TileType.Flooded:
                             tileData = new FloodedTile(data.Position, 0);
                             break;
-                        case TileType.DeadZone:
-                            tileData = new DeadZoneTile(data.Position, 0);
-                            break;
-                        case TileType.RefugeeCamp:
-                            tileData = new RefugeeCampTile(data.Position, 0, 50);
-                            break;
-                        case TileType.Heatwave:
-                            tileData = new HeatwaveTile(data.Position, 0);
-                            break;
                         case TileType.Food:
                             tileData = new FactoryTile(data.Position, FactoryCategory.Food);
+                            break;
+                        case TileType.Temple:
+                            tileData = new TempleTile(data.Position);
+                            break;
+                        case TileType.Plague:
+                            tileData = new PlagueTile(data.Position, 0);
+                            break;
+                        case TileType.SlaveRevolt:
+                            tileData = new SlaveRevoltTile(data.Position, 0);
+                            break;
+                        case TileType.CursedGround:
+                            tileData = new CursedGroundTile(data.Position, 0);
+                            break;
+                        case TileType.DesertExpansion:
+                            tileData = new DesertExpansionTile(data.Position, 0);
                             break;
                         case TileType.Production:
                         default:
@@ -272,6 +278,9 @@ namespace AncientFactory.Features.WorldMap
                 case TileType.Food:
                     newTileData = new FactoryTile(position, FactoryCategory.Food);
                     break;
+                case TileType.Temple:
+                    newTileData = new TempleTile(position);
+                    break;
                 default:
                     Debug.LogWarning($"ReplaceTile: Unsupported type {newType}");
                     return;
@@ -348,6 +357,9 @@ namespace AncientFactory.Features.WorldMap
                     break;
                 case TileType.Food:
                     tileData = new FactoryTile(position, FactoryCategory.Food);
+                    break;
+                case TileType.Temple:
+                    tileData = new TempleTile(position);
                     break;
                 default:
                     Debug.LogWarning($"AddTile: Cannot place tile of type {type}");
