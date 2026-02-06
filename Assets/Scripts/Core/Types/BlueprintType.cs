@@ -2,22 +2,21 @@ namespace AncientFactory.Core.Types
 {
     public enum BlueprintType
     {
-        // Basic Types
-        Smelter,
-        Furnace,
-        Constructor,
-
-        // Advanced Types
-        Assembler,
+        // Production Types
+        Forge,      // Metal smelting (ore → ingots)
+        Kiln,       // Heat processing (clay → bricks, glass)
+        Workshop,   // Basic crafting/woodworking
+        Artisan,    // Complex skilled assembly
 
         // Utility Types
-        Splitter,
-        Merger,
+        Divider,    // Logistics - splitting
+        Combiner,   // Logistics - merging
 
-        // Power Generation Types
-        Power,
+        // Power Generation
+        Prana,      // Vital energy generation
 
-         // Food Types
-        FoodProcessor
+        // Food Types
+        Kitchen     // Food preparation/cooking
     }
 }
+

@@ -21,7 +21,7 @@ namespace AncientFactory.Core.Data
 
         [Title("Type")]
         [SerializeField]
-        private BlueprintType type = BlueprintType.Constructor;
+        private BlueprintType type = BlueprintType.Workshop;
 
         [Title("Connection Points")]
         [SerializeField, Range(1, 4)]
@@ -74,9 +74,9 @@ namespace AncientFactory.Core.Data
         public float ProductionTime => productionTime;
         public int PowerConsumption => powerConsumption;
 
-        public bool IsProducer => type == BlueprintType.Smelter || type == BlueprintType.Furnace || type == BlueprintType.Constructor || type == BlueprintType.Assembler || type == BlueprintType.FoodProcessor;
-        public bool IsLogistics => type == BlueprintType.Splitter || type == BlueprintType.Merger;
-        public bool IsPowerGenerator => type == BlueprintType.Power;
+        public bool IsProducer => type == BlueprintType.Forge || type == BlueprintType.Kiln || type == BlueprintType.Workshop || type == BlueprintType.Artisan || type == BlueprintType.Kitchen;
+        public bool IsLogistics => type == BlueprintType.Divider || type == BlueprintType.Combiner;
+        public bool IsPowerGenerator => type == BlueprintType.Prana;
 
         // Power Generation Properties
         public int PowerOutput => powerOutput;

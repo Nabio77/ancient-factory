@@ -23,7 +23,7 @@ namespace AncientFactory.Features.Tiles
 
         public Func<BlueprintDefinition, bool> BlueprintFilter => Category switch
         {
-            FactoryCategory.Food => b => b.Type == BlueprintType.FoodProcessor || b.IsLogistics,
+            FactoryCategory.Food => b => b.Type == BlueprintType.Kitchen || b.IsLogistics,
             _ => b => b.IsProducer || b.IsLogistics
         };
 

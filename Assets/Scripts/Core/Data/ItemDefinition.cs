@@ -52,12 +52,12 @@ namespace AncientFactory.Core.Data
 
     public enum ItemTier
     {
-        Raw,            // T0: Coal, Iron Ore, etc.
-        Basic,          // T1: Plates, Bricks, Planks
-        Processed,      // T2: Steel, Wire, Concrete
-        Component,      // T3: Circuits, Motors, Pipes
-        Advanced,       // T4: Processors, Batteries
-        Assembly,       // T5: Engines, Computer Units
-        FinalProduct    // T6: Vehicles, Electronics
+        Harvest,        // T0: Raw materials - Ore, Clay, Wood
+        Refined,        // T1: First processing - Ingots, Bricks, Planks
+        Crafted,        // T2: Secondary processing - Bronze, Cement
+        Artisan,        // T3: Skilled craftwork - Tools, Pottery
+        Fine,           // T4: High-quality goods - Weapons, Armor
+        Grand,          // T5: Large constructions - Chariot Frame
+        Masterwork      // T6: Ultimate achievements - Statues, Chariots
     }
 }
