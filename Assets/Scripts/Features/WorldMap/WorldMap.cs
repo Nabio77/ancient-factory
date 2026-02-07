@@ -64,6 +64,7 @@ namespace AncientFactory.Features.WorldMap
             EnsureSystem<FactorySystem>();
             EnsureSystem<WorkforceSystem>();
             EnsureSystem<SettlementSystem>();
+            EnsureSystem<WonderSystem>();
 
             graphSystem.Initialize(_tileData, this);
 

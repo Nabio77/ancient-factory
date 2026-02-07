@@ -17,6 +17,9 @@ namespace AncientFactory.Core.Systems
         [SerializeField, ListDrawerSettings(ShowFoldout = false)]
         private List<BlueprintDefinition> blueprints = new();
 
+        [SerializeField, Required]
+        private WonderDefinition wonderDefinition;
+
         private Dictionary<string, ItemDefinition> _itemLookup;
         private Dictionary<string, BlueprintDefinition> _blueprintLookup;
 
@@ -66,6 +69,13 @@ namespace AncientFactory.Core.Systems
             if (_blueprintLookup == null) BuildLookups();
             _blueprintLookup.TryGetValue(id, out var bp);
             return bp;
+        }
+
+        public WonderDefinition WonderDefinition => wonderDefinition;
+
+        public List<WonderStage> GetWonderStages()
+        {
+            return wonderDefinition != null ? wonderDefinition.Stages : new List<WonderStage>();
         }
 
         public IEnumerable<ItemDefinition> GetAllItems() => items;

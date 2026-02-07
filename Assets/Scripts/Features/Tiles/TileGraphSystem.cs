@@ -157,6 +157,15 @@ namespace AncientFactory.Features.Tiles
                 changed = true;
             }
 
+            // 2c. Update Wonder Output Node (Wireless)
+            var wonderOutputNode = graph.ioNodes.Find(n => n.type == TileIOType.Wonder);
+            if (wonderOutputNode == null)
+            {
+                wonderOutputNode = new TileIONode(TileIOType.Wonder, tile.CellPosition, tile.Type, ItemStack.Empty, 0);
+                graph.ioNodes.Add(wonderOutputNode);
+                changed = true;
+            }
+
             // Apply inputs and check for changes
             if (ApplyInputNodes(graph, newInputs))
             {

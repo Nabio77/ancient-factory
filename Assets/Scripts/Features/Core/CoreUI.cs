@@ -8,6 +8,7 @@ using AncientFactory.Core.Data;
 using AncientFactory.Core.Events;
 using AncientFactory.Features.WorldMap;
 using AncientFactory.Features.Factory;
+using AncientFactory.Core.Systems;
 
 namespace AncientFactory.UI
 {
@@ -29,7 +30,8 @@ namespace AncientFactory.UI
 
         private VisualElement _root;
         private Label _pointLabel;
-        private VisualElement _historyContainer;
+        private Label _wonderStageLabel;
+        private VisualElement _historyContainer; // Using this for Wonder Requirements now
         private CoreTile _coreTile;
 
         void Awake()
@@ -42,6 +44,7 @@ namespace AncientFactory.UI
             {
                 _root.style.display = DisplayStyle.Flex;
                 _pointLabel = _root.Q<Label>("point-label");
+                _wonderStageLabel = _root.Q<Label>("wonder-label"); // Assuming we might add this in UXML, or repurpose an existing label
                 _historyContainer = _root.Q<VisualElement>("history-list");
             }
         }
@@ -62,11 +65,25 @@ namespace AncientFactory.UI
                 graphEditor.OnEditorOpened -= Hide;
                 graphEditor.OnEditorClosed -= Show;
             }
+
+            if (WonderSystem.Instance != null)
+            {
+                WonderSystem.Instance.OnWonderProgressUpdated -= UpdateUI;
+                WonderSystem.Instance.OnWonderStageChanged -= UpdateUI;
+                WonderSystem.Instance.OnWonderCompleted -= UpdateUI;
+            }
         }
 
         void Start()
         {
             FindCoreTile();
+            if (WonderSystem.Instance != null)
+            {
+                WonderSystem.Instance.OnWonderProgressUpdated += UpdateUI;
+                WonderSystem.Instance.OnWonderStageChanged += UpdateUI;
+                WonderSystem.Instance.OnWonderCompleted += UpdateUI;
+            }
+            UpdateUI();
         }
 
         private void Show()
@@ -85,76 +102,97 @@ namespace AncientFactory.UI
             {
                 FindCoreTile();
             }
-
-            if (_coreTile != null)
-            {
-                UpdateUI();
-            }
         }
 
         private void FindCoreTile()
         {
             if (_worldMap != null && _worldMap.TileData != null)
             {
-                _coreTile = _worldMap.TileData.GetAllTiles().OfType<CoreTile>().FirstOrDefault();
-                if (_coreTile != null)
+                var newTile = _worldMap.TileData.GetAllTiles().OfType<CoreTile>().FirstOrDefault();
+                if (newTile != _coreTile)
                 {
+                    _coreTile = newTile;
                     UpdateUI();
-                    UpdateHistoryList();
                 }
             }
         }
 
         private void UpdateUI()
         {
-            if (_coreTile == null) return;
-            // Skip update if hidden to save performance
-            if (_root != null && _root.style.display == DisplayStyle.None) return;
-
-            if (_pointLabel != null)
+            // Update Points (Still from CoreTile)
+            if (_coreTile != null && _pointLabel != null)
             {
                 _pointLabel.text = $"{_coreTile.AccumulatedPoints:N0} PTS";
             }
 
-            UpdateHistoryList();
+            // Update Wonder (From WonderSystem)
+            var wonder = WonderSystem.Instance;
+            if (wonder == null) return;
+
+            if (_wonderStageLabel != null)
+            {
+                if (wonder.IsWonderCompleted)
+                    _wonderStageLabel.text = "Wonder Completed!";
+                else if (wonder.CurrentStage.HasValue)
+                    _wonderStageLabel.text = $"Project: {wonder.CurrentStage.Value.StageName}";
+                else
+                    _wonderStageLabel.text = "No Active Project";
+            }
+
+            UpdateWonderList();
         }
 
-        private void UpdateHistoryList()
+        private void UpdateWonderList()
         {
-            if (_coreTile == null || _historyContainer == null) return;
+            if (_historyContainer == null || WonderSystem.Instance == null) return;
 
             _historyContainer.Clear();
+            var wonder = WonderSystem.Instance;
 
-            var items = _coreTile.CollectedItems.OrderByDescending(kvp => kvp.Value);
-
-            foreach (var kvp in items)
+            if (wonder.IsWonderCompleted)
             {
-                var item = kvp.Key;
-                var count = kvp.Value;
-
-                VisualElement entry;
-                if (listItemTemplate != null)
-                {
-                    entry = listItemTemplate.Instantiate();
-                }
-                else
-                {
-                    // Minimal fallback
-                    entry = new Label($"{item.ItemName}: {count}");
-                    entry.AddToClassList("history-item");
-                }
-
-                // Populate data if template structure matches
-                var icon = entry.Q("icon");
-                if (icon != null) icon.style.backgroundImage = new StyleBackground(item.Icon);
-
-                var name = entry.Q<Label>("name");
-                if (name != null) name.text = item.ItemName;
-
-                var countLbl = entry.Q<Label>("count");
-                if (countLbl != null) countLbl.text = $"{count:N0}";
-
+                var entry = new Label("Architecture Complete.");
+                entry.AddToClassList("history-item");
                 _historyContainer.Add(entry);
+                return;
+            }
+
+            var stage = wonder.CurrentStage;
+            if (stage.HasValue)
+            {
+                foreach (var req in stage.Value.Requirements)
+                {
+                    int current = wonder.StageProgress.ContainsKey(req.Item) ? wonder.StageProgress[req.Item] : 0;
+                    int target = req.Amount;
+
+                    VisualElement entry;
+                    if (listItemTemplate != null)
+                    {
+                        entry = listItemTemplate.Instantiate();
+                    }
+                    else
+                    {
+                        // Minimal fallback
+                        entry = new Label($"{req.Item.ItemName}: {current}/{target}");
+                        entry.AddToClassList("history-item");
+                    }
+
+                    // Populate data
+                    var icon = entry.Q("icon");
+                    if (icon != null) icon.style.backgroundImage = new StyleBackground(req.Item.Icon);
+
+                    var name = entry.Q<Label>("name");
+                    if (name != null) name.text = req.Item.ItemName;
+
+                    var countLbl = entry.Q<Label>("count");
+                    if (countLbl != null)
+                    {
+                        countLbl.text = $"{current}/{target}";
+                        if (current >= target) countLbl.style.color = new StyleColor(Color.green);
+                    }
+
+                    _historyContainer.Add(entry);
+                }
             }
         }
     }

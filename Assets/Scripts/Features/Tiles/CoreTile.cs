@@ -2,11 +2,15 @@ using UnityEngine;
 using System.Collections.Generic;
 using AncientFactory.Core.Types;
 using AncientFactory.Core.Data;
+using AncientFactory.Core.Systems;
 
 namespace AncientFactory.Features.Tiles
 {
+
+
     public class CoreTile : BaseTile
     {
+        // Points are still local to the specific Core tile (could be multiple in theory, or just one)
         public long AccumulatedPoints { get; set; }
         public Dictionary<ItemDefinition, int> CollectedItems { get; } = new();
 
@@ -25,6 +29,20 @@ namespace AncientFactory.Features.Tiles
                     CollectedItems[itemSource] = 0;
                 }
                 CollectedItems[itemSource] += quantity;
+            }
+        }
+
+        public void AddWonderContribution(ItemDefinition item, int quantity)
+        {
+            if (WonderSystem.Instance != null)
+            {
+                WonderSystem.Instance.AddContribution(item, quantity, out int accepted);
+
+                // If the Wonder accepted the item, we also give points for it.
+                if (accepted > 0)
+                {
+                    AddPoints(item.TechPoints * accepted, item, accepted);
+                }
             }
         }
     }

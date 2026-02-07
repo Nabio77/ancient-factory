@@ -8,7 +8,8 @@ namespace AncientFactory.Core.Data
     {
         Input,
         Output,
-        Core
+        Core,
+        Wonder
     }
 
     [Serializable]

@@ -100,6 +100,22 @@ namespace AncientFactory.Features.Factory
                         state.PendingOutput = ItemStack.Empty;
                         state.Status = ProductionStatus.Idle;
                     }
+                    else if (ioNode.type == TileIOType.Wonder)
+                    {
+                        var core = GetCoreTile();
+                        if (core != null)
+                        {
+                            // Use specific Wonder contribution logic
+                            core.AddWonderContribution(state.PendingOutput.Item, state.PendingOutput.Amount);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("[FactoryStateMachine] CoreTile not found for Wonder!");
+                        }
+
+                        state.PendingOutput = ItemStack.Empty;
+                        state.Status = ProductionStatus.Idle;
+                    }
                 }
                 else
                 {

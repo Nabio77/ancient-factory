@@ -101,6 +101,8 @@ namespace AncientFactory.Features.Factory
                 typeLabel.text = ioNode.sourceTileType.ToString();
             else if (ioNode.type == TileIOType.Core)
                 typeLabel.text = "Core";
+            else if (ioNode.type == TileIOType.Wonder)
+                typeLabel.text = "Wonder";
             else
                 typeLabel.text = "Output";
 
