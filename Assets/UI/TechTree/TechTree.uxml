@@ -10,6 +10,9 @@
                     <ui:Label name="points-value" text="1250" class="points-value"/>
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:VisualElement name="categories-container" class="categories-container">
+                <!-- Tabs will be generated here -->
+            </ui:VisualElement>
             <ui:VisualElement name="tree-canvas">
                 <ui:VisualElement name="canvas-content" picking-mode="Ignore">
                     <ui:VisualElement name="connections-layer" picking-mode="Ignore"/>

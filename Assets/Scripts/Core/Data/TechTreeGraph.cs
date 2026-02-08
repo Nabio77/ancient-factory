@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AncientFactory.Core.Data
 {
-    [CreateAssetMenu(fileName = "TechTreeGraph", menuName = "Carbon World/Tech Tree Graph")]
+    [CreateAssetMenu(fileName = "TechTreeGraph", menuName = "Ancient Factory/Tech Tree Graph")]
     public class TechTreeGraph : ScriptableObject
     {
         [SerializeField, HideInInspector]

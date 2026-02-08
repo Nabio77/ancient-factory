@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace AncientFactory.Core.Data
 {
-    [CreateAssetMenu(fileName = "Item_", menuName = "Carbon World/Item Definition")]
+    [CreateAssetMenu(fileName = "Item_", menuName = "Ancient Factory/Item Definition")]
     public class ItemDefinition : ScriptableObject
     {
         [Title("Identity")]

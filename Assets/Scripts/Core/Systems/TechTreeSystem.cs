@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using AncientFactory.Core.Data;
 using AncientFactory.Features.Tiles;
 using AncientFactory.Features.WorldMap;
+using AncientFactory.Core.Types;
 
 namespace AncientFactory.Core.Systems
 {
@@ -20,13 +21,54 @@ namespace AncientFactory.Core.Systems
         private WorldMap worldMap;
 
         [Title("Data")]
-        [SerializeField, Required]
-        private TechTreeGraph techTreeGraph;
+        [SerializeField] private TechTreeGraph metallurgyGraph;
+        [SerializeField] private TechTreeGraph agricultureGraph;
+        [SerializeField] private TechTreeGraph craftsmanshipGraph;
+        [SerializeField] private TechTreeGraph militaryGraph;
+        [SerializeField] private TechTreeGraph constructionGraph;
+        [SerializeField] private TechTreeGraph divineRitualGraph;
+        [SerializeField] private TechTreeGraph logisticsGraph;
+
+        public TechTreeGraph MetallurgyGraph => metallurgyGraph;
+        public TechTreeGraph AgricultureGraph => agricultureGraph;
+        public TechTreeGraph CraftsmanshipGraph => craftsmanshipGraph;
+        public TechTreeGraph MilitaryGraph => militaryGraph;
+        public TechTreeGraph ConstructionGraph => constructionGraph;
+        public TechTreeGraph DivineRitualGraph => divineRitualGraph;
+        public TechTreeGraph LogisticsGraph => logisticsGraph;
 
         private HashSet<string> _unlockedGuids = new(); // Track by GUID
         private CoreTile _coreTile;
 
-        public TechTreeGraph Graph => techTreeGraph;
+        // Helper to get all graphs
+        public IEnumerable<TechTreeGraph> AllGraphs
+        {
+            get
+            {
+                if (metallurgyGraph != null) yield return metallurgyGraph;
+                if (agricultureGraph != null) yield return agricultureGraph;
+                if (craftsmanshipGraph != null) yield return craftsmanshipGraph;
+                if (militaryGraph != null) yield return militaryGraph;
+                if (constructionGraph != null) yield return constructionGraph;
+                if (divineRitualGraph != null) yield return divineRitualGraph;
+                if (logisticsGraph != null) yield return logisticsGraph;
+            }
+        }
+
+        public TechTreeGraph GetGraphByCategory(TechCategory category)
+        {
+            return category switch
+            {
+                TechCategory.Metallurgy => metallurgyGraph,
+                TechCategory.Agriculture => agricultureGraph,
+                TechCategory.Craftsmanship => craftsmanshipGraph,
+                TechCategory.Military => militaryGraph,
+                TechCategory.Construction => constructionGraph,
+                TechCategory.DivineRitual => divineRitualGraph,
+                TechCategory.Logistics => logisticsGraph,
+                _ => null
+            };
+        }
 
         private void Awake()
         {
@@ -46,9 +88,9 @@ namespace AncientFactory.Core.Systems
             }
 
             // Auto-unlock item nodes (they are starting points)
-            if (techTreeGraph != null)
+            foreach (var graph in AllGraphs)
             {
-                foreach (var node in techTreeGraph.Nodes)
+                foreach (var node in graph.Nodes)
                 {
                     if (node.item != null)
                     {
@@ -78,14 +120,18 @@ namespace AncientFactory.Core.Systems
             if (blueprint == null) return false;
             // Starters are always unlocked
             if (blueprint.IsStarterCard) return true;
-            if (techTreeGraph == null) return false;
 
-            // Find node for this blueprint
-            var node = techTreeGraph.Nodes.FirstOrDefault(n => n.blueprint == blueprint);
-            // If not in tree, it's not unlocked (unless starter)
-            if (node == null) return false;
+            // Check all graphs
+            foreach (var graph in AllGraphs)
+            {
+                var node = graph.Nodes.FirstOrDefault(n => n.blueprint == blueprint);
+                if (node != null)
+                {
+                    return _unlockedGuids.Contains(node.guid);
+                }
+            }
 
-            return _unlockedGuids.Contains(node.guid);
+            return false;
         }
 
         public bool IsGuidUnlocked(string guid)

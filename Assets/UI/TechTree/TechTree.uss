@@ -264,3 +264,42 @@
 #close-button:hover {
     background-color: rgb(221, 68, 68);
 }
+
+/* Categories */
+.categories-container {
+    flex-direction: row;
+    height: 48px;
+    background-color: rgb(35, 35, 40);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-border);
+    padding-left: 20px;
+}
+
+.tech-category-tab {
+    height: 100%;
+    padding: 0 20px;
+    justify-content: center;
+    border-bottom-width: 3px;
+    border-bottom-color: transparent;
+    cursor: link;
+    transition-duration: 0.1s;
+}
+
+.tech-category-tab:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.tech-category-tab.selected {
+    border-bottom-color: var(--color-accent);
+    background-color: rgba(65, 105, 225, 0.1);
+}
+
+.tech-category-tab Label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    -unity-font-style: bold;
+}
+
+.tech-category-tab.selected Label {
+    color: var(--color-text-primary);
+}

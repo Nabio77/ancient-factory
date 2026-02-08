@@ -15,7 +15,7 @@ namespace AncientFactory.Editor
 
         private string outputFolder = "Assets/Tiles";
 
-        [MenuItem("Tools/Carbon World/Create Hex Tiles")]
+        [MenuItem("Tools/Ancient Factory/Create Hex Tiles")]
         public static void ShowWindow()
         {
             GetWindow<TileCreatorWindow>("Create Hex Tiles");

@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using Sirenix.OdinInspector;
 using AncientFactory.Core.Data;
 using AncientFactory.Core.Systems;
+using AncientFactory.Core.Types;
 
 namespace AncientFactory.Features.TechTree
 {
@@ -19,9 +20,9 @@ namespace AncientFactory.Features.TechTree
 
         [Title("Connection Settings")]
         [SerializeField]
-        private Color connectionColor = new Color(0.4f, 0.5f, 0.6f);
+        private Color connectionColor = new(0.4f, 0.5f, 0.6f);
         [SerializeField]
-        private Color unlockedConnectionColor = new Color(0.4f, 0.7f, 0.5f);
+        private Color unlockedConnectionColor = new(0.4f, 0.7f, 0.5f);
 
         [SerializeField]
         private float lineWidth = 3f;
@@ -30,6 +31,8 @@ namespace AncientFactory.Features.TechTree
         private VisualElement _canvas;
         private VisualElement _connectionsLayer;
         private VisualElement _nodesContainer;
+        private VisualElement _categoriesContainer; // Added
+        private TechCategory _currentCategory = TechCategory.Metallurgy; // Default
         private VisualElement _infoPanel;
         private Label _pointsValue;
         private Label _infoName;
@@ -41,7 +44,7 @@ namespace AncientFactory.Features.TechTree
         private Button _unlockButton;
         private Button _closeButton;
 
-        private Dictionary<string, VisualElement> _nodeElements = new(); // Keyed by GUID
+        private readonly Dictionary<string, VisualElement> _nodeElements = new(); // Keyed by GUID
         private TechTreeNodeData _selectedNode;
 
         private VisualElement _content; // Added variable for content container
@@ -60,6 +63,7 @@ namespace AncientFactory.Features.TechTree
             _root = uiDocument.rootVisualElement.Q<VisualElement>("root");
             _canvas = _root.Q<VisualElement>("tree-canvas");
             _content = _root.Q<VisualElement>("canvas-content"); // Query content container
+            _categoriesContainer = _root.Q<VisualElement>("categories-container");
             _connectionsLayer = _root.Q<VisualElement>("connections-layer");
             _nodesContainer = _root.Q<VisualElement>("nodes-container");
             _infoPanel = _root.Q<VisualElement>("info-panel");
@@ -88,6 +92,8 @@ namespace AncientFactory.Features.TechTree
             // Start hidden
             _root.AddToClassList("hidden");
             _infoPanel.AddToClassList("hidden");
+
+            CreateCategoryTabs();
         }
 
         private void OnPointerDown(PointerDownEvent evt)
@@ -146,7 +152,7 @@ namespace AncientFactory.Features.TechTree
                 tileSelector = FindFirstObjectByType<AncientFactory.Features.WorldMap.TileSelector>();
             }
 
-            if (TechTreeSystem.Instance != null && TechTreeSystem.Instance.Graph != null)
+            if (TechTreeSystem.Instance != null)
             {
                 BuildTree();
             }
@@ -197,9 +203,9 @@ namespace AncientFactory.Features.TechTree
 
         public void Show()
         {
-            if (TechTreeSystem.Instance == null || TechTreeSystem.Instance.Graph == null)
+            if (TechTreeSystem.Instance == null)
             {
-                Debug.LogWarning("[TechTreeUI] TechTreeSystem or Graph is missing.");
+                Debug.LogWarning("[TechTreeUI] TechTreeSystem is missing.");
                 return;
             }
 
@@ -241,7 +247,8 @@ namespace AncientFactory.Features.TechTree
             _nodesContainer.Clear();
             _nodeElements.Clear();
 
-            var graph = TechTreeSystem.Instance.Graph;
+            if (TechTreeSystem.Instance == null) return;
+            var graph = TechTreeSystem.Instance.GetGraphByCategory(_currentCategory);
             if (graph == null) return;
 
             foreach (var nodeData in graph.Nodes)
@@ -301,7 +308,7 @@ namespace AncientFactory.Features.TechTree
 
             _pointsValue.text = TechTreeSystem.Instance.GetAvailablePoints().ToString("N0");
 
-            var graph = TechTreeSystem.Instance.Graph;
+            var graph = TechTreeSystem.Instance.GetGraphByCategory(_currentCategory);
             if (graph != null)
             {
                 foreach (var nodeData in graph.Nodes)
@@ -423,16 +430,19 @@ namespace AncientFactory.Features.TechTree
             else
             {
                 var prereqNames = new List<string>();
-                var graph = TechTreeSystem.Instance.Graph;
-                foreach (var guid in nodeData.prerequisites)
+                var graph = TechTreeSystem.Instance.GetGraphByCategory(_currentCategory);
+                if (graph != null)
                 {
-                    var prereqNode = graph.Nodes.FirstOrDefault(n => n.guid == guid);
-                    if (prereqNode != null)
+                    foreach (var guid in nodeData.prerequisites)
                     {
-                        if (prereqNode.blueprint != null)
-                            prereqNames.Add(prereqNode.blueprint.BlueprintName);
-                        else if (prereqNode.item != null)
-                            prereqNames.Add(prereqNode.item.ItemName);
+                        var prereqNode = graph.Nodes.FirstOrDefault(n => n.guid == guid);
+                        if (prereqNode != null)
+                        {
+                            if (prereqNode.blueprint != null)
+                                prereqNames.Add(prereqNode.blueprint.BlueprintName);
+                            else if (prereqNode.item != null)
+                                prereqNames.Add(prereqNode.item.ItemName);
+                        }
                     }
                 }
                 _infoPrereqs.text = string.Join(", ", prereqNames);
@@ -473,13 +483,19 @@ namespace AncientFactory.Features.TechTree
 
         private void OnGenerateConnections(MeshGenerationContext mgc)
         {
-            if (TechTreeSystem.Instance == null || TechTreeSystem.Instance.Graph == null) return;
+            if (TechTreeSystem.Instance == null) return;
+
+            var graph = TechTreeSystem.Instance.GetGraphByCategory(_currentCategory);
+            if (graph == null) return;
 
             var paint = mgc.painter2D;
             paint.lineWidth = lineWidth;
 
+            var categoryColor = GetCategoryColor(_currentCategory);
+            // Dim the color slightly for the base connection, use full brightness for unlocked
+            var baseColor = new Color(categoryColor.r * 0.6f, categoryColor.g * 0.6f, categoryColor.b * 0.6f, 1f);
+
             var offset = new Vector2(5000, 5000); // VisualElement coordinate quirk as before
-            var graph = TechTreeSystem.Instance.Graph;
 
             foreach (var nodeData in graph.Nodes)
             {
@@ -495,11 +511,26 @@ namespace AncientFactory.Features.TechTree
                     bool bothUnlocked = TechTreeSystem.Instance.IsGuidUnlocked(prereqGuid) &&
                                          TechTreeSystem.Instance.IsGuidUnlocked(nodeData.guid);
 
-                    paint.strokeColor = bothUnlocked ? unlockedConnectionColor : connectionColor;
+                    paint.strokeColor = bothUnlocked ? unlockedConnectionColor : baseColor;
 
                     DrawConnection(paint, prereqPos + offset, nodePos + offset);
                 }
             }
+        }
+
+        private Color GetCategoryColor(TechCategory category)
+        {
+            return category switch
+            {
+                TechCategory.Metallurgy => new Color(0.8f, 0.4f, 0.4f),     // Reddish
+                TechCategory.Agriculture => new Color(0.4f, 0.8f, 0.4f),    // Greenish
+                TechCategory.Craftsmanship => new Color(0.4f, 0.4f, 0.8f),  // Blueish
+                TechCategory.Military => new Color(0.8f, 0.2f, 0.2f),       // Strong Red
+                TechCategory.Construction => new Color(0.8f, 0.6f, 0.2f),   // Orange
+                TechCategory.DivineRitual => new Color(0.6f, 0.2f, 0.8f),   // Purple
+                TechCategory.Logistics => new Color(0.2f, 0.8f, 0.8f),      // Cyan
+                _ => connectionColor
+            };
         }
 
         private void DrawConnection(Painter2D paint, Vector2 start, Vector2 end)
@@ -515,6 +546,49 @@ namespace AncientFactory.Features.TechTree
             paint.LineTo(p2);
             paint.LineTo(end);
             paint.Stroke();
+        }
+
+        private void CreateCategoryTabs()
+        {
+            if (_categoriesContainer == null) return;
+
+            _categoriesContainer.Clear();
+
+            foreach (TechCategory category in System.Enum.GetValues(typeof(TechCategory)))
+            {
+                var tab = new VisualElement();
+                tab.AddToClassList("tech-category-tab");
+                if (category == _currentCategory)
+                {
+                    tab.AddToClassList("selected");
+                }
+
+                // Add spaces to enum name (e.g. DivineRitual -> Divine Ritual)
+                string niceName = System.Text.RegularExpressions.Regex.Replace(category.ToString(), "(\\B[A-Z])", " $1");
+                var label = new Label(niceName);
+                tab.Add(label);
+
+                tab.RegisterCallback<ClickEvent>(evt => OnCategoryClicked(category));
+                _categoriesContainer.Add(tab);
+            }
+        }
+
+        private void OnCategoryClicked(TechCategory category)
+        {
+            if (_currentCategory == category) return;
+
+            _currentCategory = category;
+
+            // Rebuild tabs to update selection
+            CreateCategoryTabs();
+
+            // Rebuild tree
+            DeselectNode();
+            BuildTree();
+
+            // Reset pan to center/zero to avoid getting lost
+            _panPosition = Vector2.zero;
+            UpdateTransform();
         }
     }
 }

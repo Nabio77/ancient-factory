@@ -12,7 +12,7 @@ namespace AncientFactory.Editor.TechTree
         private TechTreeGraphView _graphView;
         private TechTreeGraph _currentGraph;
 
-        [MenuItem("Carbon World/Tech Tree Editor")]
+        [MenuItem("Ancient Factory/Tech Tree Editor")]
         public static void OpenWindow()
         {
             var window = GetWindow<TechTreeGraphWindow>();

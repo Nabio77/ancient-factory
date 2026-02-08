@@ -6,7 +6,7 @@ using AncientFactory.Features.Inventories;
 
 namespace AncientFactory.Core.Data
 {
-    [CreateAssetMenu(fileName = "Blueprint_", menuName = "Carbon World/Blueprint Definition")]
+    [CreateAssetMenu(fileName = "Blueprint_", menuName = "Ancient Factory/Blueprint Definition")]
     public class BlueprintDefinition : ScriptableObject
     {
         [Title("Identity")]

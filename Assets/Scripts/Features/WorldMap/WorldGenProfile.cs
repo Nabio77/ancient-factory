@@ -7,7 +7,7 @@ using AncientFactory.Core.Types;
 
 namespace AncientFactory.Features.WorldMap
 {
-    [CreateAssetMenu(fileName = "WorldGenProfile", menuName = "Carbon World/World Gen Profile")]
+    [CreateAssetMenu(fileName = "WorldGenProfile", menuName = "Ancient Factory/World Gen Profile")]
     public class WorldGenProfile : ScriptableObject
     {
         [Title("Map Dimensions")]
